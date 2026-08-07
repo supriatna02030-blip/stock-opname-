@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stock Opname RPC RAW ORI</title>
+<style>
+  body{font-family:Arial; background:#3498db; display:flex; justify-content:center; align-items:center; min-height:100vh; margin:0; padding:10px}
+  .login-box,.container{background:white; padding:25px; border-radius:10px; width:100%; max-width:1000px}
+  h2{text-align:center; color:#2c3e50}
+  input,button,select{width:100%; padding:10px; margin:8px 0; border:1px solid #ccc; border-radius:4px; box-sizing:border-box}
+  button{background:#27ae60; color:white; border:none; cursor:pointer; font-weight:bold}
+  button:hover{background:#229954}
+  table{width:100%; border-collapse:collapse; margin-top:15px; font-size:14px}
+  th,td{border:1px solid #ddd; padding:8px; text-align:center}
+  th{background:#3498db; color:white}
+  .badge{padding:3px 8px; border-radius:4px; color:white; font-size:12px}
+  .badge-RPC{background:#e67e22}
+  .badge-RAW{background:#2980b9}
+  .badge-ORI{background:#27ae60}
+  .selisih-plus{color:green; font-weight:bold}
+  .selisih-minus{color:red; font-weight:bold}
+  #app{display:none}
+  .logout{float:right; background:red; width:auto; padding:5px 15px}
+  .filter{margin:10px 0}
+  .total{margin-top:10px; font-weight:bold; background:#ecf0f1; padding:10px; border-radius:5px}
+  .meta {font-size:12px; color:gray; margin-top:8px}
+</style>
+</head>
+<body>
+
+<div class="login-box" id="loginPage">
+  <h2>LOGIN STOCK OPNAME</h2>
+  <input type="password" id="password" placeholder="Masukkan Password">
+  <button onclick="login()">Masuk</button>
+  <p class="meta">Password default disimpan secara lokal (untuk demo). Untuk produksi jangan simpan password plaintext di localStorage.</p>
+</div>
+
+<div class="container" id="app">
+  <button class="logout" onclick="logout()">Logout</button>
+  <h2>APLIKASI STOCK OPNAME RPC RAW ORI</h2>
+
+  <h3>1. Tambah Barang</h3>
+  <select id="kategoriBarang">
+    <option value="">Pilih Kategori</option>
+    <option value="RPC">RPC</option>
+    <option value="RAW">RAW</option>
+    <option value="ORI">ORI</option>
+  </select>
+  <input type="text" id="namaBarang" placeholder="Nama Barang">
+  <input type="number" id="stokSistem" placeholder="Stok Sistem">
+  <button onclick="tambahBarang()">+ Tambah</button>
+
+  <h3>2. Form Stock Opname</h3>
+  <div class="filter">
+    <label><b>Filter Kategori:</b></label>
+    <select id="filterKategori" onchange="tampilkan()">
+      <option value="ALL">Semua Kategori</option>
+      <option value="RPC">RPC</option>
+      <option value="RAW">RAW</option>
+      <option value="ORI">ORI</option>
+    </select>
+  </div>
+  <input type="date" id="tanggalOpname">
+  <button onclick="simpanOpname()">Simpan Opname</button>
+  <button onclick="exportExcel()">Export Excel</button>
+  <button onclick="gantiPassword()" style="background:orange">Ganti Password</button>
+
+  <table id="tabelBarang"></table>
+  <div class="total" id="totalStok"></div>
+</div>
+
+<script>
+/*
+  Notes on security:
+  - This demo stores the password in localStorage for convenience only.
+  - For production, use proper authentication and never store plaintext passwords on the client.
+*/
+
+let PASSWORD = localStorage.getItem('so_password') || 'admin123';
+let dataBarang = JSON.parse(localStorage.getItem('dataBarang')) || [
+  {kategori:"RPC", nama:"Pelet Hi-Pro 781 - 1", stokSistem:20, stokFisik:0},
+  {kategori:"RPC", nama:"Pelet Hi-Pro 781 - 2", stokSistem:15, stokFisik:0},
+  {kategori:"RPC", nama:"Pelet F999", stokSistem:10, stokFisik:0},
+  {kategori:"RAW", nama:"Tepung Ikan 65%", stokSistem:8, stokFisik:0},
+  {kategori:"RAW", nama:"Tepung Kedelai", stokSistem:12, stokFisik:0},
+  {kategori:"RAW", nama:"Vitamin C Bubuk", stokSistem:5, stokFisik:0},
+  {kategori:"ORI", nama:"Probiotik Aquazym", stokSistem:10, stokFisik:0},
+  {kategori:"ORI", nama:"Disinfektan Benkots", stokSistem:6, stokFisik:0},
+  {kategori:"ORI", nama:"Terpal Kolam 3x4", stokSistem:4, stokFisik:0},
+  {kategori:"ORI", nama:"Blower LP100", stokSistem:2, stokFisik:0}
+];
+
+function login(){
+  let pass = document.getElementById('password').value;
+  if(pass === PASSWORD){
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    tampilkan();
+  } else { alert('Password Salah!'); }
+}
+
+function logout(){
+  document.getElementById('loginPage').style.display = 'block';
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('password').value = '';
+}
+
+function gantiPassword(){
+  let baru = prompt('Masukkan Password Baru:');
+  if(baru){
+    PASSWORD = baru;
+    localStorage.setItem('so_password', PASSWORD);
+    alert('Password berhasil diganti!');
+  }
+}
+
+function tampilkan() {
+  let filter = document.getElementById('filterKategori').value;
+  let tabel = document.getElementById('tabelBarang');
+  tabel.innerHTML = `<tr><th>No</th><th>Kategori</th><th>Nama Barang</th><th>Stok Sistem</th><th>Stok Fisik</th><th>Selisih</th><th>Aksi</th></tr>`;
+
+  // Totals across ALL items (useful to always show)
+  let totalRPC_all = 0, totalRAW_all = 0, totalORI_all = 0;
+  dataBarang.forEach(item => {
+    if(item.kategori==="RPC") totalRPC_all += Number(item.stokSistem) || 0;
+    if(item.kategori==="RAW") totalRAW_all += Number(item.stokSistem) || 0;
+    if(item.kategori==="ORI") totalORI_all += Number(item.stokSistem) || 0;
+  });
+
+  let no = 1;
+  dataBarang.forEach((item, i) => {
+    if(filter !== 'ALL' && item.kategori !== filter) return;
+
+    // ensure stokFisik displayed as number (allow 0 to show)
+    let fisikVal = (item.stokFisik !== undefined && item.stokFisik !== null) ? item.stokFisik : '';
+
+    let selisih = (Number(item.stokFisik) || 0) - (Number(item.stokSistem) || 0);
+    let classSelisih = selisih > 0 ? 'selisih-plus' : selisih < 0 ? 'selisih-minus' : '';
+
+    tabel.innerHTML += `<tr>
+      <td>${no++}</td>
+      <td><span class="badge badge-${item.kategori}">${item.kategori}</span></td>
+      <td>${escapeHtml(item.nama)}</td>
+      <td>${item.stokSistem}</td>
+      <td><input type="number" value="${fisikVal}" onchange="updateFisik(${i}, this.value)"></td>
+      <td class="${classSelisih}">${selisih}</td>
+      <td><button onclick="hapus(${i})" style="background:red">Hapus</button></td>
+    </tr>`;
+  });
+
+  document.getElementById('totalStok').innerHTML =
+    `Total Stok Sistem (All): RPC = ${totalRPC_all} | RAW = ${totalRAW_all} | ORI = ${totalORI_all}`;
+
+  // persist data
+  localStorage.setItem('dataBarang', JSON.stringify(dataBarang));
+}
+
+function tambahBarang() {
+  let kategori = document.getElementById('kategoriBarang').value;
+  let nama = document.getElementById('namaBarang').value.trim();
+  let stokRaw = document.getElementById('stokSistem').value;
+  let stok = stokRaw === '' ? NaN : parseInt(stokRaw, 10);
+  if(kategori && nama && !isNaN(stok)){
+    dataBarang.push({kategori, nama, stokSistem: stok, stokFisik: 0});
+    document.getElementById('kategoriBarang').value = '';
+    document.getElementById('namaBarang').value = '';
+    document.getElementById('stokSistem').value = '';
+    tampilkan();
+  } else { alert('Lengkapi Kategori, Nama, dan Stok!'); }
+}
+
+function updateFisik(i, val){
+  // treat empty input as 0
+  let num = (val === '' ? 0 : parseInt(val, 10));
+  dataBarang[i].stokFisik = isNaN(num) ? 0 : num;
+  tampilkan();
+}
+
+function hapus(i){
+  if(confirm('Hapus barang ini?')){
+    dataBarang.splice(i,1);
+    tampilkan();
+  }
+}
+
+function simpanOpname(){
+  let tgl = document.getElementById('tanggalOpname').value;
+  if(!tgl){
+    alert('Pilih tanggal opname terlebih dahulu!');
+    return;
+  }
+  // Save a deep copy to prevent future mutations changing stored history
+  const snapshot = dataBarang.map(item => ({...item}));
+  localStorage.setItem('riwayat_'+tgl, JSON.stringify(snapshot));
+  alert('Data opname tanggal '+tgl+' sudah disimpan!');
+}
+
+function exportExcel(){
+  let csv = 'No,Kategori,Nama Barang,Stok Sistem,Stok Fisik,Selisih\n';
+  dataBarang.forEach((item,i)=>{
+    let selisih = (Number(item.stokFisik) || 0) - (Number(item.stokSistem) || 0);
+    // escape commas/newlines in names
+    let nama = `"${(item.nama || '').replace(/"/g, '""')}"`;
+    csv += `${i+1},${item.kategori},${nama},${item.stokSistem},${item.stokFisik || 0},${selisih}\n`;
+  });
+  let blob = new Blob([csv], {type: 'text/csv'});
+  let a = document.createElement('a');
+  let tanggal = document.getElementById('tanggalOpname').value || (new Date()).toISOString().slice(0,10);
+  a.href = URL.createObjectURL(blob);
+  a.download = 'stock-opname-'+tanggal+'.csv';
+  a.click();
+}
+
+function escapeHtml(text) {
+  if(!text) return '';
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+document.getElementById('tanggalOpname').valueAsDate = new Date();
+</script>
+</body>
+</html>
