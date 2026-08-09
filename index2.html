@@ -53,7 +53,7 @@
     <input type="text" id="namaPIC" placeholder="👤 Nama PIC Yang SO">
 
     <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center">
-      <button class="btn-aksi" onclick="loadTemplate()">📥 Load Template</button>
+      <button class="btn-aksi" onclick="loadTemplate()">📥 Load Template 43 Item</button>
       <button class="btn-copy" onclick="copyDariShiftSebelumnya()">📋 Copy dari Shift Sebelumnya</button>
       <button class="btn-reset-angka" onclick="resetAngka()">🔄 Reset Angka</button>
       <button class="btn-aksi" onclick="simpanOpname()">💾 Simpan Opname</button>
@@ -85,17 +85,22 @@ window.onload = function(){
   loadData(); tampilkan(); tampilkanDaftarRiwayat();
 }
 
-// TEMPLATE SHIFT - ANGKA KOSONG
+// TEMPLATE SHIFT - 24 ITEM + 19 MINYAK = 43 ITEM
 const templateShift = [
+// KANZLER SINGLE
 {kategori:"KANZLER SINGLE", kode:"417806", nama:"kanzler sgl mini 65g", oh:"", fisik:""},
 {kategori:"KANZLER SINGLE", kode:"417804", nama:"kanzler sgl ori 65g", oh:"", fisik:""},
 {kategori:"KANZLER SINGLE", kode:"417805", nama:"kanzler single keju", oh:"", fisik:""},
 {kategori:"KANZLER SINGLE", kode:"423992", nama:"kanzler single hot", oh:"", fisik:""},
 {kategori:"KANZLER SINGLE", kode:"435578", nama:"kanzler single gochujang", oh:"", fisik:""},
+
+// KANZLER BAKSO
 {kategori:"KANZLER BAKSO", kode:"435736", nama:"kanzler bakso hot 48g", oh:"", fisik:""},
 {kategori:"KANZLER BAKSO", kode:"465771", nama:"kenzler bakso gochujang 55g", oh:"", fisik:""},
 {kategori:"KANZLER BAKSO", kode:"428660", nama:"kanzler bakso ori 48g", oh:"", fisik:""},
 {kategori:"KANZLER BAKSO", kode:"428662", nama:"kanzler bakso keju 48g", oh:"", fisik:""},
+
+// FIESTA + ECO + FRESHMILK
 {kategori:"FIESTA SOSIS", kode:"443704", nama:"fiesta rtg sosis spicykorean", oh:"", fisik:""},
 {kategori:"ECO BAG", kode:"-", nama:"Alfamart ECO", oh:"", fisik:""},
 {kategori:"ECO BAG", kode:"-", nama:"ECO bag kecil", oh:"", fisik:""},
@@ -103,14 +108,39 @@ const templateShift = [
 {kategori:"FRESHMILK", kode:"-", nama:"Diamond", oh:"", fisik:""},
 {kategori:"FRESHMILK", kode:"-", nama:"Greenfield milk", oh:"", fisik:""},
 {kategori:"FRESHMILK", kode:"-", nama:"Omela", oh:"", fisik:""},
+
+// LAIN
 {kategori:"LAIN", kode:"418605", nama:"Raw Hot beanspot", oh:"", fisik:""},
 {kategori:"LAIN", kode:"422782", nama:"Le mineral 15L", oh:"", fisik:""},
 {kategori:"LAIN", kode:"460235", nama:"NPL 15L", oh:"", fisik:""},
+
+// GULA
 {kategori:"GULA", kode:"401698", nama:"PSM Gula Premium 1kg", oh:"", fisik:""},
 {kategori:"GULA", kode:"405970", nama:"Rose Brand Gula Tebu premium 1kg", oh:"", fisik:""},
 {kategori:"GULA", kode:"466054", nama:"Gula vigula kristal putih 1kg", oh:"", fisik:""},
 {kategori:"GULA", kode:"221587", nama:"Gulaku gula tebu premium", oh:"", fisik:""},
-{kategori:"GULA", kode:"406643", nama:"GMP Gula Kristal putih 1kg", oh:"", fisik:""}
+{kategori:"GULA", kode:"406643", nama:"GMP Gula Kristal putih 1kg", oh:"", fisik:""},
+
+// MINYAK - 19 ITEM DARI KAMU
+{kategori:"MINYAK", kode:"113079", nama:"Tropical myk grg pet 2L", oh:"", fisik:""},
+{kategori:"MINYAK", kode:"451350", nama:"Tropical myk grg pet 1,5L", oh:"", fisik:""},
+{kategori:"MINYAK", kode:"61132", nama:"Tropical myk grg pet 1L", oh:"", fisik:""},
+{kategori:"MINYAK", kode:"195673", nama:"sania mnyk grg pch 1L", oh:"", fisik:""},
+{kategori:"MINYAK", kode:"211141", nama:"Bimoli myk pch grg 1L", oh:"", fisik:""},
+{kategori:"MINYAK", kode:"6965", nama:"Barco myk grg pch 1L", oh:"", fisik:""},
+{kategori:"MINYAK", kode:"244111", nama:"SunCo myk grg pch 2L", oh:"", fisik:""},
+{kategori:"MINYAK", kode:"156747", nama:"Filma myk grg pch 2L", oh:"", fisik:""},
+{kategori:"MINYAK", kode:"192730", nama:"Bimoli myk grg pch 2L", oh:"", fisik:""},
+{kategori:"MINYAK", kode:"113222", nama:"Fortune myk grg pch 2L", oh:"", fisik:""},
+{kategori:"MINYAK", kode:"195674", nama:"Sania myk grg pch 2L", oh:"", fisik:""},
+{kategori:"MINYAK", kode:"211378", nama:"Bimoli myk grg spesial pch 2L", oh:"", fisik:""},
+{kategori:"MINYAK", kode:"121905", nama:"Sovia myk grg pch 2L", oh:"", fisik:""},
+{kategori:"MINYAK", kode:"437794", nama:"Harumnas myk grg pch 2L", oh:"", fisik:""},
+{kategori:"MINYAK", kode:"433436", nama:"Camar myk grg pch 2L", oh:"", fisik:""},
+{kategori:"MINYAK", kode:"123332", nama:"Alfamart myk grg pch 2L", oh:"", fisik:""},
+{kategori:"MINYAK", kode:"453308", nama:"Vipco myk 2L", oh:"", fisik:""},
+{kategori:"MINYAK", kode:"45258", nama:"Merah pth myk 2L", oh:"", fisik:""},
+{kategori:"MINYAK", kode:"436397", nama:"ikan dorang myk grng kelapa", oh:"", fisik:""}
 ];
 
 function login(){
@@ -127,7 +157,7 @@ function login(){
 }
 
 function loadTemplate(){
-  if(confirm('Load 24 item template?')){
+  if(confirm('Load 43 item template?')){
     dataBarang = templateShift.map(item => ({...item}));
     tampilkan(); alert('Template berhasil dimuat! Tinggal isi OH & Fisik');
   }
