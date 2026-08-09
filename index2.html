@@ -27,7 +27,7 @@
 #listRiwayat{max-height:250px; overflow-y:auto; border:1px solid #ddd; padding:10px; border-radius:10px}
 .filter-shift{display:flex; gap:10px}
 .rekap-container{border:2px dashed #e74c3c; padding:15px; border-radius:10px; margin-top:15px; background:#fdedec}
-.login-box{border:2px solid #2980b9; padding:20px; border-radius:10px; margin-bottom:20px; background:#ebf5fb}
+.login-box{display:none} /* LOGIN DIMATIIN DULU */
 </style>
 </head>
 <body>
@@ -39,10 +39,9 @@
     <h3>🔒 Login Dulu</h3>
     <input type="password" id="inputPassword" placeholder="Masukkan Password">
     <button onclick="login()">Masuk</button>
-    <p style="font-size:12px; color:#7f8c8d">*Password default: benspot123. Bisa diganti di kode</p>
   </div>
 
-  <div id="mainApp" style="display:none">
+  <div id="mainApp">
     <div class="filter-shift">
       <input type="date" id="tanggalOpname">
       <select id="pilihShift">
@@ -75,7 +74,16 @@ let dataBarang = [];
 let tanggalAktif = "";
 let shiftAktif = "SHIFT 1";
 let namaPIC = "";
-const PASSWORD = "benspot123"; // GANTI PASSWORD DISINI OM
+const PASSWORD = ""; // UDAH DIKOSONGIN
+
+// LANGSUNG BUKA APLIKASI
+window.onload = function(){
+  document.getElementById('loginBox').style.display = 'none';
+  document.getElementById('mainApp').style.display = 'block';
+  document.getElementById('tanggalOpname').valueAsDate = new Date();
+  tanggalAktif = document.getElementById('tanggalOpname').value;
+  loadData(); tampilkan(); tampilkanDaftarRiwayat();
+}
 
 // TEMPLATE SHIFT - ANGKA KOSONG
 const templateShift = [
@@ -165,7 +173,6 @@ function tampilkan() {
       totalOH += Number(item.oh) || 0;
       totalFisik += Number(item.fisik) || 0;
       let selisih = (Number(item.fisik) || 0) - (Number(item.oh) || 0);
-      // CUMA AMBIL YANG MINUS UNTUK REKAP
       if(selisih < 0) listMinus.push({...item, selisih: Math.abs(selisih)});
       let classSelisih = selisih > 0? 'selisih-plus' : selisih < 0? 'selisih-minus' : '';
       let icon = selisih === 0 && item.oh!== ""? '✅' : selisih > 0? `(+${selisih})` : selisih < 0? `(-${Math.abs(selisih)})` : '';
@@ -182,7 +189,6 @@ function tampilkan() {
     container.innerHTML += html;
   });
 
-  // REKAP HANYA MINUS
   let rekapHtml = `<h4 class="rekap">📉 REKAP BARANG MINUS / HILANG - ${shiftAktif}</h4>`;
   if(listMinus.length === 0){
     rekapHtml += `<p>✅ Aman, tidak ada barang minus</p>`;
@@ -285,5 +291,6 @@ function exportExcel(){
   a.download = `SO-${shift}-${tgl}-${namaPIC}.csv`;
   a.click();
 }
-
-// EVENT LISTENER
+</script>
+</body>
+</html>
