@@ -1,9 +1,15 @@
-"name": "SO RAHIL K792",
-"short_name": "SO K792",
-"icons": [
-  {
-    "src": "icon.png",
-    "sizes": "512x512",
-    "type": "image/png"
-  }
-]
+{
+  "name": "SO RAHIL K792",
+  "short_name": "SO K792",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#1E3A8A",
+  "theme_color": "#1E3A8A",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
