@@ -13,18 +13,17 @@
   .container{background:white; padding:25px; border-radius:20px; width:100%; max-width:1200px; box-shadow: 0 10px 30px rgba(0,0,0,0.2)}
   body.dark .container{background:#16213e; color:white}
   
-  /* ANIMASI BARU 4 MACAM */
-  @keyframes spin { from {transform: rotate(0deg)} to {transform: rotate(360deg)} }
-  @keyframes blink { 50% { opacity: 0.5; } }
+  /* ANIMASI 4 MACAM - VERSI FIX */
+  @keyframes blink { 0%,100%{opacity:1; transform:scale(1)} 50%{opacity:0.4; transform:scale(1.05)} }
   @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
   .page.active { animation: slideUp 0.3s ease-out; }
   button:active { transform: scale(0.95); transition: 0.1s; }
 
   /* TOAST NOTIFIKASI */
   #toast{
-    position:fixed; top:-50px; left:50%; transform:translateX(-50%);
+    position:fixed; top:-60px; left:50%; transform:translateX(-50%);
     background:#27ae60; color:#fff; padding:12px 25px; border-radius:20px;
-    transition: top 0.4s; z-index:999; font-weight:600; box-shadow:0 4px 15px rgba(0,0,0,0.2)
+    transition: top 0.4s cubic-bezier(.68,-0.55,.27,1.55); z-index:999; font-weight:600; box-shadow:0 4px 15px rgba(0,0,0,0.2)
   }
   #toast.show{ top:20px; }
 
@@ -41,6 +40,7 @@
   body.dark input,body.dark select{background:#0f3460; color:white; border-color:#333}
   button{background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color:white; border:none; cursor:pointer; font-weight:600; font-size:16px}
   button:hover{opacity:0.9; transform:translateY(-1px)}
+  button:disabled{opacity:0.6; cursor:not-allowed}
   .btn-aksi{background:#27ae60; width:auto; padding:10px 15px; margin:5px}
   .btn-admin{background:#8e44ad; width:auto; padding:10px 15px; margin:5px; color:white}
   .btn-wa{background:#25D366; width:auto; padding:10px 15px; margin:5px; color:white}
@@ -55,8 +55,8 @@
   th{background:#2980b9; color:white; padding:8px; position:sticky; top:0}
   td{padding:8px; border-bottom:1px solid #ddd; text-align:center}
   body.dark td{border-color:#333}
-  .selisih-minus{color:red; font-weight:700; animation: blink 1s infinite;}
-  .selisih-plus{color:green; font-weight:700; animation: blink 1s infinite;}
+  .selisih-minus{color:red; font-weight:700; animation: blink 0.8s infinite;}
+  .selisih-plus{color:green; font-weight:700; animation: blink 0.8s infinite;}
   .user-item{display:flex; justify-content:space-between; align-items:center; padding:8px; border-bottom:1px solid #ddd}
   .rekap-box{margin-top:20px; padding:15px; border-radius:10px}
   .rekap-minus{background:#ffebee; border-left:5px solid #e74c3c}
@@ -161,7 +161,7 @@
 
 <script>
 if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('sw.js?v=5')
+  navigator.serviceWorker.register('sw.js?v=6') // UDAH V6 BIAR GA CACHE
   .then(reg => console.log('SW Registered', reg))
   .catch(err => console.log('SW Error', err));
 }
@@ -317,18 +317,17 @@ const templateShift = [
 {kategori:"MINYAK", kode:"436397", nama:"ikan dorang myk grng kelapa", oh:"", fisik:"", harga:"0"}
 ];
 
-function loadItems(){
+function loadItems(){ // UDAH FIX GA Muter kebalik
   const btn = event.target;
+  const textAwal = btn.innerHTML;
   btn.innerHTML = "⏳ Loading...";
   btn.disabled = true;
-  btn.style.animation = "spin 1s linear infinite";
   
   setTimeout(()=>{
     dataBarang = templateShift.map(item => ({...item}));
     tampilkan();
-    btn.innerHTML = "📥 Load 43 Item";
+    btn.innerHTML = textAwal;
     btn.disabled = false;
-    btn.style.animation = "";
   }, 500);
 }
 
