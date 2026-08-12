@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SO PRO V4 - K792/KARBELA2</title>
+<title>SO RAHIL K792</title>
+<link rel="manifest" href="manifest.json">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
   *{font-family:'Poppins', sans-serif}
@@ -51,7 +52,7 @@
   </div>
 
   <div id="mainApp" style="display:none">
-    <h2>☀️ SO PRO K792/KARBELA2 <span id="namaUser"></span></h2>
+    <h2>☀️ SO RAHIL K792 <span id="namaUser"></span></h2>
 
     <div id="adminPanel" class="admin-panel" style="display:none">
       <h3>⚙️ Panel Admin</h3>
@@ -85,12 +86,19 @@
     </div>
 
     <div id="tabelContainer"></div>
-    <div id="rekapSelisih"></div> <!-- REKAP PLUS MINUS DI SINI -->
+    <div id="rekapSelisih"></div>
     <div id="totalStok" style="margin-top:15px; font-weight:700; background:#2980b9; color:white; padding:15px; border-radius:15px; text-align:center"></div>
   </div>
 </div>
 
 <script>
+// DAFTAR SERVICE WORKER BARU BIAR CACHE KEHAPUS
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js?v=2')
+  .then(reg => console.log('SW Registered', reg))
+  .catch(err => console.log('SW Error', err));
+}
+
 let dataBarang = [];
 let users = JSON.parse(localStorage.getItem('users_so')) || [{nik:"ADMIN", pin:"1234", nama:"ADMIN", role:"admin"}];
 let logLogin = JSON.parse(localStorage.getItem('logLogin_so')) || [];
@@ -251,7 +259,7 @@ function tampilkan(){
     html += `</table>`; container.innerHTML += html;
   });
   document.getElementById('totalStok').innerHTML = `Total Item: ${dataBarang.length} | OH: ${totalOH} | Fisik: ${totalFisik}`;
-  tampilkanRekapSelisih(); // PANGGIL REKAP OTOMATIS
+  tampilkanRekapSelisih();
 }
 
 function tampilkanRekapSelisih(){
@@ -309,7 +317,7 @@ function lihatRiwayat(){
   });
   html += '</table>';
   document.getElementById('tabelContainer').innerHTML = html;
-  document.getElementById('rekapSelisih').innerHTML = ''; // kosongin rekap pas liat riwayat
+  document.getElementById('rekapSelisih').innerHTML = '';
 }
 
 function bukaRiwayat(key){
