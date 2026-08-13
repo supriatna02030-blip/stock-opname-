@@ -7,6 +7,7 @@
 <link rel="manifest" href="manifest.json">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script> <!-- BUAT PDF -->
 <style>
   *{font-family:'Poppins', sans-serif}
   body{background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); display:flex; justify-content:center; align-items:center; min-height:100vh; margin:0; padding:15px; transition:0.3s}
@@ -42,6 +43,7 @@
 .btn-admin{background:#8e44ad; width:auto; padding:10px 15px; margin:5px; color:white}
 .btn-wa{background:#25D366; width:auto; padding:10px 15px; margin:5px; color:white}
 .btn-danger{background:#e74c3c; width:auto; padding:8px 12px; margin:3px; color:white; font-size:12px}
+.btn-pdf{background:#e67e22; width:auto; padding:10px 15px; margin:5px; color:white} /* TOMBOL PDF */
 .btn-back{background:#7f8c8d; width:auto; padding:10px 15px; margin:10px 0}
 .btn-menu{margin:10px 0; padding:18px; font-size:18px}
 .btn-dark{position:fixed; top:20px; right:20px; width:50px; height:50px; border-radius:50%; font-size:20px; z-index:999; padding:0}
@@ -67,6 +69,7 @@
 .total-rp-box{background:#ffc107; color:#000; padding:15px; border-radius:10px; margin-top:15px; font-weight:700; text-align:center; font-size:16px}
   #reader{width:100%; border-radius:10px; overflow:hidden; display:none; margin-top:10px; border:2px solid #4facfe}
   #readerStatus{text-align:center; font-size:12px; color:#2980b9; margin-top:5px}
+.highlight-row{background: #fff3cd!important; transition: 0.5s;} /* SOROT PAS SCAN */
 </style>
 </head>
 <body>
@@ -91,9 +94,6 @@
         <p>Alfamart Karbela 2</p>
       </div>
       <h2>Selamat Datang <span id="namaUser"></span></h2>
-
-      <!-- KARTU DASHBOARD UDAH AKU HAPUS DARI SINI -->
-
       <button class="btn-menu" onclick="showMenu('opname')">📝 Input Opname</button>
       <button class="btn-menu" onclick="showMenu('dashboard')">📊 Dashboard</button>
       <button class="btn-menu" onclick="showMenu('laporan')">📋 Laporan & Rekap</button>
@@ -102,7 +102,6 @@
       <button class="btn-menu btn-danger" onclick="logout()">🚪 Logout</button>
     </div>
 
-    <!-- MENU DASHBOARD TETEP ADA DI SINI -->
     <div id="menuDashboard" class="page">
       <button class="btn-back" onclick="showMenu('home')">⬅️ Kembali ke Home</button>
       <h2>📊 Dashboard Ringkasan</h2>
@@ -111,7 +110,6 @@
         <div class="dash-card card-minus"><h4>Minus</h4><h2 id="dashMinus2">0</h2></div>
         <div class="dash-card card-rugi"><h4>Rugi</h4><h2 id="dashRugi2">Rp 0</h2></div>
       </div>
-      <p style="text-align:center; margin-top:20px">Data ini update otomatis saat kamu input di menu Opname</p>
     </div>
 
     <div id="menuOpname" class="page">
@@ -147,6 +145,7 @@
       <button class="btn-aksi" onclick="lihatRiwayat()">📜 Lihat Riwayat</button>
       <button class="btn-wa" onclick="kirimRekapWA()">📲 Kirim Rekap Minus WA</button>
       <button class="btn-aksi" onclick="exportExcel()">📤 Export Excel</button>
+      <button class="btn-pdf" onclick="exportPDF()">📑 Export PDF</button> <!-- TOMBOL BARU -->
       <div id="rekapSelisih"></div>
       <div id="totalSelisihRp" class="total-rp-box"></div>
     </div>
@@ -154,7 +153,6 @@
     <div id="menuBackup" class="page">
       <button class="btn-back" onclick="showMenu('home')">⬅️ Kembali ke Home</button>
       <h2>📤 Backup & Data</h2>
-      <p>Backup data opname kamu biar aman di HP lain</p>
       <button class="btn-aksi" onclick="exportCSV()">📤 Backup Manual.CSV</button>
     </div>
 
@@ -176,8 +174,9 @@
 </div>
 
 <script>
+const { jsPDF } = window.jspdf; // BUAT PDF
 if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('sw.js?v=8')
+  navigator.serviceWorker.register('sw.js?v=9')
 .then(reg => console.log('SW Registered', reg))
 .catch(err => console.log('SW Error', err));
 }
@@ -281,7 +280,7 @@ function tampilkan(){
   let kategoriList = [...new Set(dataBarang.map(x => x.kategori))];
   let totalOH=0; let totalFisik=0;
   kategoriList.forEach(kat => {
-    let html = `<h3>${kat}</h3><table><tr><th>No</th><th>Kode</th><th>Nama</th><th>OH</th><th>Fisik</th><th>Harga</th><th>Selisih</th><th>Selisih Rp</th></tr>`;
+    let html = `<h3>${kat}</h3><table id="tabel-${kat}"><tr><th>No</th><th>Kode</th><th>Nama</th><th>OH</th><th>Fisik</th><th>Harga</th><th>Selisih</th><th>Selisih Rp</th></tr>`;
     let no=1;
     dataBarang.filter(x => x.kategori === kat).forEach((item) => {
       let index = dataBarang.indexOf(item);
@@ -289,9 +288,9 @@ function tampilkan(){
       let selisih = (Number(item.fisik) || 0) - (Number(item.oh) || 0);
       let selisihRp = selisih * (Number(item.harga) || 0);
       let classSelisih = selisih > 0? 'selisih-plus' : selisih < 0? 'selisih-minus' : '';
-      html += `<tr><td>${no++}</td><td>${item.kode}</td><td style="text-align:left">${item.nama}</td>
+      html += `<tr id="row-${item.kode}"><td>${no++}</td><td>${item.kode}</td><td style="text-align:left">${item.nama}</td>
       <td><input type="number" value="${item.oh}" onchange="updateOH(${index}, this.value)" style="width:60px"></td>
-      <td><input type="number" value="${item.fisik}" onchange="updateFisik(${index}, this.value)" style="width:60px"></td>
+      <td><input type="number" id="fisik-${item.kode}" value="${item.fisik}" onchange="updateFisik(${index}, this.value)" style="width:60px"></td>
       <td><input type="number" value="${item.harga}" onchange="updateHarga(${index}, this.value)" style="width:80px" placeholder="Harga"></td>
       <td class="${classSelisih}">${selisih}</td>
       <td class="${classSelisih}">Rp ${selisihRp.toLocaleString()}</td></tr>`;
@@ -310,7 +309,6 @@ function updateDashboard(){
     let kurang = Math.abs((Number(m.fisik)||0) - (Number(m.oh)||0));
     totalRugi += kurang * (Number(m.harga)||0);
   });
-  // Cuma update di Menu Dashboard
   document.getElementById('dashTotal2').innerText = dataBarang.length;
   document.getElementById('dashMinus2').innerText = minus.length;
   document.getElementById('dashRugi2').innerText = 'Rp ' + totalRugi.toLocaleString();
@@ -343,6 +341,22 @@ function tampilkanRekapSelisih(){
   }
   document.getElementById('rekapSelisih').innerHTML = html;
   document.getElementById('totalSelisihRp').innerHTML = `TOTAL SELISIH NILAI: Rp ${totalSelisihRp.toLocaleString()}`;
+}
+
+// FITUR 1: SCAN AUTO ISI KOLOM FISIK
+function handleScan(kode){
+  let item = dataBarang.find(x => x.kode === kode);
+  if(item){
+    item.fisik = (Number(item.fisik)||0) + 1; // Nambah 1 otomatis
+    tampilkan();
+    // Sorot barisnya 1 detik
+    let row = document.getElementById(`row-${kode}`);
+    if(row){ row.classList.add('highlight-row'); setTimeout(()=>row.classList.remove('highlight-row'), 1000); }
+    showToast(`✅ ${item.nama} +1`);
+    document.getElementById(`fisik-${kode}`).focus();
+  } else {
+    showToast(`⚠️ Kode ${kode} tidak ditemukan`);
+  }
 }
 
 function copyOHShiftSebelumnya(){
@@ -420,6 +434,35 @@ function exportExcel(){
   let a = document.createElement('a'); a.href = url; a.download = `SO_${document.getElementById('tanggalOpname').value}_${document.getElementById('pilihShift').value}.csv`; a.click();
 }
 
+// FITUR 2: EXPORT PDF
+function exportPDF(){
+  const doc = new jsPDF();
+  let tgl = document.getElementById('tanggalOpname').value;
+  let shift = document.getElementById('pilihShift').value;
+  let pic = document.getElementById('namaPIC').value;
+
+  doc.setFontSize(16); doc.text("LAPORAN STOCK OPNAME", 105, 15, {align:"center"});
+  doc.setFontSize(12); doc.text(`Toko: ${document.getElementById('kodeToko').value}`, 14, 25);
+  doc.text(`Tanggal: ${tgl}`, 14, 32); doc.text(`Shift: ${shift}`, 14, 39); doc.text(`PIC: ${pic}`, 14, 46);
+
+  let y = 55;
+  let minus = dataBarang.filter(x => (Number(x.fisik)||0) < (Number(x.oh)||0));
+  let totalRugi = 0;
+
+  doc.setFontSize(14); doc.text("REKAP BARANG MINUS", 14, y); y+=7;
+  doc.setFontSize(10);
+  minus.forEach((m,i) => {
+    let kurang = Math.abs((Number(m.fisik)||0) - (Number(m.oh)||0));
+    let rugi = kurang * (Number(m.harga)||0); totalRugi += rugi;
+    doc.text(`${i+1}. ${m.nama} - Kurang ${kurang} = Rp ${rugi.toLocaleString()}`, 14, y); y+=6;
+    if(y>270){ doc.addPage(); y=20; }
+  });
+
+  y+=5; doc.setFontSize(12); doc.text(`TOTAL RUGI: Rp ${totalRugi.toLocaleString()}`, 14, y);
+  doc.save(`LAPORAN_SO_${tgl}_${shift}.pdf`);
+  showToast("✅ PDF Berhasil di Download");
+}
+
 function exportCSV(){ exportExcel(); }
 
 function searchBarang(){
@@ -435,12 +478,10 @@ function startScan(){
   html5QrCode.start(
     { facingMode: "environment" }, { fps: 10, qrbox: {width: 250, height: 100} },
     qrCodeMessage => {
-      document.getElementById('searchBarang').value = qrCodeMessage;
-      searchBarang();
+      handleScan(qrCodeMessage); // LANGSUNG PANGGIL HANDLESCAN
       html5QrCode.stop();
       reader.style.display = 'none';
       status.innerText = '';
-      showToast("✅ Barcode: " + qrCodeMessage);
     },
     errorMessage => {}
   ).catch(err => { status.innerText = "Gagal buka kamera. Izin ditolak?"; });
