@@ -20,7 +20,7 @@
   #toast{ position:fixed; top:-60px; left:50%; transform:translateX(-50%); background:#27ae60; color:#fff; padding:12px 25px; border-radius:20px; transition: top 0.4s cubic-bezier(.68,-0.55,.27,1.55); z-index:999; font-weight:600; box-shadow:0 4px 15px rgba(0,0,0,0.2) }
   #toast.show{ top:20px; }
 .dashboard{display:flex; gap:10px; margin:20px 0; flex-wrap:wrap}
-.dash-card{flex:1; min-width:110px; padding:15px; border-radius:15px; text-align:center; color:white; box-shadow:0 4px 10px rgba(0,0,0,0.1); cursor:pointer}
+.dash-card{flex:1; min-width:110px; padding:15px; border-radius:15px; text-align:center; color:white; box-shadow:0 4px 10px rgba(0,0,0,0.1)}
 .dash-card h4{margin:0; font-size:12px; opacity:0.9; font-weight:400}
 .dash-card h2{margin:5px 0 0; font-size:24px; font-weight:700}
 .card-item{background:linear-gradient(135deg,#4facfe,#00f2fe)}
@@ -92,21 +92,17 @@
       </div>
       <h2>Selamat Datang <span id="namaUser"></span></h2>
 
-      <div class="dashboard">
-        <div class="dash-card card-item" onclick="showMenu('dashboard')"><h4>Total Item</h4><h2 id="dashTotal">0</h2></div>
-        <div class="dash-card card-minus" onclick="showMenu('dashboard')"><h4>Minus</h4><h2 id="dashMinus">0</h2></div>
-        <div class="dash-card card-rugi" onclick="showMenu('dashboard')"><h4>Rugi</h4><h2 id="dashRugi">Rp 0</h2></div>
-      </div>
+      <!-- KARTU DASHBOARD UDAH AKU HAPUS DARI SINI -->
 
       <button class="btn-menu" onclick="showMenu('opname')">📝 Input Opname</button>
-      <button class="btn-menu" onclick="showMenu('dashboard')">📊 Dashboard</button> <!-- TOMBOL BARU -->
+      <button class="btn-menu" onclick="showMenu('dashboard')">📊 Dashboard</button>
       <button class="btn-menu" onclick="showMenu('laporan')">📋 Laporan & Rekap</button>
       <button class="btn-menu" onclick="showMenu('backup')">📤 Backup & Data</button>
       <button class="btn-menu" onclick="showMenu('setting')">⚙️ Pengaturan</button>
       <button class="btn-menu btn-danger" onclick="logout()">🚪 Logout</button>
     </div>
 
-    <!-- MENU BARU DASHBOARD -->
+    <!-- MENU DASHBOARD TETEP ADA DI SINI -->
     <div id="menuDashboard" class="page">
       <button class="btn-back" onclick="showMenu('home')">⬅️ Kembali ke Home</button>
       <h2>📊 Dashboard Ringkasan</h2>
@@ -197,7 +193,7 @@ function showMenu(menu) {
   target.style.display = 'block';
   setTimeout(()=> target.classList.add('active'), 10);
   if(menu === 'laporan') tampilkanRekapSelisih();
-  if(menu === 'home' || menu === 'dashboard') updateDashboard();
+  if(menu === 'dashboard') updateDashboard();
 }
 
 function showToast(pesan = "✅ Data Tersimpan"){
@@ -314,11 +310,7 @@ function updateDashboard(){
     let kurang = Math.abs((Number(m.fisik)||0) - (Number(m.oh)||0));
     totalRugi += kurang * (Number(m.harga)||0);
   });
-  // Update di Home
-  document.getElementById('dashTotal').innerText = dataBarang.length;
-  document.getElementById('dashMinus').innerText = minus.length;
-  document.getElementById('dashRugi').innerText = 'Rp ' + totalRugi.toLocaleString();
-  // Update di Menu Dashboard
+  // Cuma update di Menu Dashboard
   document.getElementById('dashTotal2').innerText = dataBarang.length;
   document.getElementById('dashMinus2').innerText = minus.length;
   document.getElementById('dashRugi2').innerText = 'Rp ' + totalRugi.toLocaleString();
