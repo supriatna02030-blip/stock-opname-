@@ -1,17 +1,34 @@
-const CACHE_NAME = "so-pro-v9";
+const CACHE_NAME = 'so-k792-v8'; // UDAH AKU NAIKIN JADI V8
 const urlsToCache = [
-  "./",
-  "index2.html"
+  '/',
+  '/index.html',
+  '/manifest.json'
 ];
 
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(urlsToCache))
   );
 });
 
 self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.match(event.request).then(response => response || fetch(event.request))
+    caches.match(event.request)
+      .then(response => response || fetch(event.request))
+  );
+});
+
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.map(cacheName => {
+          if (cacheName !== CACHE_NAME) {
+            return caches.delete(cacheName); // HAPUS CACHE LAMA OTOMATIS
+          }
+        })
+      );
+    })
   );
 });
