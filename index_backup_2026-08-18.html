@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SO RAHIL K792</title>
+<link rel="manifest" href="manifest.json">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script> <!-- BUAT PDF -->
+<style>
+  *{font-family:'Poppins', sans-serif}
+  body{background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); display:flex; justify-content:center; align-items:center; min-height:100vh; margin:0; padding:15px; transition:0.3s}
+  body.dark{background:#1a1a2e}
+.container{background:white; padding:25px; border-radius:20px; width:100%; max-width:1200px; box-shadow: 0 10px 30px rgba(0,0,0,0.2)}
+  body.dark.container{background:#16213e; color:white}
+  @keyframes blink { 0%,100%{opacity:1; transform:scale(1)} 50%{opacity:0.4; transform:scale(1.05)} }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+.page.active { animation: slideUp 0.3s ease-out; }
+  button:active { transform: scale(0.95); transition: 0.1s; }
+  #toast{ position:fixed; top:-60px; left:50%; transform:translateX(-50%); background:#27ae60; color:#fff; padding:12px 25px; border-radius:20px; transition: top 0.4s cubic-bezier(.68,-0.55,.27,1.55); z-index:999; font-weight:600; box-shadow:0 4px 15px rgba(0,0,0,0.2) }
+  #toast.show{ top:20px; }
+.dashboard{display:flex; gap:10px; margin:20px 0; flex-wrap:wrap}
+.dash-card{flex:1; min-width:110px; padding:15px; border-radius:15px; text-align:center; color:white; box-shadow:0 4px 10px rgba(0,0,0,0.1)}
+.dash-card h4{margin:0; font-size:12px; opacity:0.9; font-weight:400}
+.dash-card h2{margin:5px 0 0; font-size:24px; font-weight:700}
+.card-item{background:linear-gradient(135deg,#4facfe,#00f2fe)}
+.card-minus{background:linear-gradient(135deg,#e74c3c,#c0392b)}
+.card-rugi{background:linear-gradient(135deg,#f39c12,#e67e22)}
+.header-toko{text-align:center; padding:15px; margin-bottom:15px; border-bottom:2px solid #eee}
+.header-toko img{width:70px; height:70px; border-radius:15px; margin-bottom:8px; background:#fff; padding:5px}
+.header-toko h1{margin:5px 0; font-size:22px; color:#2980b9}
+  body.dark.header-toko h1{color:#00f2fe}
+.header-toko p{margin:0; font-size:13px; opacity:0.8}
+  h2{text-align:center; color:#2980b9; font-weight:700}
+  body.dark h2{color:#00f2fe}
+  input,button,select{width:100%; padding:12px; margin:6px 0; border:2px solid #eee; border-radius:10px; box-sizing:border-box; font-size:14px}
+  body.dark input,body.dark select{background:#0f3460; color:white; border-color:#333}
+  button{background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color:white; border:none; cursor:pointer; font-weight:600; font-size:16px}
+  button:hover{opacity:0.9; transform:translateY(-1px)}
+  button:disabled{opacity:0.6; cursor:not-allowed}
+.btn-aksi{background:#27ae60; width:auto; padding:10px 15px; margin:5px}
+.btn-admin{background:#8e44ad; width:auto; padding:10px 15px; margin:5px; color:white}
+.btn-wa{background:#25D366; width:auto; padding:10px 15px; margin:5px; color:white}
+.btn-danger{background:#e74c3c; width:auto; padding:8px 12px; margin:3px; color:white; font-size:12px}
+.btn-pdf{background:#e67e22; width:auto; padding:10px 15px; margin:5px; color:white} /* TOMBOL PDF */
+.btn-back{background:#7f8c8d; width:auto; padding:10px 15px; margin:10px 0}
+.btn-menu{margin:10px 0; padding:18px; font-size:18px}
+.btn-dark{position:fixed; top:20px; right:20px; width:50px; height:50px; border-radius:50%; font-size:20px; z-index:999; padding:0}
+.login-box{max-width:400px; margin:auto}
+.admin-panel{border:2px dashed #8e44ad; padding:15px; border-radius:10px; margin:15px 0; background:#f4ecf7}
+  body.dark.admin-panel{background:#2c003e}
+  table{width:100%; border-collapse:collapse; margin-top:10px; font-size:12px}
+  th{background:#2980b9; color:white; padding:8px; position:sticky; top:0}
+  td{padding:8px; border-bottom:1px solid #ddd; text-align:center}
+  body.dark td{border-color:#333}
+.selisih-minus{color:red; font-weight:700; animation: blink 0.8s infinite;}
+.selisih-plus{color:green; font-weight:700; animation: blink 0.8s infinite;}
+.user-item{display:flex; justify-content:space-between; align-items:center; padding:8px; border-bottom:1px solid #ddd}
+.rekap-box{margin-top:20px; padding:15px; border-radius:10px}
+.rekap-minus{background:#ffebee; border-left:5px solid #e74c3c}
+.rekap-plus{background:#e8f5e9; border-left:5px solid #27ae60}
+  body.dark.rekap-minus{background:#3e1f1f}
+  body.dark.rekap-plus{background:#1f3e2a}
+.page{display:none}
+.search-box{display:flex; gap:10px}
+.search-box input{flex:1}
+.search-box button{width:55px; padding:12px}
+.total-rp-box{background:#ffc107; color:#000; padding:15px; border-radius:10px; margin-top:15px; font-weight:700; text-align:center; font-size:16px}
+  #reader{width:100%; border-radius:10px; overflow:hidden; display:none; margin-top:10px; border:2px solid #4facfe}
+  #readerStatus{text-align:center; font-size:12px; color:#2980b9; margin-top:5px}
+.highlight-row{background: #fff3cd!important; transition: 0.5s;} /* SOROT PAS SCAN */
+</style>
+</head>
+<body>
+<button class="btn-dark" onclick="toggleDark()">🌙</button>
+<div id="toast">✅ Data Tersimpan</div>
+
+<div class="container">
+  <div id="loginPage" class="login-box">
+    <h2>🔐 LOGIN SO K792</h2>
+    <input type="text" id="inputNIK" placeholder="NIK Karyawan">
+    <input type="password" id="inputPIN" placeholder="PIN">
+    <button onclick="login()">Login</button>
+    <p id="loginError" style="color:red; text-align:center"></p>
+  </div>
+
+  <div id="mainApp" style="display:none">
+
+    <div id="home" class="page active">
+      <div class="header-toko">
+        <img src="https://placehold.co/70x70/2980b9/fff?text=K792" alt="logo">
+        <h1>SO RAHIL K792</h1>
+        <p>Alfamart Karbela 2</p>
+      </div>
+      <h2>Selamat Datang <span id="namaUser"></span></h2>
+      <button class="btn-menu" onclick="showMenu('opname')">📝 Input Opname</button>
+      <button class="btn-menu" onclick="showMenu('dashboard')">📊 Dashboard</button>
+      <button class="btn-menu" onclick="showMenu('laporan')">📋 Laporan & Rekap</button>
+      <button class="btn-menu" onclick="showMenu('backup')">📤 Backup & Data</button>
+      <button class="btn-menu" onclick="showMenu('setting')">⚙️ Pengaturan</button>
+      <button class="btn-menu btn-danger" onclick="logout()">🚪 Logout</button>
+    </div>
+
+    <div id="menuDashboard" class="page">
+      <button class="btn-back" onclick="showMenu('home')">⬅️ Kembali ke Home</button>
+      <h2>📊 Dashboard Ringkasan</h2>
+      <div class="dashboard">
+        <div class="dash-card card-item"><h4>Total Item</h4><h2 id="dashTotal2">0</h2></div>
+        <div class="dash-card card-minus"><h4>Minus</h4><h2 id="dashMinus2">0</h2></div>
+        <div class="dash-card card-rugi"><h4>Rugi</h4><h2 id="dashRugi2">Rp 0</h2></div>
+      </div>
+    </div>
+
+    <div id="menuOpname" class="page">
+      <button class="btn-back" onclick="showMenu('home')">⬅️ Kembali ke Home</button>
+      <h2>📝 Input Opname</h2>
+      <input type="text" id="kodeToko" value="K792/KARBELA2">
+      <div style="display:flex; gap:10px">
+        <input type="date" id="tanggalOpname">
+        <select id="pilihShift" onchange="loadData()">
+          <option>SHIFT 1</option><option>SHIFT 2</option><option>SHIFT 3</option>
+        </select>
+      </div>
+      <input type="text" id="namaPIC" placeholder="👤 Nama PIC">
+      <div class="search-box">
+        <input type="text" id="searchBarang" placeholder="🔍 Cari Barang / Scan Barcode..." onkeyup="searchBarang()">
+        <button onclick="startScan()">📷</button>
+      </div>
+      <div id="reader"></div>
+      <p id="readerStatus"></p>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center">
+        <button class="btn-aksi" onclick="loadItems()">📥 Load 43 Item</button>
+        <button class="btn-aksi" onclick="copyOHShiftSebelumnya()">📋 Ambil OH Shift Sebelumnya</button>
+        <button class="btn-aksi" onclick="simpanOpname()">💾 Simpan Opname</button>
+      </div>
+      <div id="tabelContainer"></div>
+      <div id="totalStok" style="margin-top:15px; font-weight:700; background:#2980b9; color:white; padding:15px; border-radius:15px; text-align:center"></div>
+    </div>
+
+    <div id="menuLaporan" class="page">
+      <button class="btn-back" onclick="showMenu('home')">⬅️ Kembali ke Home</button>
+      <h2>📊 Laporan & Rekap</h2>
+      <input type="text" id="searchLaporan" class="search-box" placeholder="🔍 Cari di Laporan..." onkeyup="tampilkanRekapSelisih()">
+      <button class="btn-aksi" onclick="lihatRiwayat()">📜 Lihat Riwayat</button>
+      <button class="btn-wa" onclick="kirimRekapWA()">📲 Kirim Rekap Minus WA</button>
+      <button class="btn-aksi" onclick="exportExcel()">📤 Export Excel</button>
+      <button class="btn-pdf" onclick="exportPDF()">📑 Export PDF</button> <!-- TOMBOL BARU -->
+      <div id="rekapSelisih"></div>
+      <div id="totalSelisihRp" class="total-rp-box"></div>
+    </div>
+
+    <div id="menuBackup" class="page">
+      <button class="btn-back" onclick="showMenu('home')">⬅️ Kembali ke Home</button>
+      <h2>📤 Backup & Data</h2>
+      <button class="btn-aksi" onclick="exportCSV()">📤 Backup Manual.CSV</button>
+    </div>
+
+    <div id="menuSetting" class="page">
+      <button class="btn-back" onclick="showMenu('home')">⬅️ Kembali ke Home</button>
+      <h2>⚙️ Pengaturan</h2>
+      <div id="adminPanel" class="admin-panel" style="display:none">
+        <h3>Panel Admin</h3>
+        <input type="text" id="newNIK" placeholder="NIK Baru">
+        <input type="text" id="newPIN" placeholder="PIN Baru">
+        <input type="text" id="newNama" placeholder="Nama Karyawan">
+        <button class="btn-admin" onclick="tambahUser()">+ Tambah User</button>
+        <div id="listUser"></div>
+      </div>
+      <button class="btn-aksi" onclick="toggleDark()">🌙 Ganti Tema</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const { jsPDF } = window.jspdf; // BUAT PDF
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js?v=9')
+.then(reg => console.log('SW Registered', reg))
+.catch(err => console.log('SW Error', err));
+}
+
+let html5QrCode;
+let dataBarang = [];
+let users = JSON.parse(localStorage.getItem('users_so')) || [{nik:"ADMIN", pin:"1234", nama:"ADMIN", role:"admin"}];
+let userLogin = null;
+
+function showMenu(menu) {
+  document.querySelectorAll('.page').forEach(p => {p.classList.remove('active'); p.style.display = 'none';});
+  let target = document.getElementById(menu === 'home'? 'home' : 'menu' + menu.charAt(0).toUpperCase() + menu.slice(1));
+  target.style.display = 'block';
+  setTimeout(()=> target.classList.add('active'), 10);
+  if(menu === 'laporan') tampilkanRekapSelisih();
+  if(menu === 'dashboard') updateDashboard();
+}
+
+function showToast(pesan = "✅ Data Tersimpan"){
+  const t = document.getElementById('toast');
+  t.innerText = pesan;
+  t.classList.add('show');
+  setTimeout(()=> t.classList.remove('show'), 2000);
+}
+
+window.onload = function(){
+  document.getElementById('tanggalOpname').valueAsDate = new Date();
+  cekLogin();
+}
+
+function cekLogin(){
+  userLogin = JSON.parse(sessionStorage.getItem('userLogin'));
+  if(userLogin){
+    document.getElementById('loginPage').style.display='none';
+    document.getElementById('mainApp').style.display='block';
+    document.getElementById('namaUser').innerText = `${userLogin.nama}`;
+    if(userLogin.role==='admin') document.getElementById('adminPanel').style.display='block';
+    tampilkanListUser();
+    showMenu('home');
+  }
+}
+
+function login(){
+  let nik = document.getElementById('inputNIK').value;
+  let pin = document.getElementById('inputPIN').value;
+  let user = users.find(u => u.nik===nik && u.pin===pin);
+  if(user){
+    userLogin = user;
+    sessionStorage.setItem('userLogin', JSON.stringify(user));
+    cekLogin();
+  } else {
+    document.getElementById('loginError').innerText = 'NIK/PIN Salah!';
+  }
+}
+
+function logout(){ sessionStorage.removeItem('userLogin'); location.reload(); }
+
+function tambahUser(){
+  if(userLogin.role!=='admin') return alert('Hanya Admin!');
+  let newUser = {nik: document.getElementById('newNIK').value, pin: document.getElementById('newPIN').value, nama: document.getElementById('newNama').value, role: 'user'};
+  if(users.find(u => u.nik === newUser.nik)) return alert('NIK sudah ada!');
+  users.push(newUser);
+  localStorage.setItem('users_so', JSON.stringify(users));
+  alert('User berhasil ditambah');
+  tampilkanListUser();
+}
+
+function tampilkanListUser(){
+  let html = '<h4>Daftar User:</h4>';
+  users.forEach(u => {
+    html += `<div class="user-item"><span>${u.nik} - ${u.nama} ${u.role==='admin'?'(Admin)':''}</span></div>`;
+  });
+  document.getElementById('listUser').innerHTML = html;
+}
+
+const templateShift = [
+{kategori:"KANZLER SINGLE", kode:"417806", nama:"kanzler sgl mini 65g", oh:"14", fisik:"14", harga:"0"},
+{kategori:"KANZLER SINGLE", kode:"417804", nama:"kanzler sgl ori 65g", oh:"28", fisik:"28", harga:"0"},
+{kategori:"KANZLER SINGLE", kode:"417805", nama:"kanzler single keju", oh:"18", fisik:"18", harga:"0"},
+{kategori:"KANZLER SINGLE", kode:"423992", nama:"kanzler single hot", oh:"32", fisik:"32", harga:"0"},
+{kategori:"KANZLER SINGLE", kode:"435578", nama:"kanzler single gochujang", oh:"36", fisik:"36", harga:"0"},
+{kategori:"KANZLER BAKSO", kode:"435736", nama:"kanzler bakso hot 48g", oh:"14", fisik:"14", harga:"0"},
+{kategori:"KANZLER BAKSO", kode:"465771", nama:"kanzler bakso gochujang 55g", oh:"19", fisik:"18", harga:"0"},
+{kategori:"KANZLER BAKSO", kode:"428660", nama:"kanzler bakso ori 48g", oh:"8", fisik:"8", harga:"0"},
+{kategori:"KANZLER BAKSO", kode:"428662", nama:"kanzler bakso keju 48g", oh:"10", fisik:"10", harga:"0"},
+{kategori:"FIESTA SOSIS", kode:"443704", nama:"fiesta rtg sosis spicykorean", oh:"28", fisik:"28", harga:"0"},
+{kategori:"ECO BAG", kode:"ECO1", nama:"Alfamart ECO", oh:"295", fisik:"302", harga:"0"},
+{kategori:"ECO BAG", kode:"ECO2", nama:"ECO bag kecil", oh:"135", fisik:"132", harga:"0"},
+{kategori:"ECO BAG", kode:"ECO3", nama:"ECO bag gede", oh:"65", fisik:"69", harga:"0"},
+{kategori:"FRESHMILK", kode:"FM1", nama:"Diamond", oh:"24", fisik:"24", harga:"0"},
+{kategori:"FRESHMILK", kode:"FM2", nama:"Greenfield milk", oh:"16", fisik:"16", harga:"0"},
+{kategori:"FRESHMILK", kode:"FM3", nama:"Omela", oh:"36", fisik:"36", harga:"0"},
+{kategori:"FRESHMILK", kode:"460235", nama:"NPL 15L", oh:"0", fisik:"0", harga:"0"},
+{kategori:"FRESHMILK", kode:"422782", nama:"Le mineral 15L", oh:"1", fisik:"0", harga:"0"},
+{kategori:"GULA", kode:"401698", nama:"PSM Gula Premium 1kg", oh:"38", fisik:"38", harga:"0"},
+{kategori:"GULA", kode:"405970", nama:"Rose Brand Gula Tebu premium 1kg", oh:"41", fisik:"41", harga:"0"},
+{kategori:"GULA", kode:"466054", nama:"Gula vigula kristal putih 1kg", oh:"7", fisik:"7", harga:"0"},
+{kategori:"GULA", kode:"221587", nama:"Gulaku gula tebu premium", oh:"7", fisik:"6", harga:"0"},
+{kategori:"GULA", kode:"406643", nama:"GMP Gula Kristal putih 1kg", oh:"32", fisik:"32", harga:"0"},
+{kategori:"MINYAK", kode:"113079", nama:"Tropical myk grg pet 2L", oh:"58", fisik:"58", harga:"0"},
+{kategori:"MINYAK", kode:"451350", nama:"Tropical myk grg pet 1,5L", oh:"16", fisik:"16", harga:"0"},
+{kategori:"MINYAK", kode:"61132", nama:"Tropical myk grg pet 1L", oh:"48", fisik:"48", harga:"0"},
+{kategori:"MINYAK", kode:"195673", nama:"sania mnyk grg pch 1L", oh:"35", fisik:"11", harga:"0"},
+{kategori:"MINYAK", kode:"211141", nama:"Bimoli myk pch grg 1L", oh:"4", fisik:"4", harga:"0"},
+{kategori:"MINYAK", kode:"6965", nama:"Barco myk grg pch 1L", oh:"12", fisik:"12", harga:"0"},
+{kategori:"MINYAK", kode:"244111", nama:"SunCo myk grg pch 2L", oh:"72", fisik:"6", harga:"0"},
+{kategori:"MINYAK", kode:"156747", nama:"Filma myk grg pch 2L", oh:"17", fisik:"5", harga:"0"},
+{kategori:"MINYAK", kode:"192730", nama:"Bimoli myk grg pch 2L", oh:"16", fisik:"4", harga:"0"},
+{kategori:"MINYAK", kode:"113222", nama:"Fortune myk grg pch 2L", oh:"29", fisik:"4", harga:"0"},
+{kategori:"MINYAK", kode:"195674", nama:"Sania myk grg pch 2L", oh:"35", fisik:"3", harga:"0"},
+{kategori:"MINYAK", kode:"211378", nama:"Bimoli myk grg spesial pch 2L", oh:"1", fisik:"1", harga:"0"},
+{kategori:"MINYAK", kode:"121905", nama:"Sovia myk grg pch 2L", oh:"95", fisik:"10", harga:"0"},
+{kategori:"MINYAK", kode:"437794", nama:"Harumnas myk grg pch 2L", oh:"0", fisik:"0", harga:"0"},
+{kategori:"MINYAK", kode:"433436", nama:"Camar myk grg pch 2L", oh:"0", fisik:"0", harga:"0"},
+{kategori:"MINYAK", kode:"123332", nama:"Alfamart myk grg pch 2L", oh:"40", fisik:"40", harga:"0"},
+{kategori:"MINYAK", kode:"453308", nama:"Vipco myk 2L", oh:"6", fisik:"6", harga:"0"},
+{kategori:"MINYAK", kode:"45258", nama:"Merah pth myk 2L", oh:"12", fisik:"12", harga:"0"},
+{kategori:"MINYAK", kode:"436397", nama:"ikan dorang myk grng kelapa", oh:"7", fisik:"7", harga:"0"}
+];
+
+function loadItems(){
+  const btn = event.target;
+  const textAwal = btn.innerHTML;
+  btn.innerHTML = "⏳ Loading...";
+  btn.disabled = true;
+  setTimeout(()=>{
+    dataBarang = templateShift.map(item => ({...item}));
+    tampilkan();
+    btn.innerHTML = textAwal;
+    btn.disabled = false;
+  }, 500);
+}
+
+function updateOH(i, val){ dataBarang[i].oh = val; tampilkan(); }
+function updateFisik(i, val){ dataBarang[i].fisik = val; tampilkan(); }
+function updateHarga(i, val){ dataBarang[i].harga = val; tampilkan(); }
+
+function tampilkan(){
+  let container = document.getElementById('tabelContainer'); container.innerHTML = '';
+  let kategoriList = [...new Set(dataBarang.map(x => x.kategori))];
+  let totalOH=0; let totalFisik=0;
+  kategoriList.forEach(kat => {
+    let html = `<h3>${kat}</h3><table id="tabel-${kat}"><tr><th>No</th><th>Kode</th><th>Nama</th><th>OH</th><th>Fisik</th><th>Harga</th><th>Selisih</th><th>Selisih Rp</th></tr>`;
+    let no=1;
+    dataBarang.filter(x => x.kategori === kat).forEach((item) => {
+      let index = dataBarang.indexOf(item);
+      totalOH += Number(item.oh) || 0; totalFisik += Number(item.fisik) || 0;
+      let selisih = (Number(item.fisik) || 0) - (Number(item.oh) || 0);
+      let selisihRp = selisih * (Number(item.harga) || 0);
+      let classSelisih = selisih > 0? 'selisih-plus' : selisih < 0? 'selisih-minus' : '';
+      html += `<tr id="row-${item.kode}"><td>${no++}</td><td>${item.kode}</td><td style="text-align:left">${item.nama}</td>
+      <td><input type="number" value="${item.oh}" onchange="updateOH(${index}, this.value)" style="width:60px"></td>
+      <td><input type="number" id="fisik-${item.kode}" value="${item.fisik}" onchange="updateFisik(${index}, this.value)" style="width:60px"></td>
+      <td><input type="number" value="${item.harga}" onchange="updateHarga(${index}, this.value)" style="width:80px" placeholder="Harga"></td>
+      <td class="${classSelisih}">${selisih}</td>
+      <td class="${classSelisih}">Rp ${selisihRp.toLocaleString()}</td></tr>`;
+    });
+    html += `</table>`; container.innerHTML += html;
+  });
+  document.getElementById('totalStok').innerHTML = `Total Item: ${dataBarang.length} | OH: ${totalOH} | Fisik: ${totalFisik}`;
+  tampilkanRekapSelisih();
+  updateDashboard();
+}
+
+function updateDashboard(){
+  let minus = dataBarang.filter(x => (Number(x.fisik)||0) < (Number(x.oh)||0));
+  let totalRugi = 0;
+  minus.forEach(m => {
+    let kurang = Math.abs((Number(m.fisik)||0) - (Number(m.oh)||0));
+    totalRugi += kurang * (Number(m.harga)||0);
+  });
+  document.getElementById('dashTotal2').innerText = dataBarang.length;
+  document.getElementById('dashMinus2').innerText = minus.length;
+  document.getElementById('dashRugi2').innerText = 'Rp ' + totalRugi.toLocaleString();
+}
+
+function tampilkanRekapSelisih(){
+  let keyword = document.getElementById('searchLaporan')?.value.toLowerCase() || '';
+  let minus = dataBarang.filter(x => ((Number(x.fisik)||0) < (Number(x.oh)||0)) && x.nama.toLowerCase().includes(keyword));
+  let plus = dataBarang.filter(x => ((Number(x.fisik)||0) > (Number(x.oh)||0)) && x.nama.toLowerCase().includes(keyword));
+  let totalSelisihRp = 0;
+  dataBarang.forEach(x => totalSelisihRp += ((Number(x.fisik)||0) - (Number(x.oh)||0)) * (Number(x.harga)||0) );
+  let html = '';
+  if(minus.length > 0){
+    html += `<div class="rekap-box rekap-minus"><h3>❌ REKAP BARANG MINUS: ${minus.length} Item</h3>`;
+    minus.forEach((m,i) => {
+      let kurang = Math.abs((Number(m.fisik)||0) - (Number(m.oh)||0));
+      let rugi = kurang * (Number(m.harga)||0);
+      html += `<p>${i+1}. ${m.nama} - Kurang <b>${kurang}</b> = <b>Rp ${rugi.toLocaleString()}</b></p>`;
+    });
+    html += `</div>`;
+  }
+  if(plus.length > 0){
+    html += `<div class="rekap-box rekap-plus"><h3>✅ REKAP BARANG PLUS: ${plus.length} Item</h3>`;
+    plus.forEach((p,i) => {
+      let lebih = (Number(p.fisik)||0) - (Number(p.oh)||0);
+      let untung = lebih * (Number(p.harga)||0);
+      html += `<p>${i+1}. ${p.nama} - Lebih <b>${lebih}</b> = <b>Rp ${untung.toLocaleString()}</b></p>`;
+    });
+    html += `</div>`;
+  }
+  document.getElementById('rekapSelisih').innerHTML = html;
+  document.getElementById('totalSelisihRp').innerHTML = `TOTAL SELISIH NILAI: Rp ${totalSelisihRp.toLocaleString()}`;
+}
+
+// FITUR 1: SCAN AUTO ISI KOLOM FISIK
+function handleScan(kode){
+  let item = dataBarang.find(x => x.kode === kode);
+  if(item){
+    item.fisik = (Number(item.fisik)||0) + 1; // Nambah 1 otomatis
+    tampilkan();
+    // Sorot barisnya 1 detik
+    let row = document.getElementById(`row-${kode}`);
+    if(row){ row.classList.add('highlight-row'); setTimeout(()=>row.classList.remove('highlight-row'), 1000); }
+    showToast(`✅ ${item.nama} +1`);
+    document.getElementById(`fisik-${kode}`).focus();
+  } else {
+    showToast(`⚠️ Kode ${kode} tidak ditemukan`);
+  }
+}
+
+function copyOHShiftSebelumnya(){
+  let shift = document.getElementById('pilihShift').value;
+  let tgl = document.getElementById('tanggalOpname').value;
+  let shiftNum = parseInt(shift.replace('SHIFT ',''));
+  if(shiftNum===1) return alert('Ini sudah SHIFT 1');
+  let prevShift = `SHIFT ${shiftNum-1}`;
+  let key = `so_${tgl}_${prevShift}`;
+  let dataPrev = JSON.parse(localStorage.getItem(key));
+  if(!dataPrev) return alert(`Data ${prevShift} belum ada!`);
+  dataBarang.forEach((item,i) => {
+    let itemPrev = dataPrev.barang.find(p => p.kode === item.kode);
+    if(itemPrev) item.oh = itemPrev.fisik;
+  });
+  tampilkan(); alert(`OH berhasil diambil dari ${prevShift}`);
+}
+
+function lihatRiwayat(){
+  let keys = Object.keys(localStorage).filter(k => k.startsWith('so_'));
+  if(keys.length === 0) return alert('Belum ada riwayat SO');
+  let html = '<h3>📜 RIWAYAT SO TERSIMPAN</h3><table><tr><th>Tanggal</th><th>Shift</th><th>PIC</th><th>Aksi</th></tr>';
+  keys.forEach(key => {
+    let data = JSON.parse(localStorage.getItem(key));
+    let [_, tgl, shift] = key.split('_');
+    html += `<tr><td>${tgl}</td><td>${shift}</td><td>${data.pic || '-'}</td><td><button onclick="bukaRiwayat('${key}')">Buka</button></td></tr>`;
+  });
+  html += '</table>';
+  document.getElementById('tabelContainer').innerHTML = html;
+}
+
+function bukaRiwayat(key){
+  let [_, tgl, shift] = key.split('_');
+  document.getElementById('tanggalOpname').value = tgl;
+  document.getElementById('pilihShift').value = shift;
+  loadData();
+  showMenu('opname');
+}
+
+function kirimRekapWA(){
+  let minus = dataBarang.filter(x => (Number(x.fisik)||0) < (Number(x.oh)||0));
+  if(minus.length===0) return alert('Tidak ada barang minus!');
+  let pesan = `*REKAP MINUS SO ${document.getElementById('kodeToko').value}*\nTanggal: ${document.getElementById('tanggalOpname').value}\nShift: ${document.getElementById('pilihShift').value}\nPIC: ${document.getElementById('namaPIC').value}\n\n`;
+  minus.forEach((m,i) => {
+    let kurang = Math.abs((Number(m.fisik)||0) - (Number(m.oh)||0));
+    let rugi = kurang * (Number(m.harga)||0);
+    pesan += `${i+1}. ${m.nama} - Kurang ${kurang} = Rp ${rugi.toLocaleString()}\n`;
+  });
+  window.open(`https://wa.me/?text=${encodeURIComponent(pesan)}`);
+}
+
+function simpanOpname(){
+  let key = `so_${document.getElementById('tanggalOpname').value}_${document.getElementById('pilihShift').value}`;
+  localStorage.setItem(key, JSON.stringify({barang:dataBarang, pic:document.getElementById('namaPIC').value}));
+  showToast();
+}
+
+function loadData(){
+  let key = `so_${document.getElementById('tanggalOpname').value}_${document.getElementById('pilihShift').value}`;
+  let data = JSON.parse(localStorage.getItem(key));
+  if(data) { dataBarang = data.barang || []; document.getElementById('namaPIC').value = data.pic || ''; }
+  else dataBarang = [];
+  tampilkan();
+}
+
+function exportExcel(){
+  let csv = 'KATEGORI,KODE,NAMA,OH,FISIK,HARGA,SELISIH,SELISIH_RP\n';
+  dataBarang.forEach(item => {
+    let selisih = (Number(item.fisik)||0) - (Number(item.oh)||0);
+    let selisihRp = selisih * (Number(item.harga)||0);
+    csv += `${item.kategori},${item.kode},${item.nama},${item.oh},${item.fisik},${item.harga},${selisih},${selisihRp}\n`;
+  });
+  let blob = new Blob([csv], {type: 'text/csv'});
+  let url = URL.createObjectURL(blob);
+  let a = document.createElement('a'); a.href = url; a.download = `SO_${document.getElementById('tanggalOpname').value}_${document.getElementById('pilihShift').value}.csv`; a.click();
+}
+
+// FITUR 2: EXPORT PDF
+function exportPDF(){
+  const doc = new jsPDF();
+  let tgl = document.getElementById('tanggalOpname').value;
+  let shift = document.getElementById('pilihShift').value;
+  let pic = document.getElementById('namaPIC').value;
+
+  doc.setFontSize(16); doc.text("LAPORAN STOCK OPNAME", 105, 15, {align:"center"});
+  doc.setFontSize(12); doc.text(`Toko: ${document.getElementById('kodeToko').value}`, 14, 25);
+  doc.text(`Tanggal: ${tgl}`, 14, 32); doc.text(`Shift: ${shift}`, 14, 39); doc.text(`PIC: ${pic}`, 14, 46);
+
+  let y = 55;
+  let minus = dataBarang.filter(x => (Number(x.fisik)||0) < (Number(x.oh)||0));
+  let totalRugi = 0;
+
+  doc.setFontSize(14); doc.text("REKAP BARANG MINUS", 14, y); y+=7;
+  doc.setFontSize(10);
+  minus.forEach((m,i) => {
+    let kurang = Math.abs((Number(m.fisik)||0) - (Number(m.oh)||0));
+    let rugi = kurang * (Number(m.harga)||0); totalRugi += rugi;
+    doc.text(`${i+1}. ${m.nama} - Kurang ${kurang} = Rp ${rugi.toLocaleString()}`, 14, y); y+=6;
+    if(y>270){ doc.addPage(); y=20; }
+  });
+
+  y+=5; doc.setFontSize(12); doc.text(`TOTAL RUGI: Rp ${totalRugi.toLocaleString()}`, 14, y);
+  doc.save(`LAPORAN_SO_${tgl}_${shift}.pdf`);
+  showToast("✅ PDF Berhasil di Download");
+}
+
+function exportCSV(){ exportExcel(); }
+
+function searchBarang(){
+  let keyword = document.getElementById('searchBarang').value.toLowerCase();
+}
+
+function startScan(){
+  const reader = document.getElementById('reader');
+  const status = document.getElementById('readerStatus');
+  reader.style.display = 'block';
+  status.innerText = 'Arahkan kamera ke barcode...';
+  html5QrCode = new Html5Qrcode("reader");
+  html5QrCode.start(
+    { facingMode: "environment" }, { fps: 10, qrbox: {width: 250, height: 100} },
+    qrCodeMessage => {
+      handleScan(qrCodeMessage); // LANGSUNG PANGGIL HANDLESCAN
+      html5QrCode.stop();
+      reader.style.display = 'none';
+      status.innerText = '';
+    },
+    errorMessage => {}
+  ).catch(err => { status.innerText = "Gagal buka kamera. Izin ditolak?"; });
+}
+
+function toggleDark(){ document.body.classList.toggle('dark'); }
+</script>
+</body>
+</html>
