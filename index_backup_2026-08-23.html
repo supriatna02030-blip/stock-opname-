@@ -1,0 +1,3963 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#2980b9">
+<meta name="description" content="SO RAHIL K792 MULTI - Professional Stock Opname System">
+
+<title>SO RAHIL K792 MULTI</title>
+
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-rahil.png">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+*{
+  box-sizing:border-box;
+  font-family:'Poppins',sans-serif;
+  -webkit-tap-highlight-color:transparent;
+}
+
+:root{
+  --primary:#2980b9;
+  --secondary:#00f2fe;
+  --accent:#8e44ad;
+  --success:#27ae60;
+  --danger:#e74c3c;
+  --warning:#f39c12;
+  --bg1:#4facfe;
+  --bg2:#00f2fe;
+  --card:rgba(255,255,255,.96);
+  --text:#222;
+  --muted:#777;
+  --line:#e5e5e5;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  background:linear-gradient(135deg,var(--bg1),var(--bg2));
+  background-size:400% 400%;
+  animation:bgMove 12s ease infinite;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  margin:0;
+  padding:12px;
+  color:var(--text);
+  transition:.5s;
+  overflow-x:hidden;
+}
+
+body::before,
+body::after{
+  content:"";
+  position:fixed;
+  width:260px;
+  height:260px;
+  border-radius:50%;
+  background:rgba(255,255,255,.12);
+  filter:blur(5px);
+  pointer-events:none;
+  z-index:0;
+}
+
+body::before{
+  top:-120px;
+  left:-100px;
+  animation:floatBubble 8s infinite ease-in-out;
+}
+
+body::after{
+  bottom:-120px;
+  right:-100px;
+  animation:floatBubble 10s infinite ease-in-out reverse;
+}
+
+@keyframes bgMove{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+
+@keyframes floatBubble{
+  0%,100%{
+    transform:translate(0,0) scale(1);
+  }
+  50%{
+    transform:translate(40px,30px) scale(1.2);
+  }
+}
+
+.container{
+  position:relative;
+  z-index:2;
+  background:var(--card);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  padding:25px;
+  border-radius:25px;
+  width:100%;
+  max-width:1200px;
+  box-shadow:
+    0 20px 60px rgba(0,0,0,.25),
+    inset 0 1px 0 rgba(255,255,255,.7);
+  animation:containerIn .7s cubic-bezier(.17,.67,.32,1.3);
+  transition:.5s;
+}
+
+@keyframes containerIn{
+  from{
+    opacity:0;
+    transform:translateY(40px) scale(.95);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
+}
+
+.page{
+  display:none;
+}
+
+.page.active{
+  animation:pageIn .45s cubic-bezier(.17,.67,.32,1.3);
+}
+
+@keyframes pageIn{
+  from{
+    opacity:0;
+    transform:translateY(25px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* LOGIN */
+
+.login-box{
+  max-width:430px;
+  margin:auto;
+  text-align:center;
+  padding:15px;
+}
+
+.login-logo{
+  width:105px;
+  height:105px;
+  object-fit:cover;
+  border-radius:28px;
+  background:#fff;
+  padding:6px;
+  box-shadow:0 12px 35px rgba(0,0,0,.25);
+  animation:logoFloat 3s ease-in-out infinite;
+}
+
+.login-box h1{
+  margin:15px 0 3px;
+  font-size:27px;
+  font-weight:800;
+  background:linear-gradient(90deg,var(--primary),var(--secondary));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:titleGlow 2s infinite alternate;
+}
+
+.login-subtitle{
+  margin:0 0 20px;
+  font-size:13px;
+  opacity:.7;
+}
+
+.login-card{
+  padding:5px;
+}
+
+.login-footer{
+  margin-top:20px;
+  font-size:11px;
+  opacity:.65;
+}
+
+@keyframes logoFloat{
+  0%,100%{
+    transform:translateY(0) rotate(0);
+  }
+  50%{
+    transform:translateY(-8px) rotate(2deg);
+  }
+}
+
+@keyframes titleGlow{
+  from{
+    filter:drop-shadow(0 0 2px rgba(0,242,254,.2));
+  }
+  to{
+    filter:drop-shadow(0 0 12px rgba(0,242,254,.7));
+  }
+}
+
+/* HEADER */
+
+.header-toko{
+  text-align:center;
+  padding:18px;
+  margin-bottom:20px;
+  border-bottom:2px solid rgba(0,0,0,.08);
+}
+
+.header-toko img{
+  width:82px;
+  height:82px;
+  border-radius:22px;
+  margin-bottom:8px;
+  background:#fff;
+  padding:5px;
+  object-fit:cover;
+  box-shadow:0 8px 25px rgba(0,0,0,.2);
+  animation:logoFloat 3s ease-in-out infinite;
+}
+
+.header-toko h1{
+  margin:5px 0;
+  font-size:25px;
+  color:var(--primary);
+  font-weight:800;
+}
+
+.header-toko p{
+  margin:0;
+  font-size:13px;
+  opacity:.7;
+}
+
+.welcome{
+  text-align:center;
+  margin-bottom:20px;
+}
+
+.welcome h2{
+  margin-bottom:3px;
+}
+
+.welcome p{
+  margin-top:0;
+  font-size:12px;
+  opacity:.65;
+}
+
+/* TEXT */
+
+h2{
+  text-align:center;
+  color:var(--primary);
+  font-weight:800;
+}
+
+h3{
+  color:var(--primary);
+}
+
+/* INPUT */
+
+input,
+select{
+  width:100%;
+  padding:12px;
+  margin:6px 0;
+  border:2px solid #eee;
+  border-radius:12px;
+  font-size:14px;
+  outline:none;
+  transition:.25s;
+  background:white;
+  color:#222;
+}
+
+input:focus,
+select:focus{
+  border-color:var(--secondary);
+  box-shadow:0 0 0 4px rgba(0,242,254,.12);
+  transform:translateY(-1px);
+}
+
+/* BUTTON */
+
+button{
+  position:relative;
+  overflow:hidden;
+  width:100%;
+  padding:12px;
+  margin:6px 0;
+  border:0;
+  border-radius:12px;
+  font-size:14px;
+  background:linear-gradient(135deg,var(--primary),var(--secondary));
+  color:white;
+  cursor:pointer;
+  font-weight:600;
+  transition:.25s;
+  box-shadow:0 5px 15px rgba(0,0,0,.12);
+}
+
+button:hover{
+  transform:translateY(-3px);
+  box-shadow:0 10px 25px rgba(0,0,0,.2);
+}
+
+button:active{
+  transform:scale(.96);
+}
+
+button:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
+
+.btn-login{
+  height:50px;
+  font-size:16px;
+  margin-top:10px;
+}
+
+.btn-menu{
+  margin:10px 0;
+  padding:18px;
+  font-size:17px;
+  text-align:left;
+  border-radius:17px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  box-shadow:0 8px 20px rgba(0,0,0,.12);
+}
+
+.btn-menu:hover{
+  transform:translateX(6px) scale(1.01);
+}
+
+.btn-aksi{
+  background:#27ae60;
+  width:auto;
+  padding:10px 15px;
+  margin:5px;
+}
+
+.btn-admin{
+  background:#8e44ad;
+  width:auto;
+  padding:10px 15px;
+  margin:5px;
+}
+
+.btn-wa{
+  background:#25D366;
+  width:auto;
+  padding:10px 15px;
+  margin:5px;
+}
+
+.btn-danger{
+  background:#e74c3c;
+  width:auto;
+  padding:8px 12px;
+  margin:3px;
+  color:white;
+  font-size:12px;
+}
+
+.btn-pdf{
+  background:#e67e22;
+  width:auto;
+  padding:10px 15px;
+  margin:5px;
+}
+
+.btn-back{
+  background:#7f8c8d;
+  width:auto;
+  padding:10px 15px;
+  margin:10px 0;
+}
+
+.btn-tambah{
+  background:#8e44ad;
+  width:auto;
+  padding:10px 15px;
+  margin:5px;
+}
+
+/* DASHBOARD */
+
+.dashboard{
+  display:flex;
+  gap:12px;
+  margin:20px 0;
+  flex-wrap:wrap;
+}
+
+.dash-card{
+  flex:1;
+  min-width:110px;
+  padding:18px;
+  border-radius:18px;
+  text-align:center;
+  color:white;
+  box-shadow:0 10px 25px rgba(0,0,0,.15);
+  transition:.3s;
+  animation:cardPop .6s backwards;
+}
+
+.dash-card:nth-child(2){
+  animation-delay:.1s;
+}
+
+.dash-card:nth-child(3){
+  animation-delay:.2s;
+}
+
+.dash-card:hover{
+  transform:translateY(-7px) scale(1.02);
+}
+
+@keyframes cardPop{
+  from{
+    opacity:0;
+    transform:translateY(20px) scale(.9);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
+}
+
+.card-item{
+  background:linear-gradient(135deg,#4facfe,#00f2fe);
+}
+
+.card-minus{
+  background:linear-gradient(135deg,#e74c3c,#c0392b);
+}
+
+.card-rugi{
+  background:linear-gradient(135deg,#f39c12,#e67e22);
+}
+
+.dash-card h4{
+  margin:0;
+  font-size:12px;
+  opacity:.9;
+  font-weight:500;
+}
+
+.dash-card h2{
+  color:white;
+  margin:5px 0 0;
+  font-size:24px;
+}
+
+/* RUANG */
+
+.ruang-list{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  margin-top:15px;
+}
+
+.ruang-item{
+  background:rgba(241,248,255,.9);
+  border:2px solid var(--secondary);
+  padding:17px;
+  border-radius:18px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  transition:.3s;
+  animation:slideRoom .45s backwards;
+}
+
+.ruang-item:hover{
+  transform:translateX(5px);
+  box-shadow:0 8px 20px rgba(0,0,0,.12);
+}
+
+.ruang-name{
+  font-weight:700;
+  color:var(--primary);
+}
+
+.ruang-info{
+  font-size:11px;
+  opacity:.65;
+}
+
+@keyframes slideRoom{
+  from{
+    opacity:0;
+    transform:translateX(-25px);
+  }
+  to{
+    opacity:1;
+    transform:translateX(0);
+  }
+}
+
+/* SEARCH */
+
+.search-box{
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+
+.search-box input{
+  flex:1;
+}
+
+.search-box button{
+  width:55px;
+  padding:12px;
+}
+
+/* SCANNER */
+
+#reader{
+  width:100%;
+  border-radius:15px;
+  overflow:hidden;
+  display:none;
+  margin-top:10px;
+  border:3px solid var(--secondary);
+  box-shadow:0 10px 30px rgba(0,0,0,.2);
+  animation:scannerIn .4s;
+}
+
+@keyframes scannerIn{
+  from{
+    opacity:0;
+    transform:scale(.95);
+  }
+  to{
+    opacity:1;
+    transform:scale(1);
+  }
+}
+
+#readerStatus{
+  text-align:center;
+  font-size:12px;
+  color:var(--primary);
+  margin-top:5px;
+}
+
+/* TABLE */
+
+.table-wrap{
+  overflow-x:auto;
+  border-radius:12px;
+}
+
+table{
+  width:100%;
+  min-width:700px;
+  border-collapse:collapse;
+  margin-top:10px;
+  font-size:12px;
+}
+
+th{
+  background:linear-gradient(135deg,var(--primary),var(--secondary));
+  color:white;
+  padding:9px;
+  position:sticky;
+  top:0;
+  z-index:2;
+}
+
+td{
+  padding:8px;
+  border-bottom:1px solid #ddd;
+  text-align:center;
+}
+
+tr{
+  transition:.2s;
+}
+
+tr:hover{
+  background:rgba(79,172,254,.08);
+}
+
+.highlight-row{
+  background:#fff3cd!important;
+  animation:scanFlash .7s ease;
+}
+
+@keyframes scanFlash{
+  0%{
+    transform:scale(1);
+  }
+  50%{
+    transform:scale(1.02);
+    box-shadow:0 0 20px #ffc107;
+  }
+  100%{
+    transform:scale(1);
+  }
+}
+
+/* SELISIH */
+
+.selisih-minus{
+  color:#e74c3c;
+  font-weight:700;
+  animation:blinkMinus 1s infinite;
+}
+
+.selisih-plus{
+  color:#27ae60;
+  font-weight:700;
+  animation:blinkPlus 1s infinite;
+}
+
+@keyframes blinkMinus{
+  0%,100%{opacity:1}
+  50%{opacity:.45}
+}
+
+@keyframes blinkPlus{
+  0%,100%{opacity:1}
+  50%{opacity:.55}
+}
+
+/* REKAP */
+
+.rekap-box{
+  margin-top:20px;
+  padding:15px;
+  border-radius:15px;
+  animation:pageIn .4s;
+}
+
+.rekap-minus{
+  background:#ffebee;
+  border-left:6px solid #e74c3c;
+}
+
+.rekap-plus{
+  background:#e8f5e9;
+  border-left:6px solid #27ae60;
+}
+
+.total-rp-box{
+  background:linear-gradient(135deg,#ffc107,#ff9800);
+  color:#000;
+  padding:17px;
+  border-radius:15px;
+  margin-top:15px;
+  font-weight:700;
+  text-align:center;
+  box-shadow:0 8px 20px rgba(0,0,0,.12);
+}
+
+/* ADMIN */
+
+.admin-panel{
+  border:2px dashed #8e44ad;
+  padding:15px;
+  border-radius:15px;
+  margin:15px 0;
+  background:#f4ecf7;
+}
+
+.user-item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px;
+  border-bottom:1px solid #ddd;
+}
+
+/* THEME */
+
+.theme-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+  margin-top:15px;
+}
+
+.theme-btn{
+  min-height:75px;
+  border-radius:17px;
+  font-size:13px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  gap:4px;
+}
+
+.theme-blue{
+  background:linear-gradient(135deg,#4facfe,#00f2fe);
+}
+
+.theme-purple{
+  background:linear-gradient(135deg,#667eea,#764ba2);
+}
+
+.theme-green{
+  background:linear-gradient(135deg,#11998e,#38ef7d);
+}
+
+.theme-red{
+  background:linear-gradient(135deg,#ff416c,#ff4b2b);
+}
+
+.theme-orange{
+  background:linear-gradient(135deg,#f7971e,#ffd200);
+  color:#222;
+}
+
+.theme-dark{
+  background:linear-gradient(135deg,#141e30,#243b55);
+}
+
+/* TUTORIAL */
+
+.tutorial-box{
+  margin-top:15px;
+}
+
+.tutorial-item{
+  background:rgba(255,255,255,.8);
+  border-radius:15px;
+  padding:15px;
+  margin:10px 0;
+  border-left:5px solid var(--primary);
+  transition:.3s;
+}
+
+.tutorial-item:hover{
+  transform:translateX(5px);
+  box-shadow:0 6px 15px rgba(0,0,0,.1);
+}
+
+.tutorial-item b{
+  color:var(--primary);
+}
+
+.tutorial-item p{
+  font-size:13px;
+  line-height:1.6;
+  margin-bottom:0;
+}
+
+/* TOAST */
+
+#toast{
+  position:fixed;
+  top:-80px;
+  left:50%;
+  transform:translateX(-50%);
+  background:rgba(39,174,96,.96);
+  backdrop-filter:blur(10px);
+  color:#fff;
+  padding:13px 25px;
+  border-radius:30px;
+  transition:.5s cubic-bezier(.68,-.55,.27,1.55);
+  z-index:9999;
+  font-weight:600;
+  box-shadow:0 8px 25px rgba(0,0,0,.25);
+  max-width:90%;
+  text-align:center;
+}
+
+#toast.show{
+  top:20px;
+}
+
+/* FOOTER */
+
+.app-footer{
+  text-align:center;
+  margin-top:25px;
+  padding-top:15px;
+  border-top:1px solid rgba(0,0,0,.1);
+  font-size:12px;
+  opacity:.7;
+}
+
+.app-version{
+  font-weight:800;
+  color:var(--primary);
+  font-size:14px;
+}
+
+/* DARK */
+
+body.dark{
+  --card:rgba(20,30,55,.97);
+  --text:#fff;
+}
+
+body.dark .container{
+  color:white;
+}
+
+body.dark h2,
+body.dark h3{
+  color:#00f2fe;
+}
+
+body.dark input,
+body.dark select{
+  background:#0f3460;
+  color:white;
+  border-color:#244b72;
+}
+
+body.dark .ruang-item{
+  background:#0f3460;
+}
+
+body.dark .tutorial-item{
+  background:rgba(15,52,96,.8);
+}
+
+body.dark .admin-panel{
+  background:#261634;
+}
+
+body.dark td{
+  border-color:#333;
+}
+
+body.dark .header-toko{
+  border-color:#333;
+}
+
+body.dark .header-toko h1{
+  color:#00f2fe;
+}
+
+body.dark .user-item{
+  border-color:#333;
+}
+
+/* MOBILE */
+
+@media(max-width:600px){
+
+  body{
+    padding:7px;
+    align-items:flex-start;
+  }
+
+  .container{
+    padding:15px;
+    border-radius:20px;
+    margin:8px 0;
+  }
+
+  .header-toko h1{
+    font-size:21px;
+  }
+
+  .dashboard{
+    gap:8px;
+  }
+
+  .dash-card{
+    min-width:calc(33.33% - 6px);
+    padding:12px 5px;
+  }
+
+  .dash-card h2{
+    font-size:17px;
+  }
+
+  .dash-card h4{
+    font-size:10px;
+  }
+
+  .theme-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .ruang-item{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:10px;
+  }
+
+  .ruang-item > div:last-child{
+    width:100%;
+  }
+
+  .ruang-item button{
+    width:auto;
+  }
+
+  .btn-menu{
+    font-size:15px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div id="toast">✅ Data Tersimpan</div>
+
+<div class="container">
+
+  <!-- ================= LOGIN ================= -->
+
+  <div id="loginPage" class="login-box">
+
+    <img
+      src="icon-rahil.png"
+      class="login-logo"
+      alt="SO RAHIL">
+
+    <h1>SO RAHIL K792</h1>
+
+    <p class="login-subtitle">
+      MULTI • PROFESSIONAL STOCK OPNAME
+    </p>
+
+    <div class="login-card">
+
+      <input
+        type="text"
+        id="inputNIK"
+        placeholder="👤 NIK Karyawan"
+        autocomplete="username">
+
+      <input
+        type="password"
+        id="inputPIN"
+        placeholder="🔐 PIN"
+        autocomplete="current-password"
+        onkeydown="if(event.key==='Enter') login()">
+
+      <button class="btn-login" onclick="login()">
+        🚀 LOGIN
+      </button>
+
+      <p id="loginError"
+         style="color:#e74c3c;text-align:center;font-size:13px">
+      </p>
+
+    </div>
+
+    <div class="login-footer">
+      <b>SO RAHIL K792 MULTI v2.0</b><br>
+      Professional Stock Opname System<br>
+      By Ade Supriatna
+    </div>
+
+  </div>
+
+
+  <!-- ================= MAIN APP ================= -->
+
+  <div id="mainApp" style="display:none">
+
+    <!-- HOME -->
+
+    <div id="home" class="page active">
+
+      <div class="header-toko">
+
+        <img
+          src="icon-rahil.png"
+          alt="Logo SO RAHIL">
+
+        <h1>SO RAHIL K792</h1>
+
+        <p>Alfamart Karbela 2 • MULTI STOCK OPNAME</p>
+
+      </div>
+
+      <div class="welcome">
+
+        <h2>
+          Selamat Datang,
+          <span id="namaUser"></span> 👋
+        </h2>
+
+        <p>
+          Sistem Stock Opname Profesional
+        </p>
+
+      </div>
+
+      <button class="btn-menu"
+        onclick="showMenu('daftarRuang')">
+        🏠 Daftar Ruang SO
+      </button>
+
+      <button class="btn-menu"
+        onclick="showMenu('dashboard')">
+        📊 Dashboard
+      </button>
+
+      <button class="btn-menu"
+        onclick="showMenu('laporan')">
+        📋 Laporan & Rekap
+      </button>
+
+      <button class="btn-menu"
+        onclick="showMenu('backup')">
+        📤 Backup & Data
+      </button>
+
+      <button class="btn-menu"
+        onclick="showMenu('setting')">
+        ⚙️ Pengaturan & Tutorial
+      </button>
+
+      <button class="btn-menu btn-danger"
+        onclick="logout()">
+        🚪 Logout
+      </button>
+
+      <div class="app-footer">
+        SO RAHIL K792 MULTI v2.0<br>
+        By <b>Ade Supriatna</b>
+      </div>
+
+    </div>
+
+
+    <!-- ================= DAFTAR RUANG ================= -->
+
+    <div id="menuDaftarRuang" class="page">
+
+      <button class="btn-back"
+        onclick="showMenu('home')">
+        ⬅️ Kembali ke Home
+      </button>
+
+      <h2>🏠 Pilih Ruang SO</h2>
+
+      <div style="display:flex;gap:8px;align-items:center">
+
+        <input
+          type="text"
+          id="namaRuangBaru"
+          placeholder="Contoh: SO RAHIL A"
+          onkeydown="if(event.key==='Enter') tambahRuang()">
+
+        <button
+          class="btn-tambah"
+          style="width:auto"
+          onclick="tambahRuang()">
+          ➕ Tambah
+        </button>
+
+      </div>
+
+      <div id="listRuang"
+           class="ruang-list">
+      </div>
+
+    </div>
+
+
+    <!-- ================= DASHBOARD ================= -->
+
+    <div id="menuDashboard" class="page">
+
+      <button class="btn-back"
+        onclick="showMenu('home')">
+        ⬅️ Kembali ke Home
+      </button>
+
+      <h2>📊 Dashboard Ringkasan</h2>
+
+      <div class="dashboard">
+
+        <div class="dash-card card-item">
+          <h4>Total Item</h4>
+          <h2 id="dashTotal2">0</h2>
+        </div>
+
+        <div class="dash-card card-minus">
+          <h4>Minus</h4>
+          <h2 id="dashMinus2">0</h2>
+        </div>
+
+        <div class="dash-card card-rugi">
+          <h4>Rugi</h4>
+          <h2 id="dashRugi2">Rp 0</h2>
+        </div>
+
+      </div>
+
+      <div class="rekap-box rekap-plus">
+
+        <h3>📈 Status Ruang Aktif</h3>
+
+        <p>
+          Ruang:
+          <b id="dashboardRuang">-</b>
+        </p>
+
+        <p>
+          Data tersimpan otomatis di perangkat.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <!-- ================= OPNAME ================= -->
+
+    <div id="menuOpname" class="page">
+
+      <button class="btn-back"
+        onclick="showMenu('daftarRuang')">
+        ⬅️ Kembali ke Daftar Ruang
+      </button>
+
+      <h2 id="judulRuang">
+        📝 Input Opname
+      </h2>
+
+      <input
+        type="text"
+        id="kodeToko"
+        value="K792/KARBELA2"
+        placeholder="Kode Toko">
+
+      <div style="display:flex;gap:8px">
+
+        <input
+          type="date"
+          id="tanggalOpname"
+          onchange="loadData()">
+
+        <select
+          id="pilihShift"
+          onchange="loadData()">
+
+          <option>SHIFT 1</option>
+          <option>SHIFT 2</option>
+          <option>SHIFT 3</option>
+
+        </select>
+
+      </div>
+
+      <input
+        type="text"
+        id="namaPIC"
+        placeholder="👤 Nama PIC">
+
+      <div class="search-box">
+
+        <input
+          type="text"
+          id="searchBarang"
+          placeholder="🔍 Cari Barang / Barcode..."
+          oninput="filterBarang()">
+
+        <button
+          onclick="startScan()">
+          📷
+        </button>
+
+      </div>
+
+      <div id="reader"></div>
+
+      <p id="readerStatus"></p>
+
+      <div style="
+        display:flex;
+        gap:5px;
+        flex-wrap:wrap;
+        justify-content:center">
+
+        <button
+          class="btn-aksi"
+          onclick="loadItems()">
+          📥 Load 43 Item
+        </button>
+
+        <button
+          class="btn-tambah"
+          onclick="tambahProdukManual()">
+          ➕ Tambah Produk
+        </button>
+
+        <button
+          class="btn-aksi"
+          onclick="copyOHShiftSebelumnya()">
+          📋 Ambil OH Shift Sebelumnya
+        </button>
+
+        <button
+          class="btn-aksi"
+          onclick="simpanOpname()">
+          💾 Simpan Opname
+        </button>
+
+      </div>
+
+      <div id="tabelContainer"></div>
+
+      <div
+        id="totalStok"
+        style="
+        margin-top:15px;
+        font-weight:700;
+        background:linear-gradient(135deg,var(--primary),var(--secondary));
+        color:white;
+        padding:15px;
+        border-radius:15px;
+        text-align:center">
+      </div>
+
+    </div>
+
+
+    <!-- ================= LAPORAN ================= -->
+
+    <div id="menuLaporan" class="page">
+
+      <button class="btn-back"
+        onclick="showMenu('home')">
+        ⬅️ Kembali ke Home
+      </button>
+
+      <h2>📊 Laporan & Rekap</h2>
+
+      <input
+        type="text"
+        id="searchLaporan"
+        placeholder="🔍 Cari di Laporan..."
+        oninput="tampilkanRekapSelisih()">
+
+      <button class="btn-aksi"
+        onclick="lihatRiwayat()">
+        📜 Lihat Riwayat
+      </button>
+
+      <button class="btn-wa"
+        onclick="kirimRekapWA()">
+        📲 Kirim Rekap Minus WA
+      </button>
+
+      <button class="btn-wa"
+        onclick="kirimRekapPlusWA()">
+        📲 Kirim Rekap Plus WA
+      </button>
+
+      <button class="btn-aksi"
+        onclick="exportExcel()">
+        📤 Export CSV / Excel
+      </button>
+
+      <button class="btn-pdf"
+        onclick="exportPDF()">
+        📑 Export PDF
+      </button>
+
+      <div id="rekapSelisih"></div>
+
+      <div
+        id="totalSelisihRp"
+        class="total-rp-box">
+      </div>
+
+    </div>
+
+
+    <!-- ================= BACKUP ================= -->
+
+    <div id="menuBackup" class="page">
+
+      <button class="btn-back"
+        onclick="showMenu('home')">
+        ⬅️ Kembali ke Home
+      </button>
+
+      <h2>📤 Backup & Data</h2>
+
+      <div class="admin-panel">
+
+        <h3>💾 Backup Data</h3>
+
+        <p style="font-size:13px">
+          Gunakan backup untuk menyimpan data SO
+          dalam bentuk CSV.
+        </p>
+
+        <button class="btn-aksi"
+          onclick="exportCSV()">
+          📤 Backup Data CSV
+        </button>
+
+        <button class="btn-pdf"
+          onclick="exportPDF()">
+          📑 Backup Laporan PDF
+        </button>
+
+      </div>
+
+      <div class="admin-panel">
+
+        <h3>ℹ️ Penyimpanan</h3>
+
+        <p style="font-size:13px;line-height:1.7">
+          Data aplikasi disimpan di penyimpanan lokal
+          perangkat/browser menggunakan LocalStorage.
+          Sebaiknya lakukan backup secara berkala.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <!-- ================= SETTING ================= -->
+
+    <div id="menuSetting" class="page">
+
+      <button class="btn-back"
+        onclick="showMenu('home')">
+        ⬅️ Kembali ke Home
+      </button>
+
+      <h2>⚙️ Pengaturan</h2>
+
+
+      <!-- ADMIN -->
+
+      <div id="adminPanel"
+           class="admin-panel"
+           style="display:none">
+
+        <h3>👨‍💼 Panel Admin</h3>
+
+        <input
+          type="text"
+          id="newNIK"
+          placeholder="NIK Baru">
+
+        <input
+          type="text"
+          id="newPIN"
+          placeholder="PIN Baru">
+
+        <input
+          type="text"
+          id="newNama"
+          placeholder="Nama Karyawan">
+
+        <button
+          class="btn-admin"
+          onclick="tambahUser()">
+          ➕ Tambah User
+        </button>
+
+        <div id="listUser"></div>
+
+      </div>
+
+
+      <!-- TEMA -->
+
+      <div class="admin-panel">
+
+        <h3>🎨 Tema Profesional</h3>
+
+        <p style="font-size:13px;opacity:.7">
+          Pilih warna tampilan aplikasi.
+          Tema akan tersimpan otomatis.
+        </p>
+
+        <div class="theme-grid">
+
+          <button
+            class="theme-btn theme-blue"
+            onclick="ubahTema('blue')">
+            💎
+            <span>Ocean Blue</span>
+          </button>
+
+          <button
+            class="theme-btn theme-purple"
+            onclick="ubahTema('purple')">
+            💜
+            <span>Royal Purple</span>
+          </button>
+
+          <button
+            class="theme-btn theme-green"
+            onclick="ubahTema('green')">
+            🌿
+            <span>Emerald Green</span>
+          </button>
+
+          <button
+            class="theme-btn theme-red"
+            onclick="ubahTema('red')">
+            ❤️
+            <span>Ruby Red</span>
+          </button>
+
+          <button
+            class="theme-btn theme-orange"
+            onclick="ubahTema('orange')">
+            🧡
+            <span>Sunset Orange</span>
+          </button>
+
+          <button
+            class="theme-btn theme-dark"
+            onclick="ubahTema('dark')">
+            🌌
+            <span>Midnight</span>
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <button
+        class="btn-aksi"
+        onclick="toggleDark()">
+        🌙 Ganti Mode Terang / Gelap
+      </button>
+
+
+      <!-- TUTORIAL -->
+
+      <div class="admin-panel tutorial-box">
+
+        <h3>📚 Tutorial & Panduan</h3>
+
+        <div class="tutorial-item">
+          <b>🔐 1. Login</b>
+          <p>
+            Masukkan NIK dan PIN karyawan yang telah
+            terdaftar. Admin awal adalah
+            <b>ADMIN / 1234</b>.
+          </p>
+        </div>
+
+        <div class="tutorial-item">
+          <b>🏠 2. Daftar Ruang SO</b>
+          <p>
+            Buat ruang SO sesuai area yang ingin dihitung.
+            Contoh: SO RAHIL A atau SO RAHIL B.
+          </p>
+        </div>
+
+        <div class="tutorial-item">
+          <b>📦 3. Load Produk</b>
+          <p>
+            Tekan <b>Load 43 Item</b> untuk memasukkan
+            daftar produk template. Produk tambahan
+            dapat dimasukkan melalui <b>Tambah Produk</b>.
+          </p>
+        </div>
+
+        <div class="tutorial-item">
+          <b>📷 4. Scan Barcode</b>
+          <p>
+            Tekan tombol kamera dan arahkan kamera ke
+            barcode. Setiap scan berhasil otomatis
+            menambahkan Fisik +1.
+          </p>
+        </div>
+
+        <div class="tutorial-item">
+          <b>📊 5. OH & Fisik</b>
+          <p>
+            OH adalah stok sistem, sedangkan Fisik adalah
+            hasil penghitungan barang secara langsung.
+            Sistem menghitung selisih otomatis.
+          </p>
+        </div>
+
+        <div class="tutorial-item">
+          <b>🔴 6. Barang Minus</b>
+          <p>
+            Jika Fisik lebih kecil dari OH, barang masuk
+            Rekap Minus dan nilai kerugian dihitung
+            berdasarkan harga.
+          </p>
+        </div>
+
+        <div class="tutorial-item">
+          <b>🟢 7. Barang Plus</b>
+          <p>
+            Jika Fisik lebih besar dari OH, barang masuk
+            Rekap Plus. Rekap Plus dapat dikirim
+            langsung ke WhatsApp.
+          </p>
+        </div>
+
+        <div class="tutorial-item">
+          <b>📋 8. Shift Sebelumnya</b>
+          <p>
+            Pada Shift 2 atau Shift 3 gunakan
+            <b>Ambil OH Shift Sebelumnya</b> agar OH
+            otomatis mengambil Fisik dari shift sebelumnya.
+          </p>
+        </div>
+
+        <div class="tutorial-item">
+          <b>💾 9. Simpan Opname</b>
+          <p>
+            Setelah selesai menghitung, tekan
+            <b>Simpan Opname</b>. Data akan tersimpan
+            di perangkat.
+          </p>
+        </div>
+
+        <div class="tutorial-item">
+          <b>📲 10. WhatsApp</b>
+          <p>
+            Laporan menyediakan tombol khusus untuk
+            mengirim Rekap Minus maupun Rekap Plus
+            langsung melalui WhatsApp.
+          </p>
+        </div>
+
+        <div class="tutorial-item">
+          <b>📑 11. PDF & CSV</b>
+          <p>
+            Gunakan Export PDF untuk laporan dan CSV
+            untuk backup atau dibuka menggunakan Excel.
+          </p>
+        </div>
+
+        <div class="tutorial-item">
+          <b>👨‍💼 12. Admin</b>
+          <p>
+            Admin dapat menambahkan akun karyawan baru
+            melalui Panel Admin.
+          </p>
+        </div>
+
+      </div>
+
+
+      <!-- INFO APP -->
+
+      <div class="app-footer">
+
+        <div class="app-version">
+          SO RAHIL K792 MULTI v2.0
+        </div>
+
+        <div>
+          Professional Stock Opname System
+        </div>
+
+        <div style="margin-top:6px">
+          © 2026 • By <b>Ade Supriatna</b>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+
+<script>
+
+/* =====================================================
+   INIT
+===================================================== */
+
+const {jsPDF} = window.jspdf;
+
+if("serviceWorker" in navigator){
+  window.addEventListener("load",()=>{
+    navigator.serviceWorker
+      .register("sw.js?v=20")
+      .catch(err=>console.log("SW:",err));
+  });
+}
+
+let html5QrCode = null;
+let ruangAktif = null;
+
+let daftarRuang =
+  JSON.parse(localStorage.getItem("daftar_ruang_so")) || [];
+
+let users =
+  JSON.parse(localStorage.getItem("users_so")) || [
+    {
+      nik:"ADMIN",
+      pin:"1234",
+      nama:"ADMIN",
+      role:"admin"
+    }
+  ];
+
+let userLogin = null;
+
+
+/* =====================================================
+   TEMPLATE 43 ITEM
+===================================================== */
+
+const templateShift = [
+
+{kategori:"KANZLER SINGLE",kode:"417806",nama:"kanzler sgl mini 65g",oh:"0",fisik:"0",harga:"0"},
+{kategori:"KANZLER SINGLE",kode:"417804",nama:"kanzler sgl ori 65g",oh:"0",fisik:"0",harga:"0"},
+{kategori:"KANZLER SINGLE",kode:"417805",nama:"kanzler single keju",oh:"0",fisik:"0",harga:"0"},
+{kategori:"KANZLER SINGLE",kode:"423992",nama:"kanzler single hot",oh:"0",fisik:"0",harga:"0"},
+{kategori:"KANZLER SINGLE",kode:"435578",nama:"kanzler single gochujang",oh:"0",fisik:"0",harga:"0"},
+
+{kategori:"KANZLER BAKSO",kode:"435736",nama:"kanzler bakso hot 48g",oh:"0",fisik:"0",harga:"0"},
+{kategori:"KANZLER BAKSO",kode:"465771",nama:"kanzler bakso gochujang 55g",oh:"0",fisik:"0",harga:"0"},
+{kategori:"KANZLER BAKSO",kode:"428660",nama:"kanzler bakso ori 48g",oh:"0",fisik:"0",harga:"0"},
+{kategori:"KANZLER BAKSO",kode:"428662",nama:"kanzler bakso keju 48g",oh:"0",fisik:"0",harga:"0"},
+
+{kategori:"FIESTA SOSIS",kode:"443704",nama:"fiesta rtg sosis spicykorean",oh:"0",fisik:"0",harga:"0"},
+
+{kategori:"ECO BAG",kode:"ECO1",nama:"Alfamart ECO",oh:"0",fisik:"0",harga:"0"},
+{kategori:"ECO BAG",kode:"ECO2",nama:"ECO bag kecil",oh:"0",fisik:"0",harga:"0"},
+{kategori:"ECO BAG",kode:"ECO3",nama:"ECO bag gede",oh:"0",fisik:"0",harga:"0"},
+
+{kategori:"FRESHMILK",kode:"FM1",nama:"Diamond",oh:"0",fisik:"0",harga:"0"},
+{kategori:"FRESHMILK",kode:"FM2",nama:"Greenfield milk",oh:"0",fisik:"0",harga:"0"},
+{kategori:"FRESHMILK",kode:"FM3",nama:"Omela",oh:"0",fisik:"0",harga:"0"},
+{kategori:"FRESHMILK",kode:"460235",nama:"NPL 15L",oh:"0",fisik:"0",harga:"0"},
+{kategori:"FRESHMILK",kode:"422782",nama:"Le mineral 15L",oh:"0",fisik:"0",harga:"0"},
+
+{kategori:"GULA",kode:"401698",nama:"PSM Gula Premium 1kg",oh:"0",fisik:"0",harga:"0"},
+{kategori:"GULA",kode:"405970",nama:"Rose Brand Gula Tebu premium 1kg",oh:"0",fisik:"0",harga:"0"},
+{kategori:"GULA",kode:"466054",nama:"Gula vigula kristal putih 1kg",oh:"0",fisik:"0",harga:"0"},
+{kategori:"GULA",kode:"221587",nama:"Gulaku gula tebu premium",oh:"0",fisik:"0",harga:"0"},
+{kategori:"GULA",kode:"406643",nama:"GMP Gula Kristal putih 1kg",oh:"0",fisik:"0",harga:"0"},
+
+{kategori:"MINYAK",kode:"113079",nama:"Tropical myk grg pet 2L",oh:"0",fisik:"0",harga:"0"},
+{kategori:"MINYAK",kode:"451350",nama:"Tropical myk grg pet 1,5L",oh:"0",fisik:"0",harga:"0"},
+{kategori:"MINYAK",kode:"61132",nama:"Tropical myk grg pet 1L",oh:"0",fisik:"0",harga:"0"},
+{kategori:"MINYAK",kode:"195673",nama:"sania mnyk grg pch 1L",oh:"0",fisik:"0",harga:"0"},
+{kategori:"MINYAK",kode:"211141",nama:"Bimoli myk pch grg 1L",oh:"0",fisik:"0",harga:"0"},
+{kategori:"MINYAK",kode:"6965",nama:"Barco myk grg pch 1L",oh:"0",fisik:"0",harga:"0"},
+{kategori:"MINYAK",kode:"244111",nama:"SunCo myk grg pch 2L",oh:"0",fisik:"0",harga:"0"},
+{kategori:"MINYAK",kode:"156747",nama:"Filma myk grg pch 2L",oh:"0",fisik:"0",harga:"0"},
+{kategori:"MINYAK",kode:"192730",nama:"Bimoli myk grg pch 2L",oh:"0",fisik:"0",harga:"0"},
+{kategori:"MINYAK",kode:"113222",nama:"Fortune myk grg pch 2L",oh:"0",fisik:"0",harga:"0"},
+{kategori:"MINYAK",kode:"195674",nama:"Sania myk grg pch 2L",oh:"0",fisik:"0",harga:"0"},
+{kategori:"MINYAK",kode:"211378",nama:"Bimoli myk grg spesial pch 2L",oh:"0",fisik:"0",harga:"0"},
+{kategori:"MINYAK",kode:"121905",nama:"Sovia myk grg pch 2L",oh:"0",fisik:"0",harga:"0"},
+{kategori:"MINYAK",kode:"437794",nama:"Harumnas myk grg pch 2L",oh:"0",fisik:"0",harga:"0"},
+{kategori:"MINYAK",kode:"433436",nama:"Camar myk grg pch 2L",oh:"0",fisik:"0",harga:"0"},
+{kategori:"MINYAK",kode:"123332",nama:"Alfamart myk grg pch 2L",oh:"0",fisik:"0",harga:"0"},
+{kategori:"MINYAK",kode:"453308",nama:"Vipco myk 2L",oh:"0",fisik:"0",harga:"0"},
+{kategori:"MINYAK",kode:"45258",nama:"Merah pth myk 2L",oh:"0",fisik:"0",harga:"0"},
+{kategori:"MINYAK",kode:"436397",nama:"ikan dorang myk grng kelapa",oh:"0",fisik:"0",harga:"0"}
+
+];
+
+
+/* =====================================================
+   UTIL
+===================================================== */
+
+function rupiah(n){
+  return "Rp " + Number(n||0).toLocaleString("id-ID");
+}
+
+function esc(value){
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+
+/* =====================================================
+   MENU
+===================================================== */
+
+function showMenu(menu){
+
+  document.querySelectorAll(".page").forEach(p=>{
+    p.classList.remove("active");
+    p.style.display="none";
+  });
+
+  const id =
+    menu==="home"
+    ? "home"
+    : "menu"+menu.charAt(0).toUpperCase()+menu.slice(1);
+
+  const target=document.getElementById(id);
+
+  if(!target) return;
+
+  target.style.display="block";
+
+  setTimeout(()=>{
+    target.classList.add("active");
+  },10);
+
+  if(menu==="daftarRuang"){
+    tampilkanRuang();
+  }
+
+  if(menu==="laporan"){
+    tampilkanRekapSelisih();
+  }
+
+  if(menu==="dashboard"){
+    updateDashboard();
+  }
+
+}
+
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+function showToast(pesan="✅ Data Tersimpan"){
+
+  const toast=document.getElementById("toast");
+
+  toast.innerText=pesan;
+  toast.classList.add("show");
+
+  clearTimeout(window.toastTimer);
+
+  window.toastTimer=setTimeout(()=>{
+    toast.classList.remove("show");
+  },2200);
+}
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
+
+window.onload=function(){
+
+  const tanggal=document.getElementById("tanggalOpname");
+
+  if(tanggal){
+    tanggal.valueAsDate=new Date();
+  }
+
+  loadTheme();
+  loadDarkMode();
+  cekLogin();
+
+};
+
+
+function cekLogin(){
+
+  userLogin=
+    JSON.parse(sessionStorage.getItem("userLogin"));
+
+  if(userLogin){
+
+    document.getElementById("loginPage").style.display="none";
+    document.getElementById("mainApp").style.display="block";
+
+    document.getElementById("namaUser").innerText=
+      userLogin.nama;
+
+    if(userLogin.role==="admin"){
+      document.getElementById("adminPanel").style.display="block";
+    }
+
+    tampilkanListUser();
+    showMenu("home");
+
+  }
+
+}
+
+
+function login(){
+
+  const nik=
+    document.getElementById("inputNIK").value.trim();
+
+  const pin=
+    document.getElementById("inputPIN").value.trim();
+
+  const user=
+    users.find(u=>
+      String(u.nik).toUpperCase()===nik.toUpperCase()
+      &&
+      String(u.pin)===pin
+    );
+
+  if(user){
+
+    userLogin=user;
+
+    sessionStorage.setItem(
+      "userLogin",
+      JSON.stringify(user)
+    );
+
+    document.getElementById("loginError").innerText="";
+
+    showToast("🚀 Login berhasil");
+
+    setTimeout(()=>{
+      cekLogin();
+    },400);
+
+  }else{
+
+    document.getElementById("loginError").innerText=
+      "❌ NIK atau PIN salah";
+
+  }
+
+}
+
+
+function logout(){
+
+  if(!confirm("Yakin ingin logout?")) return;
+
+  sessionStorage.removeItem("userLogin");
+
+  location.reload();
+
+}
+
+
+/* =====================================================
+   DARK MODE
+===================================================== */
+
+function toggleDark(){
+
+  document.body.classList.toggle("dark");
+
+  const aktif=
+    document.body.classList.contains("dark");
+
+  localStorage.setItem(
+    "dark_mode_so",
+    aktif?"1":"0"
+  );
+
+  showToast(
+    aktif
+    ?"🌙 Mode Gelap Aktif"
+    :"☀️ Mode Terang Aktif"
+  );
+
+}
+
+
+function loadDarkMode(){
+
+  if(
+    localStorage.getItem("dark_mode_so")==="1"
+  ){
+    document.body.classList.add("dark");
+  }
+
+}
+
+
+/* =====================================================
+   TEMA
+===================================================== */
+
+const themes={
+
+  blue:{
+    primary:"#2980b9",
+    secondary:"#00f2fe",
+    bg1:"#4facfe",
+    bg2:"#00f2fe"
+  },
+
+  purple:{
+    primary:"#667eea",
+    secondary:"#764ba2",
+    bg1:"#667eea",
+    bg2:"#764ba2"
+  },
+
+  green:{
+    primary:"#11998e",
+    secondary:"#38ef7d",
+    bg1:"#11998e",
+    bg2:"#38ef7d"
+  },
+
+  red:{
+    primary:"#ff416c",
+    secondary:"#ff4b2b",
+    bg1:"#ff416c",
+    bg2:"#ff4b2b"
+  },
+
+  orange:{
+    primary:"#f7971e",
+    secondary:"#ffd200",
+    bg1:"#f7971e",
+    bg2:"#ffd200"
+  },
+
+  dark:{
+    primary:"#243b55",
+    secondary:"#667eea",
+    bg1:"#141e30",
+    bg2:"#243b55"
+  }
+
+};
+
+
+function ubahTema(nama){
+
+  const tema=themes[nama];
+
+  if(!tema) return;
+
+  document.documentElement.style.setProperty(
+    "--primary",tema.primary
+  );
+
+  document.documentElement.style.setProperty(
+    "--secondary",tema.secondary
+  );
+
+  document.documentElement.style.setProperty(
+    "--bg1",tema.bg1
+  );
+
+  document.documentElement.style.setProperty(
+    "--bg2",tema.bg2
+  );
+
+  localStorage.setItem(
+    "tema_so_rahil",
+    nama
+  );
+
+  showToast("🎨 Tema "+nama+" aktif");
+
+}
+
+
+function loadTheme(){
+
+  const nama=
+    localStorage.getItem("tema_so_rahil")
+    ||"blue";
+
+  const tema=themes[nama];
+
+  if(!tema) return;
+
+  document.documentElement.style.setProperty(
+    "--primary",tema.primary
+  );
+
+  document.documentElement.style.setProperty(
+    "--secondary",tema.secondary
+  );
+
+  document.documentElement.style.setProperty(
+    "--bg1",tema.bg1
+  );
+
+  document.documentElement.style.setProperty(
+    "--bg2",tema.bg2
+  );
+
+}
+
+
+/* =====================================================
+   ADMIN
+===================================================== */
+
+function tambahUser(){
+
+  if(!userLogin || userLogin.role!=="admin"){
+    return alert("Hanya Admin!");
+  }
+
+  const nik=
+    document.getElementById("newNIK").value.trim();
+
+  const pin=
+    document.getElementById("newPIN").value.trim();
+
+  const nama=
+    document.getElementById("newNama").value.trim();
+
+  if(!nik || !pin || !nama){
+    return alert("Lengkapi semua data!");
+  }
+
+  if(users.find(u=>
+    String(u.nik).toUpperCase()===nik.toUpperCase()
+  )){
+    return alert("NIK sudah terdaftar!");
+  }
+
+  users.push({
+    nik,
+    pin,
+    nama,
+    role:"user"
+  });
+
+  localStorage.setItem(
+    "users_so",
+    JSON.stringify(users)
+  );
+
+  document.getElementById("newNIK").value="";
+  document.getElementById("newPIN").value="";
+  document.getElementById("newNama").value="";
+
+  tampilkanListUser();
+
+  showToast("✅ User berhasil ditambahkan");
+
+}
+
+
+function tampilkanListUser(){
+
+  const box=document.getElementById("listUser");
+
+  if(!box) return;
+
+  let html="<h4>👥 Daftar User</h4>";
+
+  users.forEach((u,i)=>{
+
+    html+=`
+      <div class="user-item">
+
+        <span>
+          <b>${esc(u.nik)}</b>
+          -
+          ${esc(u.nama)}
+          ${u.role==="admin"?" 👑 Admin":""}
+        </span>
+
+        ${
+          u.role!=="admin"
+          ? `<button
+              class="btn-danger"
+              onclick="hapusUser(${i})">
+              🗑️
+             </button>`
+          :""
+        }
+
+      </div>
+    `;
+
+  });
+
+  box.innerHTML=html;
+
+}
+
+
+function hapusUser(index){
+
+  if(!userLogin || userLogin.role!=="admin"){
+    return alert("Hanya Admin!");
+  }
+
+  if(users[index].role==="admin"){
+    return alert("Admin utama tidak dapat dihapus.");
+  }
+
+  if(!confirm(
+    "Hapus user "+users[index].nama+"?"
+  )) return;
+
+  users.splice(index,1);
+
+  localStorage.setItem(
+    "users_so",
+    JSON.stringify(users)
+  );
+
+  tampilkanListUser();
+
+  showToast("🗑️ User dihapus");
+
+}
+
+
+/* =====================================================
+   RUANG
+===================================================== */
+
+function tambahRuang(){
+
+  const input=document.getElementById("namaRuangBaru");
+
+  const nama=input.value.trim();
+
+  if(!nama){
+    return alert("Isi nama ruang!");
+  }
+
+  if(
+    daftarRuang.some(r=>
+      r.nama.toLowerCase()===nama.toLowerCase()
+    )
+  ){
+    return alert("Ruang sudah ada!");
+  }
+
+  daftarRuang.push({
+    id:Date.now(),
+    nama:nama,
+    data:[]
+  });
+
+  localStorage.setItem(
+    "daftar_ruang_so",
+    JSON.stringify(daftarRuang)
+  );
+
+  input.value="";
+
+  tampilkanRuang();
+
+  showToast("🏠 Ruang berhasil ditambahkan");
+
+}
+
+
+function hapusRuang(id){
+
+  if(!confirm(
+    "Yakin menghapus ruang ini?\nSemua data ruang tetap akan terhapus."
+  )) return;
+
+  daftarRuang=
+    daftarRuang.filter(r=>r.id!==id);
+
+  localStorage.setItem(
+    "daftar_ruang_so",
+    JSON.stringify(daftarRuang)
+  );
+
+  if(ruangAktif && ruangAktif.id===id){
+    ruangAktif=null;
+  }
+
+  tampilkanRuang();
+
+  showToast("🗑️ Ruang dihapus");
+
+}
+
+
+function bukaRuang(id){
+
+  ruangAktif=
+    daftarRuang.find(r=>r.id===id);
+
+  if(!ruangAktif) return;
+
+  document.getElementById("judulRuang").innerText=
+    "📝 Input Opname: "+ruangAktif.nama;
+
+  document.getElementById("kodeToko").value=
+    ruangAktif.nama;
+
+  document.getElementById("tanggalOpname").valueAsDate=
+    new Date();
+
+  document.getElementById("namaPIC").value="";
+
+  showMenu("opname");
+
+  loadData();
+
+}
+
+
+function tampilkanRuang(){
+
+  const box=document.getElementById("listRuang");
+
+  if(!daftarRuang.length){
+
+    box.innerHTML=`
+      <div class="admin-panel"
+           style="text-align:center">
+        🏠 Belum ada ruang SO.<br>
+        Silakan tambahkan ruang terlebih dahulu.
+      </div>
+    `;
+
+    return;
+  }
+
+  let html="";
+
+  daftarRuang.forEach((r,i)=>{
+
+    html+=`
+      <div class="ruang-item"
+           style="animation-delay:${i*0.05}s">
+
+        <div>
+          <div class="ruang-name">
+            🏠 ${esc(r.nama)}
+          </div>
+
+          <div class="ruang-info">
+            ${r.data.length} Produk
+          </div>
+        </div>
+
+        <div>
+
+          <button
+            class="btn-aksi"
+            onclick="bukaRuang(${r.id})">
+            ▶️ Buka
+          </button>
+
+          <button
+            class="btn-danger"
+            onclick="hapusRuang(${r.id})">
+            🗑️
+          </button>
+
+        </div>
+
+      </div>
+    `;
+
+  });
+
+  box.innerHTML=html;
+
+}
+
+
+/* =====================================================
+   PRODUK
+===================================================== */
+
+function tambahProdukManual(){
+
+  if(!ruangAktif){
+    return alert("Pilih ruang terlebih dahulu!");
+  }
+
+  const kode=prompt("Kode Barang:");
+
+  if(!kode) return;
+
+  if(
+    ruangAktif.data.some(x=>x.kode===kode)
+  ){
+    return alert("Kode sudah ada!");
+  }
+
+  const nama=prompt("Nama Barang:");
+
+  if(!nama) return;
+
+  const kategori=prompt("Kategori:");
+
+  if(!kategori) return;
+
+  ruangAktif.data.push({
+    kategori:kategori.toUpperCase(),
+    kode:kode.trim(),
+    nama:nama.trim(),
+    oh:"0",
+    fisik:"0",
+    harga:"0"
+  });
+
+  syncRuang();
+
+  tampilkan();
+
+  showToast("➕ Produk ditambahkan");
+
+}
+
+
+function hapusProduk(index){
+
+  if(!confirm(
+    "Hapus "+ruangAktif.data[index].nama+"?"
+  )) return;
+
+  ruangAktif.data.splice(index,1);
+
+  syncRuang();
+  tampilkan();
+
+  showToast("🗑️ Produk dihapus");
+
+}
+
+
+function loadItems(){
+
+  if(!ruangAktif){
+    return alert("Pilih ruang terlebih dahulu!");
+  }
+
+  if(
+    !confirm(
+      "Load 43 item akan mengganti daftar produk ruang ini.\n\nLanjutkan?"
+    )
+  ) return;
+
+  ruangAktif.data=
+    JSON.parse(JSON.stringify(templateShift));
+
+  syncRuang();
+  tampilkan();
+
+  showToast("📥 43 item berhasil dimuat");
+
+}
+
+
+function syncRuang(){
+
+  const index=
+    daftarRuang.findIndex(
+      r=>r.id===ruangAktif.id
+    );
+
+  if(index>=0){
+
+    daftarRuang[index].data=
+      ruangAktif.data;
+
+    localStorage.setItem(
+      "daftar_ruang_so",
+      JSON.stringify(daftarRuang)
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   TAMPILKAN DATA
+===================================================== */
+
+function tampilkan(){
+
+  if(!ruangAktif) return;
+
+  const container=
+    document.getElementById("tabelContainer");
+
+  const keyword=
+    document.getElementById("searchBarang")
+    ?.value
+    .trim()
+    .toLowerCase() || "";
+
+  container.innerHTML="";
+
+  const filtered=
+    ruangAktif.data.filter(item=>
+      !keyword
+      ||
+      item.nama.toLowerCase().includes(keyword)
+      ||
+      item.kode.toLowerCase().includes(keyword)
+      ||
+      item.kategori.toLowerCase().includes(keyword)
+    );
+
+  const kategoriList=[
+    ...new Set(
+      filtered.map(x=>x.kategori)
+    )
+  ];
+
+  let totalOH=0;
+  let totalFisik=0;
+
+  ruangAktif.data.forEach(item=>{
+    totalOH+=Number(item.oh)||0;
+    totalFisik+=Number(item.fisik)||0;
+  });
+
+  kategoriList.forEach(kat=>{
+
+    let html=`
+      <h3>📦 ${esc(kat)}</h3>
+      <div class="table-wrap">
+      <table>
+      <thead>
+      <tr>
+        <th>No</th>
+        <th>Kode</th>
+        <th>Nama</th>
+        <th>OH</th>
+        <th>Fisik</th>
+        <th>Harga</th>
+        <th>Selisih</th>
+        <th>Selisih Rp</th>
+        <th>Aksi</th>
+      </tr>
+      </thead>
+      <tbody>
+    `;
+
+    let no=1;
+
+    filtered
+      .filter(x=>x.kategori===kat)
+      .forEach(item=>{
+
+        const index=
+          ruangAktif.data.indexOf(item);
+
+        const oh=Number(item.oh)||0;
+        const fisik=Number(item.fisik)||0;
+        const harga=Number(item.harga)||0;
+
+        const selisih=fisik-oh;
+        const selisihRp=selisih*harga;
+
+        const cls=
+          selisih<0
+          ?"selisih-minus"
+          :selisih>0
+          ?"selisih-plus"
+          :"";
+
+        html+=`
+        <tr id="row-${esc(item.kode)}">
+
+          <td>${no++}</td>
+
+          <td>
+            <b>${esc(item.kode)}</b>
+          </td>
+
+          <td style="text-align:left">
+            ${esc(item.nama)}
+          </td>
+
+          <td>
+            <input
+              type="number"
+              min="0"
+              value="${esc(item.oh)}"
+              onchange="updateField(${index},'oh',this.value)"
+              style="width:70px">
+          </td>
+
+          <td>
+            <input
+              type="number"
+              min="0"
+              id="fisik-${esc(item.kode)}"
+              value="${esc(item.fisik)}"
+              onchange="updateField(${index},'fisik',this.value)"
+              style="width:70px">
+          </td>
+
+          <td>
+            <input
+              type="number"
+              min="0"
+              value="${esc(item.harga)}"
+              onchange="updateField(${index},'harga',this.value)"
+              style="width:90px"
+              placeholder="Harga">
+          </td>
+
+          <td class="${cls}">
+            ${selisih>0?"+":""}${selisih}
+          </td>
+
+          <td class="${cls}">
+            ${rupiah(selisihRp)}
+          </td>
+
+          <td>
+            <button
+              class="btn-danger"
+              onclick="hapusProduk(${index})">
+              🗑️
+            </button>
+          </td>
+
+        </tr>
+        `;
+
+      });
+
+    html+=`
+      </tbody>
+      </table>
+      </div>
+    `;
+
+    container.innerHTML+=html;
+
+  });
+
+  if(!filtered.length){
+
+    container.innerHTML=`
+      <div class="admin-panel"
+           style="text-align:center">
+        🔍 Barang tidak ditemukan.
+      </div>
+    `;
+
+  }
+
+  document.getElementById("totalStok").innerHTML=
+    `📦 Total Item: ${ruangAktif.data.length}
+     &nbsp; | &nbsp;
+     📊 OH: ${totalOH}
+     &nbsp; | &nbsp;
+     📦 Fisik: ${totalFisik}`;
+
+  tampilkanRekapSelisih();
+  updateDashboard();
+
+}
+
+
+function updateField(index,field,value){
+
+  if(!ruangAktif) return;
+
+  ruangAktif.data[index][field]=value;
+
+  syncRuang();
+
+  tampilkan();
+
+}
+
+
+function filterBarang(){
+  tampilkan();
+}
+
+
+/* =====================================================
+   DASHBOARD
+===================================================== */
+
+function updateDashboard(){
+
+  const data=
+    ruangAktif
+    ? ruangAktif.data
+    : [];
+
+  const minus=
+    data.filter(x=>
+      (Number(x.fisik)||0)
+      <
+      (Number(x.oh)||0)
+    );
+
+  let totalRugi=0;
+
+  minus.forEach(m=>{
+
+    const kurang=
+      Math.abs(
+        (Number(m.fisik)||0)
+        -
+        (Number(m.oh)||0)
+      );
+
+    totalRugi+=
+      kurang*(Number(m.harga)||0);
+
+  });
+
+  document.getElementById("dashTotal2").innerText=
+    data.length;
+
+  document.getElementById("dashMinus2").innerText=
+    minus.length;
+
+  document.getElementById("dashRugi2").innerText=
+    rupiah(totalRugi);
+
+  document.getElementById("dashboardRuang").innerText=
+    ruangAktif
+    ? ruangAktif.nama
+    : "-";
+
+}
+
+
+/* =====================================================
+   REKAP
+===================================================== */
+
+function tampilkanRekapSelisih(){
+
+  const box=
+    document.getElementById("rekapSelisih");
+
+  const totalBox=
+    document.getElementById("totalSelisihRp");
+
+  if(!box || !totalBox) return;
+
+  const data=
+    ruangAktif
+    ? ruangAktif.data
+    : [];
+
+  const keyword=
+    document.getElementById("searchLaporan")
+    ?.value
+    .trim()
+    .toLowerCase() || "";
+
+  const filtered=
+    data.filter(x=>
+      !keyword
+      ||
+      x.nama.toLowerCase().includes(keyword)
+      ||
+      x.kode.toLowerCase().includes(keyword)
+    );
+
+  const minus=
+    filtered.filter(x=>
+      (Number(x.fisik)||0)
+      <
+      (Number(x.oh)||0)
+    );
+
+  const plus=
+    filtered.filter(x=>
+      (Number(x.fisik)||0)
+      >
+      (Number(x.oh)||0)
+    );
+
+  let totalSelisihRp=0;
+
+  data.forEach(x=>{
+
+    totalSelisihRp+=
+      (
+        (Number(x.fisik)||0)
+        -
+        (Number(x.oh)||0)
+      )
+      *
+      (Number(x.harga)||0);
+
+  });
+
+  let html="";
+
+  if(minus.length){
+
+    html+=`
+      <div class="rekap-box rekap-minus">
+
+        <h3>
+          ❌ REKAP BARANG MINUS
+          (${minus.length} Item)
+        </h3>
+    `;
+
+    minus.forEach((m,i)=>{
+
+      const kurang=
+        Math.abs(
+          (Number(m.fisik)||0)
+          -
+          (Number(m.oh)||0)
+        );
+
+      const rugi=
+        kurang*(Number(m.harga)||0);
+
+      html+=`
+        <p>
+          ${i+1}.
+          <b>${esc(m.nama)}</b><br>
+          Kode: ${esc(m.kode)}
+          • Kurang:
+          <b>${kurang}</b>
+          •
+          <b>${rupiah(rugi)}</b>
+        </p>
+      `;
+
+    });
+
+    html+=`</div>`;
+
+  }
+
+
+  if(plus.length){
+
+    html+=`
+      <div class="rekap-box rekap-plus">
+
+        <h3>
+          🟢 REKAP BARANG PLUS
+          (${plus.length} Item)
+        </h3>
+    `;
+
+    plus.forEach((p,i)=>{
+
+      const lebih=
+        (Number(p.fisik)||0)
+        -
+        (Number(p.oh)||0);
+
+      const nilai=
+        lebih*(Number(p.harga)||0);
+
+      html+=`
+        <p>
+          ${i+1}.
+          <b>${esc(p.nama)}</b><br>
+          Kode: ${esc(p.kode)}
+          • Lebih:
+          <b>+${lebih}</b>
+          •
+          <b>${rupiah(nilai)}</b>
+        </p>
+      `;
+
+    });
+
+    html+=`</div>`;
+
+  }
+
+
+  if(!html){
+
+    html=`
+      <div class="admin-panel"
+           style="text-align:center">
+        📊 Belum ada selisih.
+      </div>
+    `;
+
+  }
+
+  box.innerHTML=html;
+
+  totalBox.innerHTML=
+    `💰 TOTAL SELISIH NILAI:
+     ${rupiah(totalSelisihRp)}`;
+
+}
+
+
+/* =====================================================
+   SCAN BARCODE
+===================================================== */
+
+function handleScan(kode){
+
+  if(!ruangAktif){
+    return alert("Pilih ruang terlebih dahulu!");
+  }
+
+  kode=String(kode).trim();
+
+  const item=
+    ruangAktif.data.find(
+      x=>String(x.kode).trim()===kode
+    );
+
+  if(!item){
+
+    showToast(
+      "⚠️ Barcode "+kode+" tidak ditemukan"
+    );
+
+    return;
+
+  }
+
+  item.fisik=
+    (Number(item.fisik)||0)+1;
+
+  syncRuang();
+  tampilkan();
+
+  setTimeout(()=>{
+
+    const row=
+      document.getElementById(
+        "row-"+kode
+      );
+
+    if(row){
+
+      row.classList.add(
+        "highlight-row"
+      );
+
+      row.scrollIntoView({
+        behavior:"smooth",
+        block:"center"
+      });
+
+      setTimeout(()=>{
+        row.classList.remove(
+          "highlight-row"
+        );
+      },1000);
+
+    }
+
+    const input=
+      document.getElementById(
+        "fisik-"+kode
+      );
+
+    if(input) input.focus();
+
+  },100);
+
+  showToast(
+    "✅ "+item.nama+" +1"
+  );
+
+}
+
+
+async function startScan(){
+
+  if(!ruangAktif){
+    return alert(
+      "Pilih ruang SO terlebih dahulu!"
+    );
+  }
+
+  const reader=
+    document.getElementById("reader");
+
+  const status=
+    document.getElementById("readerStatus");
+
+  reader.style.display="block";
+
+  status.innerText=
+    "📷 Arahkan kamera ke barcode...";
+
+  if(html5QrCode){
+
+    try{
+      await html5QrCode.stop();
+    }catch(e){}
+
+  }
+
+  html5QrCode=
+    new Html5Qrcode("reader");
+
+  try{
+
+    await html5QrCode.start(
+
+      {
+        facingMode:"environment"
+      },
+
+      {
+        fps:10,
+        qrbox:{
+          width:250,
+          height:100
+        }
+      },
+
+      async qrCodeMessage=>{
+
+        handleScan(qrCodeMessage);
+
+        try{
+          await html5QrCode.stop();
+        }catch(e){}
+
+        reader.style.display="none";
+        status.innerText="";
+
+      },
+
+      ()=>{}
+
+    );
+
+  }catch(err){
+
+    reader.style.display="none";
+
+    status.innerText=
+      "❌ Kamera gagal dibuka. Pastikan izin kamera aktif.";
+
+    alert(
+      "Kamera tidak dapat digunakan.\n\n" +
+      "Pastikan izin kamera diberikan dan aplikasi dibuka melalui HTTPS."
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   SHIFT SEBELUMNYA
+===================================================== */
+
+function copyOHShiftSebelumnya(){
+
+  if(!ruangAktif){
+    return alert("Pilih ruang terlebih dahulu!");
+  }
+
+  const shift=
+    document.getElementById("pilihShift").value;
+
+  const tanggal=
+    document.getElementById("tanggalOpname").value;
+
+  const shiftNum=
+    parseInt(
+      shift.replace("SHIFT ","")
+    );
+
+  if(shiftNum===1){
+
+    return alert(
+      "SHIFT 1 tidak memiliki shift sebelumnya."
+    );
+
+  }
+
+  const prevShift=
+    "SHIFT "+(shiftNum-1);
+
+  const key=
+    makeStorageKey(
+      ruangAktif.id,
+      tanggal,
+      prevShift
+    );
+
+  const dataPrev=
+    JSON.parse(
+      localStorage.getItem(key)
+    );
+
+  if(!dataPrev){
+
+    return alert(
+      `Data ${prevShift} tanggal ${tanggal} belum ada!`
+    );
+
+  }
+
+  let count=0;
+
+  ruangAktif.data.forEach(item=>{
+
+    const prev=
+      (dataPrev.barang||[])
+      .find(p=>p.kode===item.kode);
+
+    if(prev){
+
+      item.oh=
+        String(prev.fisik);
+
+      count++;
+
+    }
+
+  });
+
+  syncRuang();
+  tampilkan();
+
+  alert(
+    `✅ OH berhasil diambil dari ${prevShift}.\n\n${count} produk diperbarui.`
+  );
+
+}
+
+
+/* =====================================================
+   STORAGE KEY
+===================================================== */
+
+function makeStorageKey(id,tanggal,shift){
+
+  return "so_"+
+    id+"_"+
+    tanggal+"_"+
+    shift.replace(/ /g,"-");
+
+}
+
+
+/* =====================================================
+   SIMPAN
+===================================================== */
+
+function simpanOpname(){
+
+  if(!ruangAktif){
+    return alert("Pilih ruang terlebih dahulu!");
+  }
+
+  const tanggal=
+    document.getElementById(
+      "tanggalOpname"
+    ).value;
+
+  const shift=
+    document.getElementById(
+      "pilihShift"
+    ).value;
+
+  const pic=
+    document.getElementById(
+      "namaPIC"
+    ).value.trim();
+
+  if(!tanggal){
+    return alert("Tanggal opname belum dipilih!");
+  }
+
+  const key=
+    makeStorageKey(
+      ruangAktif.id,
+      tanggal,
+      shift
+    );
+
+  localStorage.setItem(
+    key,
+    JSON.stringify({
+      barang:JSON.parse(
+        JSON.stringify(
+          ruangAktif.data
+        )
+      ),
+      pic:pic,
+      tanggal: tanggal,
+      shift: shift,
+      savedAt:new Date().toISOString(),
+      user:userLogin
+        ? userLogin.nama
+        : "-"
+    })
+  );
+
+  syncRuang();
+
+  showToast(
+    "💾 Opname berhasil disimpan"
+  );
+
+}
+
+
+/* =====================================================
+   LOAD DATA
+===================================================== */
+
+function loadData(){
+
+  if(!ruangAktif) return;
+
+  const tanggal=
+    document.getElementById(
+      "tanggalOpname"
+    ).value;
+
+  const shift=
+    document.getElementById(
+      "pilihShift"
+    ).value;
+
+  if(!tanggal || !shift){
+    tampilkan();
+    return;
+  }
+
+  const key=
+    makeStorageKey(
+      ruangAktif.id,
+      tanggal,
+      shift
+    );
+
+  const data=
+    JSON.parse(
+      localStorage.getItem(key)
+    );
+
+  if(data){
+
+    ruangAktif.data=
+      data.barang || [];
+
+    document.getElementById(
+      "namaPIC"
+    ).value=
+      data.pic || "";
+
+  }
+
+  tampilkan();
+
+}
+
+
+/* =====================================================
+   RIWAYAT
+===================================================== */
+
+function lihatRiwayat(){
+
+  if(!ruangAktif){
+    return alert(
+      "Pilih ruang terlebih dahulu!"
+    );
+  }
+
+  const prefix=
+    "so_"+ruangAktif.id+"_";
+
+  const keys=
+    Object.keys(localStorage)
+    .filter(k=>k.startsWith(prefix));
+
+  if(!keys.length){
+
+    return alert(
+      "Belum ada riwayat SO."
+    );
+
+  }
+
+  keys.sort().reverse();
+
+  let html=`
+    <h3>📜 RIWAYAT SO TERSIMPAN</h3>
+
+    <div class="table-wrap">
+
+    <table>
+
+      <thead>
+      <tr>
+        <th>Tanggal</th>
+        <th>Shift</th>
+        <th>PIC</th>
+        <th>User</th>
+        <th>Aksi</th>
+      </tr>
+      </thead>
+
+      <tbody>
+  `;
+
+  keys.forEach(key=>{
+
+    const data=
+      JSON.parse(
+        localStorage.getItem(key)
+      );
+
+    const parts=
+      key.substring(prefix.length)
+      .split("_");
+
+    const tanggal=parts[0];
+
+    const shift=
+      (parts[1]||"").replace(/-/g," ");
+
+    html+=`
+      <tr>
+
+        <td>${esc(tanggal)}</td>
+
+        <td>${esc(shift)}</td>
+
+        <td>${esc(data?.pic||"-")}</td>
+
+        <td>${esc(data?.user||"-")}</td>
+
+        <td>
+
+          <button
+            class="btn-aksi"
+            onclick="bukaRiwayat('${encodeURIComponent(key)}')">
+            📂 Buka
+          </button>
+
+          <button
+            class="btn-danger"
+            onclick="hapusRiwayat('${encodeURIComponent(key)}')">
+            🗑️
+          </button>
+
+        </td>
+
+      </tr>
+    `;
+
+  });
+
+  html+=`
+      </tbody>
+    </table>
+    </div>
+  `;
+
+  document.getElementById(
+    "tabelContainer"
+  ).innerHTML=html;
+
+  showMenu("opname");
+
+}
+
+
+function bukaRiwayat(encodedKey){
+
+  const key=
+    decodeURIComponent(encodedKey);
+
+  const data=
+    JSON.parse(
+      localStorage.getItem(key)
+    );
+
+  if(!data) return;
+
+  const prefix=
+    "so_"+ruangAktif.id+"_";
+
+  const parts=
+    key.substring(prefix.length)
+    .split("_");
+
+  const tanggal=parts[0];
+
+  const shift=
+    (parts[1]||"").replace(/-/g," ");
+
+  document.getElementById(
+    "tanggalOpname"
+  ).value=tanggal;
+
+  document.getElementById(
+    "pilihShift"
+  ).value=shift;
+
+  ruangAktif.data=
+    data.barang || [];
+
+  document.getElementById(
+    "namaPIC"
+  ).value=data.pic || "";
+
+  tampilkan();
+
+  showMenu("opname");
+
+  showToast(
+    "📂 Riwayat berhasil dibuka"
+  );
+
+}
+
+
+function hapusRiwayat(encodedKey){
+
+  const key=
+    decodeURIComponent(encodedKey);
+
+  if(!confirm(
+    "Hapus riwayat SO ini?"
+  )) return;
+
+  localStorage.removeItem(key);
+
+  lihatRiwayat();
+
+  showToast(
+    "🗑️ Riwayat dihapus"
+  );
+
+}
+
+
+/* =====================================================
+   WHATSAPP MINUS
+===================================================== */
+
+function kirimRekapWA(){
+
+  if(!ruangAktif){
+    return alert(
+      "Pilih ruang terlebih dahulu!"
+    );
+  }
+
+  const minus=
+    ruangAktif.data.filter(x=>
+      (Number(x.fisik)||0)
+      <
+      (Number(x.oh)||0)
+    );
+
+  if(!minus.length){
+    return alert(
+      "Tidak ada barang MINUS!"
+    );
+  }
+
+  const tanggal=
+    document.getElementById(
+      "tanggalOpname"
+    ).value;
+
+  const shift=
+    document.getElementById(
+      "pilihShift"
+    ).value;
+
+  const pic=
+    document.getElementById(
+      "namaPIC"
+    ).value || "-";
+
+  let pesan=
+`*❌ REKAP BARANG MINUS*
+━━━━━━━━━━━━━━━━━━
+🏪 Ruang : ${ruangAktif.nama}
+📅 Tanggal : ${tanggal}
+⏰ Shift : ${shift}
+👤 PIC : ${pic}
+
+`;
+
+  let totalRugi=0;
+
+  minus.forEach((m,i)=>{
+
+    const kurang=
+      Math.abs(
+        (Number(m.fisik)||0)
+        -
+        (Number(m.oh)||0)
+      );
+
+    const rugi=
+      kurang*(Number(m.harga)||0);
+
+    totalRugi+=rugi;
+
+    pesan+=
+`${i+1}. ${m.nama}
+   Kode : ${m.kode}
+   OH : ${m.oh}
+   Fisik : ${m.fisik}
+   MINUS : -${kurang}
+   Rugi : ${rupiah(rugi)}
+
+`;
+
+  });
+
+  pesan+=
+`━━━━━━━━━━━━━━━━━━
+🔴 TOTAL ITEM MINUS : ${minus.length}
+💰 TOTAL KERUGIAN : ${rupiah(totalRugi)}
+
+_SO RAHIL K792 MULTI v2.0_
+_By Ade Supriatna_`;
+
+  window.open(
+    "https://wa.me/?text="+
+    encodeURIComponent(pesan),
+    "_blank"
+  );
+
+}
+
+
+/* =====================================================
+   WHATSAPP PLUS
+===================================================== */
+
+function kirimRekapPlusWA(){
+
+  if(!ruangAktif){
+    return alert(
+      "Pilih ruang terlebih dahulu!"
+    );
+  }
+
+  const plus=
+    ruangAktif.data.filter(x=>
+      (Number(x.fisik)||0)
+      >
+      (Number(x.oh)||0)
+    );
+
+  if(!plus.length){
+    return alert(
+      "Tidak ada barang PLUS!"
+    );
+  }
+
+  const tanggal=
+    document.getElementById(
+      "tanggalOpname"
+    ).value;
+
+  const shift=
+    document.getElementById(
+      "pilihShift"
+    ).value;
+
+  const pic=
+    document.getElementById(
+      "namaPIC"
+    ).value || "-";
+
+  let pesan=
+`*🟢 REKAP BARANG PLUS*
+━━━━━━━━━━━━━━━━━━
+🏪 Ruang : ${ruangAktif.nama}
+📅 Tanggal : ${tanggal}
+⏰ Shift : ${shift}
+👤 PIC : ${pic}
+
+`;
+
+  let totalPlus=0;
+
+  plus.forEach((p,i)=>{
+
+    const lebih=
+      (Number(p.fisik)||0)
+      -
+      (Number(p.oh)||0);
+
+    const nilai=
+      lebih*(Number(p.harga)||0);
+
+    totalPlus+=nilai;
+
+    pesan+=
+`${i+1}. ${p.nama}
+   Kode : ${p.kode}
+   OH : ${p.oh}
+   Fisik : ${p.fisik}
+   PLUS : +${lebih}
+   Nilai : ${rupiah(nilai)}
+
+`;
+
+  });
+
+  pesan+=
+`━━━━━━━━━━━━━━━━━━
+🟢 TOTAL ITEM PLUS : ${plus.length}
+💰 TOTAL NILAI PLUS : ${rupiah(totalPlus)}
+
+_SO RAHIL K792 MULTI v2.0_
+_By Ade Supriatna_`;
+
+  window.open(
+    "https://wa.me/?text="+
+    encodeURIComponent(pesan),
+    "_blank"
+  );
+
+}
+
+
+/* =====================================================
+   CSV / EXCEL
+===================================================== */
+
+function exportExcel(){
+
+  if(!ruangAktif){
+    return alert(
+      "Pilih ruang terlebih dahulu!"
+    );
+  }
+
+  let csv=
+`KATEGORI,KODE,NAMA,OH,FISIK,HARGA,SELISIH,SELISIH_RP\n`;
+
+  ruangAktif.data.forEach(item=>{
+
+    const selisih=
+      (Number(item.fisik)||0)
+      -
+      (Number(item.oh)||0);
+
+    const selisihRp=
+      selisih*(Number(item.harga)||0);
+
+    const row=[
+      item.kategori,
+      item.kode,
+      item.nama,
+      item.oh,
+      item.fisik,
+      item.harga,
+      selisih,
+      selisihRp
+    ].map(v=>
+      `"${String(v)
+        .replace(/"/g,'""')}"`
+    ).join(",");
+
+    csv+=row+"\n";
+
+  });
+
+  const blob=
+    new Blob(
+      ["\ufeff"+csv],
+      {type:"text/csv;charset=utf-8;"}
+    );
+
+  const url=
+    URL.createObjectURL(blob);
+
+  const a=
+    document.createElement("a");
+
+  a.href=url;
+
+  a.download=
+    `${safeFileName(ruangAktif.nama)}_`+
+    `${document.getElementById("tanggalOpname").value}_`+
+    `${document.getElementById("pilihShift").value.replace(/ /g,"_")}.csv`;
+
+  document.body.appendChild(a);
+
+  a.click();
+
+  a.remove();
+
+  URL.revokeObjectURL(url);
+
+  showToast(
+    "📤 CSV berhasil dibuat"
+  );
+
+}
+
+
+function exportCSV(){
+  exportExcel();
+}
+
+
+/* =====================================================
+   PDF
+===================================================== */
+
+function exportPDF(){
+
+  if(!ruangAktif){
+    return alert(
+      "Pilih ruang terlebih dahulu!"
+    );
+  }
+
+  const doc=new jsPDF();
+
+  const tanggal=
+    document.getElementById(
+      "tanggalOpname"
+    ).value;
+
+  const shift=
+    document.getElementById(
+      "pilihShift"
+    ).value;
+
+  const pic=
+    document.getElementById(
+      "namaPIC"
+    ).value || "-";
+
+  const minus=
+    ruangAktif.data.filter(x=>
+      (Number(x.fisik)||0)
+      <
+      (Number(x.oh)||0)
+    );
+
+  const plus=
+    ruangAktif.data.filter(x=>
+      (Number(x.fisik)||0)
+      >
+      (Number(x.oh)||0)
+    );
+
+  let totalRugi=0;
+  let totalPlus=0;
+
+  doc.setFontSize(18);
+
+  doc.text(
+    "SO RAHIL K792",
+    105,
+    15,
+    {align:"center"}
+  );
+
+  doc.setFontSize(11);
+
+  doc.text(
+    "PROFESSIONAL STOCK OPNAME REPORT",
+    105,
+    22,
+    {align:"center"}
+  );
+
+  doc.setFontSize(10);
+
+  doc.text(
+    `Ruang : ${ruangAktif.nama}`,
+    14,
+    32
+  );
+
+  doc.text(
+    `Tanggal : ${tanggal}`,
+    14,
+    39
+  );
+
+  doc.text(
+    `Shift : ${shift}`,
+    14,
+    46
+  );
+
+  doc.text(
+    `PIC : ${pic}`,
+    14,
+    53
+  );
+
+  let y=65;
+
+  doc.setFontSize(13);
+
+  doc.text(
+    "REKAP BARANG MINUS",
+    14,
+    y
+  );
+
+  y+=8;
+
+  doc.setFontSize(9);
+
+  if(!minus.length){
+
+    doc.text(
+      "Tidak ada barang minus.",
+      14,
+      y
+    );
+
+    y+=8;
+
+  }else{
+
+    minus.forEach((m,i)=>{
+
+      const kurang=
+        Math.abs(
+          (Number(m.fisik)||0)
+          -
+          (Number(m.oh)||0)
+        );
+
+      const rugi=
+        kurang*(Number(m.harga)||0);
+
+      totalRugi+=rugi;
+
+      const text=
+        `${i+1}. ${m.nama} | OH ${m.oh} | Fisik ${m.fisik} | -${kurang} | ${rupiah(rugi)}`;
+
+      const lines=
+        doc.splitTextToSize(
+          text,
+          180
+        );
+
+      if(y>270){
+
+        doc.addPage();
+
+        y=20;
+
+      }
+
+      doc.text(
+        lines,
+        14,
+        y
+      );
+
+      y+=
+        lines.length*5+2;
+
+    });
+
+  }
+
+  y+=5;
+
+  if(y>270){
+
+    doc.addPage();
+
+    y=20;
+
+  }
+
+  doc.setFontSize(11);
+
+  doc.text(
+    `TOTAL KERUGIAN: ${rupiah(totalRugi)}`,
+    14,
+    y
+  );
+
+  y+=12;
+
+  doc.setFontSize(13);
+
+  doc.text(
+    "REKAP BARANG PLUS",
+    14,
+    y
+  );
+
+  y+=8;
+
+  doc.setFontSize(9);
+
+  if(!plus.length){
+
+    doc.text(
+      "Tidak ada barang plus.",
+      14,
+      y
+    );
+
+  }else{
+
+    plus.forEach((p,i)=>{
+
+      const lebih=
+        (Number(p.fisik)||0)
+        -
+        (Number(p.oh)||0);
+
+      const nilai=
+        lebih*(Number(p.harga)||0);
+
+      totalPlus+=nilai;
+
+      const text=
+        `${i+1}. ${p.nama} | OH ${p.oh} | Fisik ${p.fisik} | +${lebih} | ${rupiah(nilai)}`;
+
+      const lines=
+        doc.splitTextToSize(
+          text,
+          180
+        );
+
+      if(y>270){
+
+        doc.addPage();
+
+        y=20;
+
+      }
+
+      doc.text(
+        lines,
+        14,
+        y
+      );
+
+      y+=
+        lines.length*5+2;
+
+    });
+
+  }
+
+  y+=10;
+
+  if(y>270){
+
+    doc.addPage();
+
+    y=20;
+
+  }
+
+  doc.setFontSize(11);
+
+  doc.text(
+    `TOTAL NILAI PLUS: ${rupiah(totalPlus)}`,
+    14,
+    y
+  );
+
+  y+=15;
+
+  doc.setFontSize(9);
+
+  doc.text(
+    "SO RAHIL K792 MULTI v2.0",
+    14,
+    y
+  );
+
+  doc.text(
+    "By Ade Supriatna",
+    14,
+    y+6
+  );
+
+  doc.save(
+    `LAPORAN_${safeFileName(ruangAktif.nama)}_${tanggal}_${shift.replace(/ /g,"_")}.pdf`
+  );
+
+  showToast(
+    "📑 PDF berhasil dibuat"
+  );
+
+}
+
+
+/* =====================================================
+   FILE NAME
+===================================================== */
+
+function safeFileName(name){
+
+  return String(name)
+    .replace(/[\\/:*?"<>|]/g,"_")
+    .replace(/\s+/g,"_");
+
+}
+
+
+/* =====================================================
+   ENTER = SCAN / SEARCH
+===================================================== */
+
+document.addEventListener(
+  "keydown",
+  function(e){
+
+    if(
+      e.key==="Enter"
+      &&
+      document.activeElement.id==="searchBarang"
+    ){
+
+      const kode=
+        document.getElementById(
+          "searchBarang"
+        ).value.trim();
+
+      if(kode){
+        handleScan(kode);
+        document.getElementById(
+          "searchBarang"
+        ).value="";
+        tampilkan();
+      }
+
+    }
+
+  }
+);
+
+</script>
+
+</body>
+</html>
