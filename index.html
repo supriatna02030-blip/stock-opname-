@@ -2,1597 +2,1359 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<meta name="theme-color" content="#087cff">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#2980b9">
+<meta name="description" content="SO RAHIL K792 - Aplikasi Stock Opname">
 <title>SO RAHIL K792</title>
 
 <link rel="manifest" href="manifest.json">
-<link rel="icon" href="icon-rahil.png">
+<link rel="icon" type="image/png" href="icon-rahil.png">
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
 *{
- box-sizing:border-box;
- font-family:'Poppins',sans-serif;
- -webkit-tap-highlight-color:transparent;
+  box-sizing:border-box;
+  font-family:'Poppins',sans-serif;
+  -webkit-tap-highlight-color:transparent;
 }
 
-html,body{
- margin:0;
- min-height:100%;
+:root{
+  --primary:#2980b9;
+  --secondary:#00c6ff;
+  --accent:#8e44ad;
+  --success:#27ae60;
+  --danger:#e74c3c;
+  --warning:#f39c12;
+  --bg1:#4facfe;
+  --bg2:#00f2fe;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --border:#e5e7eb;
 }
 
 body{
- background:
- radial-gradient(circle at top left,#5bdcff 0,#238cff 35%,#06162f 100%);
- color:#172033;
- padding:15px;
- transition:.5s;
+  margin:0;
+  min-height:100vh;
+  padding:15px;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 20% 20%,rgba(255,255,255,.35),transparent 25%),
+    radial-gradient(circle at 80% 80%,rgba(255,255,255,.25),transparent 25%),
+    linear-gradient(135deg,var(--bg1),var(--bg2));
+  background-size:200% 200%;
+  animation:bgMove 12s ease infinite;
+  transition:.4s;
+}
+
+@keyframes bgMove{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
 }
 
 body.dark{
- background:
- radial-gradient(circle at top left,#172d50,#08101f 70%);
- color:#fff;
-}
-
-body.theme-purple{
- background:linear-gradient(135deg,#7f5cff,#c04cff,#32135f);
-}
-
-body.theme-green{
- background:linear-gradient(135deg,#20c997,#087f5b,#063b31);
-}
-
-body.theme-orange{
- background:linear-gradient(135deg,#ffb347,#ff7043,#762d17);
-}
-
-body.theme-pink{
- background:linear-gradient(135deg,#ff6fae,#a855f7,#37175c);
-}
-
-body.theme-dark{
- background:linear-gradient(135deg,#17233d,#05070d);
+  --card:#111827;
+  --text:#f3f4f6;
+  --muted:#9ca3af;
+  --border:#374151;
+  --bg1:#111827;
+  --bg2:#172554;
+  background:
+    radial-gradient(circle at 20% 20%,rgba(59,130,246,.2),transparent 30%),
+    linear-gradient(135deg,#020617,#172554);
 }
 
 .container{
- width:100%;
- max-width:1200px;
- margin:auto;
- background:rgba(255,255,255,.96);
- border-radius:26px;
- padding:25px;
- box-shadow:0 20px 60px rgba(0,0,0,.3);
- overflow:hidden;
+  width:100%;
+  max-width:1200px;
+  margin:auto;
+  background:rgba(255,255,255,.94);
+  border-radius:28px;
+  padding:25px;
+  box-shadow:
+    0 25px 70px rgba(0,0,0,.25),
+    inset 0 1px rgba(255,255,255,.8);
+  backdrop-filter:blur(15px);
+  min-height:calc(100vh - 30px);
+  animation:containerIn .7s ease;
 }
 
-body.dark .container,
-body.theme-dark .container{
- background:rgba(14,22,38,.96);
- color:white;
+body.dark .container{
+  background:rgba(15,23,42,.95);
 }
 
-body.theme-purple .container,
-body.theme-green .container,
-body.theme-orange .container,
-body.theme-pink .container{
- background:rgba(255,255,255,.96);
+@keyframes containerIn{
+  from{opacity:0;transform:scale(.96) translateY(20px)}
+  to{opacity:1;transform:scale(1) translateY(0)}
 }
 
 button,input,select{
- width:100%;
- padding:12px;
- margin:6px 0;
- border-radius:12px;
- border:2px solid #e6eaf0;
- font-size:14px;
- outline:none;
+  width:100%;
+  padding:13px;
+  margin:6px 0;
+  border-radius:12px;
+  border:2px solid var(--border);
+  font-size:14px;
+  outline:none;
+  transition:.25s;
+}
+
+input,select{
+  background:var(--card);
+  color:var(--text);
 }
 
 input:focus,select:focus{
- border-color:#159dff;
- box-shadow:0 0 0 3px rgba(21,157,255,.12);
-}
-
-body.dark input,
-body.dark select{
- background:#101d32;
- color:#fff;
- border-color:#30405b;
+  border-color:var(--primary);
+  box-shadow:0 0 0 4px rgba(41,128,185,.12);
+  transform:translateY(-1px);
 }
 
 button{
- border:0;
- color:white;
- font-weight:700;
- cursor:pointer;
- background:linear-gradient(135deg,#178cff,#00d9ff);
- transition:.2s;
+  border:0;
+  cursor:pointer;
+  color:white;
+  font-weight:700;
+  background:linear-gradient(135deg,var(--primary),var(--secondary));
+  box-shadow:0 7px 18px rgba(41,128,185,.2);
+  position:relative;
+  overflow:hidden;
+}
+
+button::after{
+  content:"";
+  position:absolute;
+  top:-100%;
+  left:-100%;
+  width:50%;
+  height:300%;
+  background:rgba(255,255,255,.18);
+  transform:rotate(25deg);
+  transition:.6s;
+}
+
+button:hover::after{
+  left:130%;
 }
 
 button:hover{
- transform:translateY(-2px);
- filter:brightness(1.05);
+  transform:translateY(-2px);
 }
 
 button:active{
- transform:scale(.95);
-}
-
-button:disabled{
- opacity:.5;
- cursor:not-allowed;
+  transform:scale(.96);
 }
 
 .page{
- display:none;
+  display:none;
 }
 
 .page.active{
- display:block;
- animation:pageIn .45s ease;
+  display:block;
+  animation:pageIn .45s ease;
 }
 
 @keyframes pageIn{
- from{
-  opacity:0;
-  transform:translateY(20px) scale(.98);
- }
- to{
-  opacity:1;
-  transform:translateY(0) scale(1);
- }
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
 }
 
-.login-box{
- max-width:430px;
- margin:50px auto;
- text-align:center;
+/* LOGIN */
+
+#loginPage{
+  max-width:430px;
+  margin:8vh auto 0;
+  text-align:center;
+  position:relative;
 }
 
-.login-logo{
- width:105px;
- height:105px;
- object-fit:cover;
- border-radius:28px;
- padding:8px;
- background:white;
- box-shadow:0 15px 40px rgba(0,0,0,.25);
- animation:logoFloat 3s ease-in-out infinite;
+.login-orb{
+  width:125px;
+  height:125px;
+  margin:0 auto 20px;
+  border-radius:35px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:38px;
+  color:white;
+  background:linear-gradient(135deg,#2980b9,#00f2fe);
+  box-shadow:
+    0 25px 50px rgba(41,128,185,.35),
+    inset 8px 8px 18px rgba(255,255,255,.25),
+    inset -8px -8px 18px rgba(0,0,0,.12);
+  animation:
+    float3d 3s ease-in-out infinite,
+    rotateSoft 8s linear infinite;
+  transform-style:preserve-3d;
 }
 
-@keyframes logoFloat{
- 0%,100%{transform:translateY(0) rotate(0)}
- 50%{transform:translateY(-8px) rotate(2deg)}
+@keyframes float3d{
+  0%,100%{transform:translateY(0) rotateX(0) rotateY(0)}
+  50%{transform:translateY(-12px) rotateX(8deg) rotateY(-8deg)}
 }
 
-.login-title{
- font-size:28px;
- font-weight:800;
- margin:15px 0 5px;
- background:linear-gradient(90deg,#087cff,#00c8ff);
- -webkit-background-clip:text;
- color:transparent;
+@keyframes rotateSoft{
+  0%{box-shadow:0 25px 50px rgba(41,128,185,.35)}
+  50%{box-shadow:0 35px 70px rgba(0,242,254,.4)}
+  100%{box-shadow:0 25px 50px rgba(41,128,185,.35)}
+}
+
+#loginPage h2{
+  font-size:27px;
+  margin:10px 0;
+  color:var(--primary);
 }
 
 .login-sub{
- color:#718096;
- margin-bottom:25px;
+  color:var(--muted);
+  font-size:13px;
+  margin-bottom:20px;
 }
+
+.login-card{
+  padding:22px;
+  border-radius:22px;
+  background:rgba(255,255,255,.75);
+  box-shadow:0 15px 40px rgba(0,0,0,.12);
+}
+
+body.dark .login-card{
+  background:rgba(30,41,59,.8);
+}
+
+.login-card button{
+  margin-top:12px;
+  height:50px;
+}
+
+/* THEME */
+
+.theme-btn{
+  position:fixed;
+  right:18px;
+  top:18px;
+  width:52px;
+  height:52px;
+  padding:0;
+  border-radius:50%;
+  z-index:999;
+  font-size:21px;
+}
+
+/* HEADER */
 
 .header-toko{
- text-align:center;
- padding:15px 10px 20px;
- border-bottom:2px solid #edf0f4;
- position:relative;
+  text-align:center;
+  padding:10px 10px 20px;
+  border-bottom:2px solid var(--border);
+  margin-bottom:20px;
 }
 
-.header-toko img{
- width:76px;
- height:76px;
- object-fit:cover;
- border-radius:22px;
- padding:5px;
- background:#fff;
- box-shadow:0 8px 25px rgba(0,0,0,.18);
- animation:logoFloat 4s ease-in-out infinite;
+.header-logo{
+  width:82px;
+  height:82px;
+  border-radius:24px;
+  object-fit:cover;
+  margin-bottom:8px;
+  animation:float3d 4s ease-in-out infinite;
+  box-shadow:0 12px 25px rgba(0,0,0,.18);
 }
 
 .header-toko h1{
- margin:8px 0 2px;
- font-size:24px;
- color:#087cff;
+  margin:5px 0;
+  font-size:27px;
+  color:var(--primary);
 }
 
 .header-toko p{
- margin:0;
- opacity:.65;
- font-size:13px;
+  margin:0;
+  color:var(--muted);
+  font-size:13px;
 }
 
+/* HOME */
+
 .welcome{
- text-align:center;
- margin:20px 0;
+  text-align:center;
+  margin:25px 0;
 }
 
 .welcome h2{
- margin:5px;
- color:#087cff;
+  color:var(--primary);
+  margin-bottom:5px;
 }
 
 .welcome p{
- opacity:.65;
+  color:var(--muted);
+  font-size:13px;
 }
 
 .menu-grid{
- display:grid;
- grid-template-columns:repeat(2,1fr);
- gap:12px;
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+  margin-top:25px;
 }
 
 .menu-card{
- min-height:115px;
- padding:18px;
- border-radius:20px;
- color:white;
- text-align:left;
- position:relative;
- overflow:hidden;
- background:linear-gradient(135deg,#087cff,#00c8ff);
- box-shadow:0 10px 25px rgba(0,110,255,.18);
+  min-height:125px;
+  border-radius:22px;
+  padding:20px;
+  text-align:left;
+  color:white;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  box-shadow:0 14px 30px rgba(0,0,0,.14);
+  animation:menuFloat 4s ease-in-out infinite;
 }
 
-.menu-card:before{
- content:"";
- position:absolute;
- width:100px;
- height:100px;
- border-radius:50%;
- right:-35px;
- top:-35px;
- background:rgba(255,255,255,.16);
+.menu-card:nth-child(2){animation-delay:.2s}
+.menu-card:nth-child(3){animation-delay:.4s}
+.menu-card:nth-child(4){animation-delay:.6s}
+.menu-card:nth-child(5){animation-delay:.8s}
+
+@keyframes menuFloat{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-5px)}
 }
 
 .menu-card .icon{
- font-size:32px;
+  font-size:32px;
 }
 
-.menu-card b{
- display:block;
- margin-top:8px;
- font-size:16px;
+.menu-card strong{
+  font-size:17px;
 }
 
 .menu-card small{
- opacity:.85;
+  opacity:.85;
 }
 
-.menu-card:nth-child(2){
- background:linear-gradient(135deg,#7c4dff,#b04cff);
+.menu-blue{background:linear-gradient(135deg,#2980b9,#00c6ff)}
+.menu-purple{background:linear-gradient(135deg,#8e44ad,#c471ed)}
+.menu-green{background:linear-gradient(135deg,#16a085,#2ecc71)}
+.menu-orange{background:linear-gradient(135deg,#e67e22,#f1c40f)}
+.menu-pink{background:linear-gradient(135deg,#d63384,#ff758c)}
+
+.logout{
+  background:linear-gradient(135deg,#e74c3c,#c0392b);
+  margin-top:15px;
 }
 
-.menu-card:nth-child(3){
- background:linear-gradient(135deg,#00a86b,#22c997);
-}
-
-.menu-card:nth-child(4){
- background:linear-gradient(135deg,#ff8a00,#ffb300);
-}
-
-.menu-card:nth-child(5){
- background:linear-gradient(135deg,#263b59,#536dfe);
-}
-
-.menu-card:nth-child(6){
- background:linear-gradient(135deg,#e53935,#ff7043);
-}
-
-.btn-back{
- width:auto;
- background:#718096;
- padding:10px 16px;
-}
-
-.btn-aksi{
- width:auto;
- background:#20a866;
- padding:10px 15px;
-}
-
-.btn-admin{
- width:auto;
- background:#8e44ad;
- padding:10px 15px;
-}
-
-.btn-wa{
- width:auto;
- background:#25D366;
- padding:10px 15px;
-}
-
-.btn-danger{
- width:auto;
- background:#e53935;
- padding:9px 13px;
- font-size:12px;
-}
-
-.btn-pdf{
- width:auto;
- background:#e67e22;
- padding:10px 15px;
-}
-
-.btn-tambah{
- width:auto;
- background:#8e44ad;
- padding:10px 15px;
-}
+/* DASHBOARD */
 
 .dashboard{
- display:grid;
- grid-template-columns:repeat(3,1fr);
- gap:12px;
- margin:20px 0;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+  margin:20px 0;
 }
 
 .dash-card{
- padding:18px;
- border-radius:20px;
- color:white;
- text-align:center;
- box-shadow:0 8px 25px rgba(0,0,0,.12);
+  padding:20px;
+  border-radius:20px;
+  color:white;
+  text-align:center;
+  box-shadow:0 12px 25px rgba(0,0,0,.15);
 }
 
 .dash-card h4{
- margin:0;
- font-size:12px;
- opacity:.85;
+  margin:0;
+  font-size:12px;
+  opacity:.85;
 }
 
 .dash-card h2{
- margin:5px 0 0;
- font-size:24px;
+  margin:8px 0 0;
+  font-size:25px;
 }
 
-.card-item{
- background:linear-gradient(135deg,#087cff,#00c8ff);
-}
+.card-item{background:linear-gradient(135deg,#2980b9,#00c6ff)}
+.card-minus{background:linear-gradient(135deg,#e74c3c,#ff7675)}
+.card-rugi{background:linear-gradient(135deg,#f39c12,#feca57)}
 
-.card-minus{
- background:linear-gradient(135deg,#e53935,#ff5252);
-}
+/* BUTTONS */
 
-.card-rugi{
- background:linear-gradient(135deg,#ff8f00,#ffb300);
-}
+.btn-aksi{background:#27ae60;width:auto;padding:10px 15px}
+.btn-admin{background:#8e44ad;width:auto;padding:10px 15px}
+.btn-wa{background:#25D366;width:auto;padding:10px 15px}
+.btn-danger{background:#e74c3c;width:auto;padding:8px 12px;font-size:12px}
+.btn-pdf{background:#e67e22;width:auto;padding:10px 15px}
+.btn-back{background:#7f8c8d;width:auto;padding:10px 15px}
+.btn-tambah{background:#8e44ad;width:auto;padding:10px 15px}
+
+/* RUANG */
 
 .ruang-list{
- display:flex;
- flex-direction:column;
- gap:12px;
- margin-top:15px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  margin-top:20px;
 }
 
 .ruang-item{
- display:flex;
- justify-content:space-between;
- align-items:center;
- gap:10px;
- padding:16px;
- border-radius:18px;
- background:#eef8ff;
- border:2px solid #b8e4ff;
-}
-
-body.dark .ruang-item{
- background:#102542;
- border-color:#244e76;
+  padding:18px;
+  border-radius:18px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  background:rgba(41,128,185,.08);
+  border:2px solid rgba(41,128,185,.25);
+  animation:pageIn .4s ease;
 }
 
 .ruang-item b{
- font-size:16px;
+  font-size:16px;
 }
 
-.search-box{
- display:flex;
- gap:8px;
- align-items:center;
-}
+/* TABLE */
 
-.search-box input{
- flex:1;
-}
-
-.search-box button{
- width:55px;
-}
-
-#reader{
- display:none;
- width:100%;
- margin-top:10px;
- border:2px solid #159dff;
- border-radius:15px;
- overflow:hidden;
-}
-
-#readerStatus{
- text-align:center;
- color:#087cff;
- font-size:12px;
+.table-wrap{
+  overflow-x:auto;
+  border-radius:15px;
 }
 
 table{
- width:100%;
- border-collapse:collapse;
- margin:12px 0;
- font-size:12px;
- overflow:hidden;
+  width:100%;
+  border-collapse:collapse;
+  margin-top:10px;
+  font-size:12px;
+  min-width:850px;
 }
 
 th{
- background:#087cff;
- color:white;
- padding:9px;
- position:sticky;
- top:0;
- z-index:2;
+  background:var(--primary);
+  color:white;
+  padding:10px;
+  position:sticky;
+  top:0;
+  z-index:2;
 }
 
 td{
- padding:8px;
- border-bottom:1px solid #ddd;
- text-align:center;
-}
-
-body.dark td{
- border-color:#29364d;
+  padding:8px;
+  border-bottom:1px solid var(--border);
+  text-align:center;
 }
 
 td input{
- margin:0;
- padding:7px;
- min-width:55px;
+  margin:0;
+  padding:7px;
 }
 
-.sel-minus{
- color:#e53935;
- font-weight:800;
+.selisih-minus{
+  color:#e74c3c;
+  font-weight:800;
 }
 
-.sel-plus{
- color:#0a9b59;
- font-weight:800;
+.selisih-plus{
+  color:#27ae60;
+  font-weight:800;
 }
 
 .highlight-row{
- background:#fff1a8!important;
- animation:rowFlash .8s;
+  animation:highlight .8s ease;
 }
 
-@keyframes rowFlash{
- 0%{transform:scale(1)}
- 50%{transform:scale(1.02)}
- 100%{transform:scale(1)}
+@keyframes highlight{
+  0%{background:#fff3cd}
+  50%{background:#b8f7ce}
+  100%{background:transparent}
 }
+
+/* REKAP */
 
 .rekap-box{
- margin-top:15px;
- padding:15px;
- border-radius:15px;
+  margin-top:15px;
+  padding:18px;
+  border-radius:16px;
 }
 
 .rekap-minus{
- background:#ffebee;
- border-left:5px solid #e53935;
+  background:#ffebee;
+  border-left:6px solid #e74c3c;
 }
 
 .rekap-plus{
- background:#e8f5e9;
- border-left:5px solid #20a866;
+  background:#e8f5e9;
+  border-left:6px solid #27ae60;
 }
 
 body.dark .rekap-minus{
- background:#351b21;
+  background:#3b1f25;
 }
 
 body.dark .rekap-plus{
- background:#143323;
+  background:#173523;
 }
 
 .total-rp-box{
- margin-top:15px;
- padding:16px;
- border-radius:15px;
- background:#ffc107;
- color:#111;
- text-align:center;
- font-weight:800;
+  background:linear-gradient(135deg,#ffc107,#ffca28);
+  color:#111;
+  padding:17px;
+  border-radius:15px;
+  margin-top:15px;
+  font-weight:800;
+  text-align:center;
 }
 
-.admin-panel{
- padding:16px;
- border-radius:18px;
- border:2px dashed #8e44ad;
- background:#f7effb;
- margin-bottom:20px;
+/* READER */
+
+#reader{
+  width:100%;
+  border-radius:15px;
+  overflow:hidden;
+  display:none;
+  margin-top:10px;
+  border:2px solid var(--primary);
 }
 
-body.dark .admin-panel{
- background:#29183a;
+#readerStatus{
+  text-align:center;
+  color:var(--primary);
+  font-size:12px;
 }
 
-.user-item{
- display:flex;
- justify-content:space-between;
- padding:10px;
- border-bottom:1px solid #ddd;
-}
-
-.setting-section{
- padding:16px;
- margin:12px 0;
- border-radius:18px;
- background:#f5f8fc;
-}
-
-body.dark .setting-section{
- background:#101d32;
-}
-
-.setting-section h3{
- margin-top:0;
-}
-
-.theme-grid{
- display:grid;
- grid-template-columns:repeat(3,1fr);
- gap:8px;
-}
-
-.theme-btn{
- height:55px;
- border-radius:15px;
- margin:0;
-}
-
-.theme-blue{background:linear-gradient(135deg,#087cff,#00d9ff)}
-.theme-purple{background:linear-gradient(135deg,#7f5cff,#c04cff)}
-.theme-green{background:linear-gradient(135deg,#20c997,#087f5b)}
-.theme-orange{background:linear-gradient(135deg,#ffb347,#ff7043)}
-.theme-pink{background:linear-gradient(135deg,#ff6fae,#a855f7)}
-.theme-dark{background:linear-gradient(135deg,#17233d,#05070d)}
-
-.version{
- text-align:center;
- padding:15px;
- opacity:.65;
- font-size:12px;
-}
+/* TOAST */
 
 #toast{
- position:fixed;
- top:-80px;
- left:50%;
- transform:translateX(-50%);
- z-index:9999;
- padding:13px 22px;
- border-radius:30px;
- color:white;
- background:#20a866;
- box-shadow:0 8px 30px rgba(0,0,0,.25);
- transition:.45s;
- font-weight:700;
+  position:fixed;
+  top:-80px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#27ae60;
+  color:white;
+  padding:13px 22px;
+  border-radius:25px;
+  z-index:2000;
+  font-weight:700;
+  box-shadow:0 10px 30px rgba(0,0,0,.25);
+  transition:.5s;
 }
 
 #toast.show{
- top:20px;
+  top:20px;
 }
 
-/* =========================
-   REHAT SEJENAK
-========================= */
+/* SETTINGS */
 
-#rehatOverlay{
- display:none;
- position:fixed;
- inset:0;
- z-index:5000;
- overflow:hidden;
- background:
- radial-gradient(circle at 50% 35%,#164c72,#071b31 55%,#020711);
- color:white;
+.setting-card{
+  padding:18px;
+  border-radius:18px;
+  border:1px solid var(--border);
+  margin:12px 0;
+  background:rgba(128,128,128,.05);
 }
 
-#rehatOverlay.show{
- display:block;
- animation:rehatIn .5s ease;
+.setting-card h3{
+  margin-top:0;
 }
 
-@keyframes rehatIn{
- from{opacity:0;transform:scale(1.04)}
- to{opacity:1;transform:scale(1)}
+.theme-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
 }
 
-.rehat-bg-light{
- position:absolute;
- width:320px;
- height:320px;
- left:50%;
- top:35%;
- transform:translate(-50%,-50%);
- border-radius:50%;
- background:#00d9ff;
- opacity:.13;
- filter:blur(65px);
- animation:lightPulse 4s infinite alternate;
+.theme-choice{
+  height:55px;
+  border-radius:14px;
+  border:3px solid transparent;
 }
 
-@keyframes lightPulse{
- from{transform:translate(-50%,-50%) scale(.75)}
- to{transform:translate(-50%,-50%) scale(1.25)}
+.theme-choice.active{
+  border-color:#111;
+  transform:scale(1.03);
 }
 
-.rehat-star{
- position:absolute;
- width:4px;
- height:4px;
- border-radius:50%;
- background:#fff;
- box-shadow:0 0 12px #00d9ff;
- animation:starUp 7s linear infinite;
+.theme-ocean{background:linear-gradient(135deg,#4facfe,#00f2fe)}
+.theme-purple{background:linear-gradient(135deg,#667eea,#764ba2)}
+.theme-sunset{background:linear-gradient(135deg,#ff9966,#ff5e62)}
+.theme-green{background:linear-gradient(135deg,#11998e,#38ef7d)}
+.theme-night{background:linear-gradient(135deg,#141e30,#243b55)}
+.theme-pink{background:linear-gradient(135deg,#ee9ca7,#ffdde1)}
+
+/* TUTORIAL */
+
+.tutorial-section{
+  padding:15px;
+  border-radius:15px;
+  margin:10px 0;
+  background:rgba(41,128,185,.07);
+  border-left:4px solid var(--primary);
 }
 
-@keyframes starUp{
- from{
-  transform:translateY(110vh);
-  opacity:0;
- }
- 20%{opacity:1}
- 80%{opacity:1}
- to{
-  transform:translateY(-20vh);
-  opacity:0;
- }
+.tutorial-section h4{
+  margin:0 0 6px;
 }
 
-.rehat-top{
- position:absolute;
- top:18px;
- left:0;
- width:100%;
- padding:0 18px;
- display:flex;
- justify-content:space-between;
- align-items:center;
- z-index:5;
+.tutorial-section p{
+  font-size:13px;
+  line-height:1.7;
+  margin:5px 0;
 }
 
-.rehat-title{
- text-align:center;
- flex:1;
+/* REST */
+
+.rest-box{
+  text-align:center;
+  padding:25px 10px;
 }
 
-.rehat-title b{
- display:block;
- font-size:21px;
- text-shadow:0 0 20px #00d9ff;
+.cube-scene{
+  width:180px;
+  height:180px;
+  margin:30px auto;
+  perspective:700px;
 }
 
-.rehat-title small{
- color:#94bdd7;
+.cube{
+  width:110px;
+  height:110px;
+  position:relative;
+  margin:35px auto;
+  transform-style:preserve-3d;
+  animation:cubeRotate 8s linear infinite;
 }
 
-.rehat-icon-btn{
- width:48px;
- height:48px;
- border-radius:50%;
- padding:0;
- margin:0;
- background:rgba(255,255,255,.1);
- border:1px solid rgba(255,255,255,.2);
+.face{
+  position:absolute;
+  width:110px;
+  height:110px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:35px;
+  color:white;
+  border:2px solid rgba(255,255,255,.5);
+  background:linear-gradient(135deg,rgba(41,128,185,.85),rgba(0,242,254,.7));
+  box-shadow:inset 0 0 30px rgba(255,255,255,.15);
 }
 
-.rehat-content{
- position:absolute;
- left:50%;
- top:51%;
- transform:translate(-50%,-50%);
- width:92%;
- max-width:420px;
- text-align:center;
-}
+.front{transform:translateZ(55px)}
+.back{transform:rotateY(180deg) translateZ(55px)}
+.right{transform:rotateY(90deg) translateZ(55px)}
+.left{transform:rotateY(-90deg) translateZ(55px)}
+.top{transform:rotateX(90deg) translateZ(55px)}
+.bottom{transform:rotateX(-90deg) translateZ(55px)}
 
-.coffee3d{
- position:relative;
- width:190px;
- height:155px;
- margin:auto;
- animation:coffeeFloat 3s ease-in-out infinite;
- transform-style:preserve-3d;
-}
-
-@keyframes coffeeFloat{
- 0%,100%{
-  transform:translateY(0) rotateY(-6deg);
- }
- 50%{
-  transform:translateY(-12px) rotateY(6deg);
- }
-}
-
-.cup3d{
- position:absolute;
- left:38px;
- bottom:15px;
- width:115px;
- height:76px;
- border-radius:7px 7px 35px 35px;
- background:linear-gradient(90deg,#6e270c,#e59a4a,#70270c);
- box-shadow:
-  0 20px 35px rgba(0,0,0,.5),
-  inset -10px 0 12px rgba(0,0,0,.25);
-}
-
-.coffee3d-top{
- position:absolute;
- left:35px;
- bottom:82px;
- width:121px;
- height:30px;
- border-radius:50%;
- background:radial-gradient(ellipse,#2b1007,#713316,#a85a28);
- z-index:2;
-}
-
-.handle3d{
- position:absolute;
- right:18px;
- bottom:30px;
- width:42px;
- height:42px;
- border:9px solid #b65c22;
- border-radius:50%;
-}
-
-.steam3d{
- position:absolute;
- width:13px;
- height:60px;
- border-left:3px solid rgba(255,255,255,.55);
- border-radius:50%;
- bottom:90px;
- opacity:0;
- animation:steamUp 3s ease-out infinite;
-}
-
-.steam3d:nth-child(1){left:75px}
-.steam3d:nth-child(2){left:98px;animation-delay:1s}
-.steam3d:nth-child(3){left:120px;animation-delay:1.7s}
-
-@keyframes steamUp{
- 0%{
-  transform:translateY(15px) scale(.6);
-  opacity:0;
- }
- 30%{opacity:.8}
- 100%{
-  transform:translateY(-65px) scale(1.5);
-  opacity:0;
- }
-}
-
-.rehat-card{
- padding:20px;
- border-radius:25px;
- background:rgba(255,255,255,.08);
- border:1px solid rgba(255,255,255,.2);
- box-shadow:0 20px 60px rgba(0,0,0,.45);
- backdrop-filter:blur(12px);
-}
-
-.rehat-card h2{
- margin:0 0 7px;
- color:white;
-}
-
-.rehat-message{
- color:#b8d3e6;
- font-size:13px;
- line-height:1.6;
- min-height:42px;
+@keyframes cubeRotate{
+  from{transform:rotateX(0) rotateY(0) rotateZ(0)}
+  to{transform:rotateX(360deg) rotateY(360deg) rotateZ(180deg)}
 }
 
 .breath{
- width:125px;
- height:125px;
- margin:15px auto;
- border-radius:50%;
- display:flex;
- justify-content:center;
- align-items:center;
- background:radial-gradient(circle,#00d9ff,#087cff 65%,#092448);
- box-shadow:0 0 40px rgba(0,210,255,.45);
- transition:transform 4s ease-in-out;
+  animation:breathing 5s ease-in-out infinite;
 }
 
-.breath.in{
- transform:scale(1.2);
+@keyframes breathing{
+  0%,100%{transform:scale(1);opacity:.75}
+  50%{transform:scale(1.08);opacity:1}
 }
 
-.breath.out{
- transform:scale(.78);
+.version{
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
+  margin-top:25px;
 }
 
-.breath span{
- font-weight:800;
- font-size:15px;
- text-shadow:0 2px 10px rgba(0,0,0,.5);
+/* ADMIN */
+
+.admin-panel{
+  border:2px dashed var(--accent);
+  padding:18px;
+  border-radius:18px;
+  margin:15px 0;
+  background:rgba(142,68,173,.08);
 }
 
-.rehat-timer{
- font-size:28px;
- font-weight:800;
- color:#5eeaff;
- text-shadow:0 0 15px #00c8ff;
- margin:8px;
+.user-item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px 0;
+  border-bottom:1px solid var(--border);
 }
 
-.sound-row{
- display:flex;
- gap:6px;
- margin-top:10px;
-}
+/* RESPONSIVE */
 
-.sound-row button{
- font-size:11px;
- padding:9px 4px;
- margin:0;
- background:rgba(255,255,255,.1);
- border:1px solid rgba(255,255,255,.12);
-}
+@media(max-width:700px){
+  .container{
+    padding:16px;
+    border-radius:20px;
+  }
 
-.sound-row button.active{
- background:linear-gradient(135deg,#087cff,#00d9ff);
-}
+  .menu-grid{
+    grid-template-columns:1fr;
+  }
 
-.rehat-actions{
- display:flex;
- gap:8px;
- margin-top:10px;
-}
+  .dashboard{
+    grid-template-columns:1fr;
+  }
 
-.rehat-actions button{
- margin:0;
-}
+  .theme-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
 
-.rehat-start{
- flex:1;
-}
+  .header-toko h1{
+    font-size:22px;
+  }
 
-.rehat-close{
- width:90px;
- background:rgba(255,255,255,.12);
-}
+  .ruang-item{
+    align-items:flex-start;
+    flex-direction:column;
+  }
 
-.rehat-footer{
- position:absolute;
- bottom:12px;
- width:100%;
- text-align:center;
- font-size:10px;
- color:#617f95;
-}
+  .ruang-item div:last-child{
+    width:100%;
+  }
 
-@media(max-width:600px){
-
- body{
-  padding:8px;
- }
-
- .container{
-  padding:17px;
-  border-radius:20px;
- }
-
- .menu-grid{
-  grid-template-columns:1fr 1fr;
- }
-
- .dashboard{
-  grid-template-columns:1fr;
- }
-
- .theme-grid{
-  grid-template-columns:repeat(2,1fr);
- }
-
- table{
-  font-size:10px;
- }
-
- th,td{
-  padding:5px;
- }
-
- .rehat-content{
-  top:52%;
- }
-
- .coffee3d{
-  transform:scale(.82);
-  margin-top:-10px;
-  margin-bottom:-10px;
- }
-
- .rehat-card{
-  padding:15px;
- }
-
+  .ruang-item button{
+    margin-right:5px;
+  }
 }
 </style>
 </head>
 
 <body>
 
+<button class="theme-btn" onclick="toggleDark()" id="darkBtn">🌙</button>
+
 <div id="toast">✅ Data Tersimpan</div>
 
 <div class="container">
 
 <!-- LOGIN -->
+<div id="loginPage">
 
-<div id="loginPage" class="login-box">
+  <div class="login-orb">📦</div>
 
-<img src="icon-rahil.png" class="login-logo">
+  <h2>SO RAHIL K792</h2>
+  <div class="login-sub">
+    Stock Opname Management System
+  </div>
 
-<div class="login-title">SO RAHIL K792</div>
+  <div class="login-card">
 
-<div class="login-sub">
-Sistem Stock Opname • Alfamart Karbela 2
-</div>
+    <input type="text" id="inputNIK" placeholder="👤 NIK Karyawan">
 
-<input type="text" id="inputNIK" placeholder="👤 NIK Karyawan">
+    <input type="password" id="inputPIN" placeholder="🔐 PIN">
 
-<input type="password" id="inputPIN" placeholder="🔐 PIN">
+    <button onclick="login()">🚀 LOGIN</button>
 
-<button onclick="login()">🚀 MASUK KE APLIKASI</button>
+    <p id="loginError" style="color:#e74c3c;font-size:13px"></p>
 
-<p id="loginError" style="color:#e53935"></p>
+  </div>
 
-<div class="version">
-Versi 2.0 • By Ade Supriatna
-</div>
+  <div class="version">
+    Versi APK • SO RAHIL K792<br>
+    By <b>Ade Supriatna</b>
+  </div>
 
 </div>
 
 
 <!-- MAIN -->
-
 <div id="mainApp" style="display:none">
 
 <!-- HOME -->
+<div id="home" class="page">
 
-<div id="home" class="page active">
+  <div class="header-toko">
 
-<div class="header-toko">
+    <img
+      src="icon-rahil.png"
+      class="header-logo"
+      onerror="this.style.display='none'"
+      alt="SO RAHIL">
 
-<img src="icon-rahil.png">
+    <h1>SO RAHIL K792</h1>
 
-<h1>SO RAHIL K792</h1>
+    <p>Alfamart Karbela 2</p>
 
-<p>Alfamart Karbela 2 • Sistem Stock Opname</p>
+  </div>
+
+  <div class="welcome">
+
+    <h2>
+      Selamat Datang,
+      <span id="namaUser"></span> 👋
+    </h2>
+
+    <p>
+      Siap melakukan Stock Opname hari ini?
+    </p>
+
+  </div>
+
+  <div class="menu-grid">
+
+    <button class="menu-card menu-blue"
+      onclick="showMenu('daftarRuang')">
+
+      <span class="icon">🏠</span>
+      <strong>Daftar Ruang SO</strong>
+      <small>Kelola ruang opname</small>
+
+    </button>
+
+    <button class="menu-card menu-purple"
+      onclick="showMenu('dashboard')">
+
+      <span class="icon">📊</span>
+      <strong>Dashboard</strong>
+      <small>Ringkasan stok</small>
+
+    </button>
+
+    <button class="menu-card menu-green"
+      onclick="showMenu('laporan')">
+
+      <span class="icon">📋</span>
+      <strong>Laporan & Rekap</strong>
+      <small>Minus, plus & laporan</small>
+
+    </button>
+
+    <button class="menu-card menu-orange"
+      onclick="showMenu('backup')">
+
+      <span class="icon">💾</span>
+      <strong>Backup & Data</strong>
+      <small>Simpan dan backup data</small>
+
+    </button>
+
+    <button class="menu-card menu-pink"
+      onclick="showMenu('setting')">
+
+      <span class="icon">⚙️</span>
+      <strong>Pengaturan</strong>
+      <small>Tema, tutorial & rehat</small>
+
+    </button>
+
+  </div>
+
+  <button class="logout" onclick="logout()">
+    🚪 Logout
+  </button>
 
 </div>
 
-<div class="welcome">
 
-<h2>Selamat Datang 👋</h2>
-
-<p>
-Halo, <b id="namaUser"></b><br>
-Siap melakukan SO dengan lebih cepat dan teliti?
-</p>
-
-</div>
-
-<div class="menu-grid">
-
-<button class="menu-card" onclick="showMenu('daftarRuang')">
-<span class="icon">🏠</span>
-<b>Daftar Ruang SO</b>
-<small>Kelola ruang & produk</small>
-</button>
-
-<button class="menu-card" onclick="showMenu('dashboard')">
-<span class="icon">📊</span>
-<b>Dashboard</b>
-<small>Ringkasan hasil SO</small>
-</button>
-
-<button class="menu-card" onclick="showMenu('laporan')">
-<span class="icon">📋</span>
-<b>Laporan & Rekap</b>
-<small>Minus, plus & laporan</small>
-</button>
-
-<button class="menu-card" onclick="showMenu('backup')">
-<span class="icon">💾</span>
-<b>Backup & Data</b>
-<small>Simpan data SO</small>
-</button>
-
-<button class="menu-card" onclick="showMenu('setting')">
-<span class="icon">⚙️</span>
-<b>Pengaturan</b>
-<small>Tema, tutorial & tools</small>
-</button>
-
-<button class="menu-card" onclick="logout()">
-<span class="icon">🚪</span>
-<b>Logout</b>
-<small>Keluar dari aplikasi</small>
-</button>
-
-</div>
-
-</div>
-
-
-<!-- DAFTAR RUANG -->
-
+<!-- RUANG -->
 <div id="menuDaftarRuang" class="page">
 
-<button class="btn-back" onclick="showMenu('home')">
-⬅️ Kembali
-</button>
+  <button class="btn-back" onclick="showMenu('home')">
+    ⬅️ Kembali
+  </button>
 
-<h2>🏠 Daftar Ruang SO</h2>
+  <h2>🏠 Daftar Ruang SO</h2>
 
-<div style="display:flex;gap:8px">
+  <div style="display:flex;gap:8px">
 
-<input id="namaRuangBaru" placeholder="Contoh: SO RAHIL A">
+    <input
+      type="text"
+      id="namaRuangBaru"
+      placeholder="Contoh: SO RAHIL A">
 
-<button class="btn-tambah" onclick="tambahRuang()">
-➕ Tambah
-</button>
+    <button
+      class="btn-tambah"
+      onclick="tambahRuang()">
+      ➕ Tambah
+    </button>
 
-</div>
+  </div>
 
-<div id="listRuang" class="ruang-list"></div>
+  <div id="listRuang" class="ruang-list"></div>
 
 </div>
 
 
 <!-- DASHBOARD -->
-
 <div id="menuDashboard" class="page">
 
-<button class="btn-back" onclick="showMenu('home')">
-⬅️ Kembali
-</button>
+  <button class="btn-back" onclick="showMenu('home')">
+    ⬅️ Kembali
+  </button>
 
-<h2>📊 Dashboard</h2>
+  <h2>📊 Dashboard</h2>
 
-<div class="dashboard">
+  <div class="dashboard">
 
-<div class="dash-card card-item">
-<h4>Total Item</h4>
-<h2 id="dashTotal2">0</h2>
-</div>
+    <div class="dash-card card-item">
+      <h4>Total Item</h4>
+      <h2 id="dashTotal2">0</h2>
+    </div>
 
-<div class="dash-card card-minus">
-<h4>Minus</h4>
-<h2 id="dashMinus2">0</h2>
-</div>
+    <div class="dash-card card-minus">
+      <h4>Minus</h4>
+      <h2 id="dashMinus2">0</h2>
+    </div>
 
-<div class="dash-card card-rugi">
-<h4>Nilai Rugi</h4>
-<h2 id="dashRugi2">Rp 0</h2>
-</div>
+    <div class="dash-card card-rugi">
+      <h4>Total Rugi</h4>
+      <h2 id="dashRugi2">Rp 0</h2>
+    </div>
 
-</div>
+  </div>
 
 </div>
 
 
 <!-- OPNAME -->
-
 <div id="menuOpname" class="page">
 
-<button class="btn-back" onclick="showMenu('daftarRuang')">
-⬅️ Kembali
-</button>
+  <button class="btn-back"
+    onclick="showMenu('daftarRuang')">
+    ⬅️ Daftar Ruang
+  </button>
 
-<h2 id="judulRuang">📝 Input Opname</h2>
+  <h2 id="judulRuang">📝 Input Opname</h2>
 
-<input id="kodeToko" value="K792/KARBELA2">
+  <input
+    type="text"
+    id="kodeToko"
+    value="K792/KARBELA2">
 
-<div style="display:flex;gap:8px">
+  <div style="display:flex;gap:8px">
 
-<input type="date" id="tanggalOpname">
+    <input
+      type="date"
+      id="tanggalOpname">
 
-<select id="pilihShift" onchange="loadData()">
+    <select id="pilihShift" onchange="loadData()">
+      <option>SHIFT 1</option>
+      <option>SHIFT 2</option>
+      <option>SHIFT 3</option>
+    </select>
 
-<option>SHIFT 1</option>
-<option>SHIFT 2</option>
-<option>SHIFT 3</option>
+  </div>
 
-</select>
+  <input
+    type="text"
+    id="namaPIC"
+    placeholder="👤 Nama PIC">
 
-</div>
+  <div style="display:flex;gap:8px">
 
-<input id="namaPIC" placeholder="👤 Nama PIC">
+    <input
+      type="text"
+      id="searchBarang"
+      placeholder="🔍 Cari Barang / Scan Barcode..."
+      oninput="filterBarang()">
 
-<div class="search-box">
+    <button
+      onclick="startScan()"
+      style="width:60px">
+      📷
+    </button>
 
-<input id="searchBarang"
-placeholder="🔍 Cari Barang / Scan Barcode..."
-oninput="filterBarang()">
+  </div>
 
-<button onclick="startScan()">📷</button>
+  <div id="reader"></div>
+  <p id="readerStatus"></p>
 
-</div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
 
-<div id="reader"></div>
+    <button
+      class="btn-aksi"
+      onclick="loadItems()">
+      📥 Load 43 Item
+    </button>
 
-<p id="readerStatus"></p>
+    <button
+      class="btn-tambah"
+      onclick="tambahProdukManual()">
+      ➕ Produk
+    </button>
 
-<div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center">
+    <button
+      class="btn-aksi"
+      onclick="copyOHShiftSebelumnya()">
+      📋 Ambil OH
+    </button>
 
-<button class="btn-aksi" onclick="loadItems()">
-📥 Load 43 Item
-</button>
+    <button
+      class="btn-aksi"
+      onclick="simpanOpname()">
+      💾 Simpan
+    </button>
 
-<button class="btn-tambah" onclick="tambahProdukManual()">
-➕ Produk
-</button>
+  </div>
 
-<button class="btn-aksi" onclick="copyOHShiftSebelumnya()">
-📋 Ambil OH Sebelumnya
-</button>
+  <div id="tabelContainer"></div>
 
-<button class="btn-aksi" onclick="simpanOpname()">
-💾 Simpan
-</button>
-
-</div>
-
-<div id="tabelContainer"></div>
-
-<div id="totalStok"
-style="margin-top:15px;background:#087cff;color:white;padding:15px;border-radius:15px;text-align:center;font-weight:700">
-</div>
+  <div id="totalStok"
+    style="margin-top:15px;font-weight:700;background:var(--primary);color:white;padding:15px;border-radius:15px;text-align:center">
+  </div>
 
 </div>
 
 
 <!-- LAPORAN -->
-
 <div id="menuLaporan" class="page">
 
-<button class="btn-back" onclick="showMenu('home')">
-⬅️ Kembali
-</button>
+  <button class="btn-back" onclick="showMenu('home')">
+    ⬅️ Kembali
+  </button>
 
-<h2>📋 Laporan & Rekap</h2>
+  <h2>📋 Laporan & Rekap</h2>
 
-<input
-id="searchLaporan"
-placeholder="🔍 Cari barang..."
-oninput="tampilkanRekapSelisih()">
+  <input
+    type="text"
+    id="searchLaporan"
+    placeholder="🔍 Cari barang..."
+    oninput="tampilkanRekapSelisih()">
 
-<div style="display:flex;flex-wrap:wrap;justify-content:center">
+  <div style="display:flex;flex-wrap:wrap;gap:5px">
 
-<button class="btn-aksi" onclick="lihatRiwayat()">
-📜 Riwayat
-</button>
+    <button class="btn-aksi"
+      onclick="lihatRiwayat()">
+      📜 Riwayat
+    </button>
 
-<button class="btn-wa" onclick="kirimRekapWA('minus')">
-📲 WA Minus
-</button>
+    <button class="btn-wa"
+      onclick="kirimRekapWA('minus')">
+      📲 WA Minus
+    </button>
 
-<button class="btn-wa" onclick="kirimRekapWA('plus')">
-📲 WA Plus
-</button>
+    <button class="btn-wa"
+      onclick="kirimRekapWA('plus')">
+      📲 WA Plus
+    </button>
 
-<button class="btn-wa" onclick="kirimRekapWA('semua')">
-📲 WA Semua
-</button>
+    <button class="btn-aksi"
+      onclick="exportExcel()">
+      📤 Excel/CSV
+    </button>
 
-<button class="btn-aksi" onclick="exportExcel()">
-📤 Excel/CSV
-</button>
+    <button class="btn-pdf"
+      onclick="exportPDF()">
+      📑 PDF
+    </button>
 
-<button class="btn-pdf" onclick="exportPDF()">
-📑 PDF
-</button>
+  </div>
 
-</div>
+  <div id="rekapSelisih"></div>
 
-<div id="rekapSelisih"></div>
-
-<div id="totalSelisihRp" class="total-rp-box"></div>
+  <div
+    id="totalSelisihRp"
+    class="total-rp-box">
+  </div>
 
 </div>
 
 
 <!-- BACKUP -->
-
 <div id="menuBackup" class="page">
 
-<button class="btn-back" onclick="showMenu('home')">
-⬅️ Kembali
-</button>
+  <button class="btn-back" onclick="showMenu('home')">
+    ⬅️ Kembali
+  </button>
 
-<h2>💾 Backup & Data</h2>
+  <h2>💾 Backup & Data</h2>
 
-<button class="btn-aksi" onclick="exportCSV()">
-📤 Backup CSV
-</button>
+  <div class="setting-card">
 
-<button class="btn-aksi" onclick="backupJSON()">
-💾 Backup Data JSON
-</button>
+    <h3>📤 Backup</h3>
 
-<button class="btn-danger" onclick="resetAplikasi()">
-⚠️ Reset Aplikasi
-</button>
+    <p>
+      Simpan seluruh data aplikasi ke file JSON.
+    </p>
+
+    <button
+      class="btn-aksi"
+      onclick="backupJSON()">
+      💾 Backup Semua Data
+    </button>
+
+  </div>
+
+  <div class="setting-card">
+
+    <h3>📥 Restore</h3>
+
+    <p>
+      Pulihkan data dari file backup.
+    </p>
+
+    <input
+      type="file"
+      id="restoreFile"
+      accept=".json">
+
+    <button
+      class="btn-tambah"
+      onclick="restoreJSON()">
+      📥 Restore Data
+    </button>
+
+  </div>
+
+  <button
+    class="btn-aksi"
+    onclick="exportCSV()">
+    📤 Backup CSV
+  </button>
 
 </div>
 
 
 <!-- SETTING -->
-
 <div id="menuSetting" class="page">
 
-<button class="btn-back" onclick="showMenu('home')">
-⬅️ Kembali
-</button>
+  <button class="btn-back" onclick="showMenu('home')">
+    ⬅️ Kembali
+  </button>
 
-<h2>⚙️ Pengaturan</h2>
+  <h2>⚙️ Pengaturan</h2>
 
+  <!-- ADMIN -->
+  <div
+    id="adminPanel"
+    class="admin-panel"
+    style="display:none">
 
-<div class="setting-section">
+    <h3>👑 Panel Admin</h3>
 
-<h3>🎨 Tema Aplikasi</h3>
+    <input
+      type="text"
+      id="newNIK"
+      placeholder="NIK Baru">
 
-<div class="theme-grid">
+    <input
+      type="text"
+      id="newPIN"
+      placeholder="PIN Baru">
 
-<button class="theme-btn theme-blue"
-onclick="setTheme('blue')">
-🔵 Biru
-</button>
+    <input
+      type="text"
+      id="newNama"
+      placeholder="Nama Karyawan">
 
-<button class="theme-btn theme-purple"
-onclick="setTheme('purple')">
-🟣 Ungu
-</button>
+    <button
+      class="btn-admin"
+      onclick="tambahUser()">
+      ➕ Tambah User
+    </button>
 
-<button class="theme-btn theme-green"
-onclick="setTheme('green')">
-🟢 Hijau
-</button>
+    <div id="listUser"></div>
 
-<button class="theme-btn theme-orange"
-onclick="setTheme('orange')">
-🟠 Orange
-</button>
-
-<button class="theme-btn theme-pink"
-onclick="setTheme('pink')">
-🌸 Pink
-</button>
-
-<button class="theme-btn theme-dark"
-onclick="setTheme('dark')">
-🌑 Dark
-</button>
-
-</div>
-
-</div>
+  </div>
 
 
-<div class="setting-section">
+  <!-- TEMA -->
+  <div class="setting-card">
 
-<h3>☕ Rehat Sejenak</h3>
+    <h3>🎨 Tema Profesional</h3>
 
-<p>
-SO membutuhkan ketelitian. Kalau mata dan pikiran mulai lelah,
-ambil waktu sebentar untuk menenangkan diri.
-</p>
+    <p>
+      Pilih warna tampilan aplikasi.
+    </p>
 
-<button onclick="bukaRehat()">
-🧘 BUKA RUANG REHAT 3D
-</button>
+    <div class="theme-grid">
 
-</div>
+      <button class="theme-choice theme-ocean"
+        onclick="setTheme('ocean')"></button>
+
+      <button class="theme-choice theme-purple"
+        onclick="setTheme('purple')"></button>
+
+      <button class="theme-choice theme-sunset"
+        onclick="setTheme('sunset')"></button>
+
+      <button class="theme-choice theme-green"
+        onclick="setTheme('green')"></button>
+
+      <button class="theme-choice theme-night"
+        onclick="setTheme('night')"></button>
+
+      <button class="theme-choice theme-pink"
+        onclick="setTheme('pink')"></button>
+
+    </div>
+
+  </div>
 
 
-<div class="setting-section">
+  <!-- REHAT -->
+  <div class="setting-card">
 
-<h3>🔄 Maintenance</h3>
+    <h3>😌 Rehat Sejenak</h3>
 
-<button class="btn-aksi" onclick="refreshApp()">
-🔄 Refresh Aplikasi
-</button>
+    <p>
+      Stock opname membutuhkan ketelitian.
+      Istirahat sebentar agar fokus kembali.
+    </p>
 
-<button class="btn-aksi" onclick="clearCacheInfo()">
-🧹 Bersihkan Data Tampilan
-</button>
+    <button
+      class="btn-purple"
+      onclick="showMenu('rehat')">
+      🧘 Buka Rehat 3D
+    </button>
 
-</div>
+  </div>
 
 
-<div class="setting-section">
+  <!-- TUTORIAL -->
+  <div class="setting-card">
 
-<h3>📖 Tutorial Penggunaan</h3>
+    <h3>📖 Tutorial Cara Pakai</h3>
 
-<details>
+    <div class="tutorial-section">
+      <h4>🔐 1. Login</h4>
+      <p>
+        Masukkan NIK dan PIN yang sudah terdaftar.
+        Admin awal: <b>ADMIN / 1234</b>.
+      </p>
+    </div>
 
-<summary style="font-weight:700;cursor:pointer">
-👉 Buka Tutorial Lengkap
-</summary>
+    <div class="tutorial-section">
+      <h4>🏠 2. Daftar Ruang SO</h4>
+      <p>
+        Buat ruang baru sesuai kebutuhan, misalnya
+        SO RAHIL A, SO RAHIL B, atau ruangan tertentu.
+      </p>
+    </div>
 
-<h4>🔐 1. Login</h4>
+    <div class="tutorial-section">
+      <h4>📦 3. Input Barang</h4>
+      <p>
+        Gunakan tombol Load 43 Item untuk memuat template.
+        Kamu juga dapat menambahkan produk secara manual.
+      </p>
+    </div>
 
-<p>
-Masukkan NIK dan PIN yang sudah terdaftar.
-Admin awal:
-<br><b>NIK: ADMIN</b>
-<br><b>PIN: 1234</b>
-</p>
+    <div class="tutorial-section">
+      <h4>📷 4. Scan Barcode</h4>
+      <p>
+        Tekan tombol kamera lalu arahkan kamera ke barcode.
+        Jika kode ditemukan, jumlah Fisik otomatis bertambah 1.
+      </p>
+    </div>
 
-<h4>🏠 2. Daftar Ruang SO</h4>
+    <div class="tutorial-section">
+      <h4>📋 5. OH Shift Sebelumnya</h4>
+      <p>
+        Pada Shift 2 atau Shift 3, gunakan tombol
+        Ambil OH untuk mengambil Fisik dari shift sebelumnya.
+      </p>
+    </div>
 
-<p>
-Buat ruang SO sesuai kebutuhan. Misalnya:
-SO RAHIL A, SO RAHIL B, MINYAK, GULA, dan sebagainya.
-</p>
+    <div class="tutorial-section">
+      <h4>📊 6. Rekap Minus & Plus</h4>
+      <p>
+        Minus berarti Fisik lebih kecil dari OH.
+        Plus berarti Fisik lebih besar dari OH.
+        Nilai rupiah dihitung berdasarkan harga barang.
+      </p>
+    </div>
 
-<h4>📦 3. Input Barang</h4>
+    <div class="tutorial-section">
+      <h4>📲 7. Kirim WhatsApp</h4>
+      <p>
+        Dari menu Laporan, gunakan WA Minus atau WA Plus.
+        Aplikasi akan membuat pesan otomatis.
+      </p>
+    </div>
 
-<p>
-Buka ruang lalu tekan <b>Load 43 Item</b> untuk memasukkan
-template barang.
-Kamu juga bisa menambahkan produk secara manual.
-</p>
+    <div class="tutorial-section">
+      <h4>💾 8. Backup Data</h4>
+      <p>
+        Gunakan Backup Semua Data secara berkala agar data
+        tetap aman jika perangkat bermasalah.
+      </p>
+    </div>
 
-<h4>📷 4. Scan Barcode</h4>
+    <div class="tutorial-section">
+      <h4>🎨 9. Tema</h4>
+      <p>
+        Pilih salah satu tema warna profesional.
+        Tema tersimpan otomatis di perangkat.
+      </p>
+    </div>
 
-<p>
-Tekan tombol kamera lalu arahkan kamera ke barcode.
-Jika kode ditemukan, nilai Fisik akan otomatis bertambah 1.
-</p>
+  </div>
 
-<h4>📊 5. OH & Fisik</h4>
 
-<p>
-<b>OH</b> = stok menurut sistem.
-<br>
-<b>Fisik</b> = stok hasil perhitungan langsung.
-<br>
-Selisih otomatis dihitung oleh aplikasi.
-</p>
-
-<h4>❌ 6. Minus</h4>
-
-<p>
-Jika Fisik lebih kecil daripada OH,
-barang masuk kategori <b>Minus</b> dan nilai kerugian dihitung
-berdasarkan harga.
-</p>
-
-<h4>✅ 7. Plus</h4>
-
-<p>
-Jika Fisik lebih besar daripada OH,
-barang masuk kategori <b>Plus</b>.
-</p>
-
-<h4>📋 8. Rekap</h4>
-
-<p>
-Menu Laporan menampilkan barang Minus, Plus dan total nilai selisih.
-</p>
-
-<h4>📲 9. WhatsApp</h4>
-
-<p>
-Tersedia tombol untuk mengirim:
-<br>❌ Rekap Minus
-<br>✅ Rekap Plus
-<br>📋 Rekap Semua
-</p>
-
-<h4>📑 10. PDF & CSV</h4>
-
-<p>
-Gunakan PDF untuk laporan dan CSV untuk backup atau dibuka
-menggunakan Excel.
-</p>
-
-<h4>☕ 11. Rehat Sejenak</h4>
-
-<p>
-Gunakan fitur ini ketika sudah terlalu lama melakukan SO.
-Tersedia animasi, latihan napas, timer, partikel dan suara
-relaksasi yang dibuat langsung menggunakan JavaScript.
-</p>
-
-<h4>💾 12. Penyimpanan</h4>
-
-<p>
-Data disimpan di penyimpanan browser perangkat.
-Gunakan menu Backup secara berkala agar data lebih aman.
-</p>
-
-</details>
+  <div class="version">
+    SO RAHIL K792<br>
+    Versi APK • Stock Opname System<br>
+    <b>By Ade Supriatna</b>
+  </div>
 
 </div>
 
 
-<!-- ADMIN -->
+<!-- REHAT -->
+<div id="menuRehat" class="page">
 
-<div id="adminPanel" class="admin-panel" style="display:none">
+  <button
+    class="btn-back"
+    onclick="showMenu('setting')">
+    ⬅️ Kembali
+  </button>
 
-<h3>👑 Panel Admin</h3>
+  <div class="rest-box">
 
-<input id="newNIK" placeholder="NIK Baru">
+    <h2>😌 Rehat Sejenak</h2>
 
-<input id="newPIN" placeholder="PIN Baru">
+    <p>
+      Tarik napas perlahan...<br>
+      Lepaskan ketegangan...<br>
+      Kamu sudah bekerja dengan baik. ❤️
+    </p>
 
-<input id="newNama" placeholder="Nama Karyawan">
+    <div class="cube-scene">
 
-<button class="btn-admin" onclick="tambahUser()">
-➕ Tambah User
-</button>
+      <div class="cube">
 
-<div id="listUser"></div>
+        <div class="face front">🌿</div>
+        <div class="face back">😌</div>
+        <div class="face right">✨</div>
+        <div class="face left">💙</div>
+        <div class="face top">🌙</div>
+        <div class="face bottom">☁️</div>
 
-</div>
+      </div>
 
+    </div>
 
-<div class="version">
-<b>SO RAHIL K792</b>
-<br>
-Versi 2.0
-<br>
-By Ade Supriatna
-</div>
+    <h3 class="breath">
+      Tarik napas... 4 detik
+    </h3>
 
-</div>
+    <p>
+      Fokus sebentar pada pernapasan.
+    </p>
 
-</div>
-</div>
+    <button
+      class="btn-aksi"
+      onclick="startRelaxSound()">
+      🔊 Suara Relaksasi
+    </button>
 
+    <button
+      class="btn-danger"
+      onclick="stopRelaxSound()">
+      🔇 Stop Suara
+    </button>
 
-<!-- =========================
-     REHAT OVERLAY
-========================= -->
-
-<div id="rehatOverlay">
-
-<div class="rehat-bg-light"></div>
-
-<div class="rehat-star" style="left:10%;animation-delay:.2s"></div>
-<div class="rehat-star" style="left:25%;animation-delay:1.5s"></div>
-<div class="rehat-star" style="left:40%;animation-delay:3s"></div>
-<div class="rehat-star" style="left:55%;animation-delay:2s"></div>
-<div class="rehat-star" style="left:70%;animation-delay:4s"></div>
-<div class="rehat-star" style="left:85%;animation-delay:1s"></div>
-
-<div class="rehat-top">
-
-<button class="rehat-icon-btn" onclick="tutupRehat()">
-←
-</button>
-
-<div class="rehat-title">
-<b>☕ Rehat Sejenak</b>
-<small>SO RAHIL K792</small>
-</div>
-
-<button class="rehat-icon-btn" onclick="toggleSound()">
-<span id="soundIcon">🔇</span>
-</button>
-
-</div>
-
-
-<div class="rehat-content">
-
-<div class="coffee3d">
-
-<div class="steam3d"></div>
-<div class="steam3d"></div>
-<div class="steam3d"></div>
-
-<div class="coffee3d-top"></div>
-<div class="cup3d"></div>
-<div class="handle3d"></div>
-
-</div>
-
-
-<div class="rehat-card">
-
-<h2 id="rehatMessage">
-Istirahat dulu, Bro 😌
-</h2>
-
-<div class="rehat-message" id="motivation">
-Tarik napas pelan, lepaskan lelah,
-kemudian kembali lebih fokus.
-</div>
-
-
-<div class="breath" id="breathCircle">
-
-<span id="breathText">
-Siap?
-</span>
-
-</div>
-
-
-<div class="rehat-timer" id="rehatTimer">
-01:00
-</div>
-
-
-<div class="sound-row">
-
-<button id="soundRain" onclick="setRelaxSound('rain')">
-🌧️ Hujan
-</button>
-
-<button id="soundOcean" onclick="setRelaxSound('ocean')">
-🌊 Ombak
-</button>
-
-<button id="soundWind" onclick="setRelaxSound('wind')">
-🌬️ Angin
-</button>
-
-<button id="soundZen" onclick="setRelaxSound('zen')">
-🔔 Zen
-</button>
-
-</div>
-
-
-<div class="rehat-actions">
-
-<button class="rehat-start" onclick="startRehat()">
-▶ Mulai Rehat
-</button>
-
-<button class="rehat-close" onclick="tutupRehat()">
-Kembali
-</button>
+  </div>
 
 </div>
 
 </div>
-
-</div>
-
-
-<div class="rehat-footer">
-Semua efek suara dibuat langsung dengan JavaScript • SO RAHIL K792
-</div>
-
 </div>
 
 
@@ -1600,36 +1362,34 @@ Semua efek suara dibuat langsung dengan JavaScript • SO RAHIL K792
 
 const {jsPDF}=window.jspdf;
 
-if("serviceWorker" in navigator){
- navigator.serviceWorker.register("sw.js?v=20")
- .catch(()=>{});
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js?v=20').catch(()=>{});
 }
-
-
-/* =========================
-DATA
-========================= */
 
 let html5QrCode=null;
 let ruangAktif=null;
-let userLogin=null;
 
 let daftarRuang=
- JSON.parse(localStorage.getItem("daftar_ruang_so"))||[];
+JSON.parse(localStorage.getItem('daftar_ruang_so'))||[];
 
 let users=
- JSON.parse(localStorage.getItem("users_so"))||[
+JSON.parse(localStorage.getItem('users_so'))||[
   {
-   nik:"ADMIN",
-   pin:"1234",
-   nama:"ADMIN",
-   role:"admin"
+    nik:"ADMIN",
+    pin:"1234",
+    nama:"ADMIN",
+    role:"admin"
   }
- ];
+];
+
+let userLogin=null;
+
+let audioContext=null;
+let audioOscillator=null;
 
 
 /* =========================
-TEMPLATE 43 ITEM
+   TEMPLATE BARANG
 ========================= */
 
 const templateShift=[
@@ -1687,2024 +1447,1770 @@ const templateShift=[
 
 
 /* =========================
-NAVIGASI
+   NAVIGASI
 ========================= */
 
 function showMenu(menu){
 
- document.querySelectorAll(".page")
- .forEach(p=>{
-  p.classList.remove("active");
- });
+  document
+    .querySelectorAll('.page')
+    .forEach(p=>{
+      p.classList.remove('active');
+      p.style.display='none';
+    });
 
- let id=menu==="home"
-  ?"home"
-  :"menu"+menu.charAt(0).toUpperCase()+menu.slice(1);
+  let id=
+    menu==='home'
+      ? 'home'
+      : 'menu'+menu.charAt(0).toUpperCase()+menu.slice(1);
 
- let target=document.getElementById(id);
+  let target=document.getElementById(id);
 
- if(!target)return;
+  if(!target)return;
 
- target.classList.add("active");
+  target.style.display='block';
 
- if(menu==="daftarRuang")tampilkanRuang();
- if(menu==="dashboard")updateDashboard();
- if(menu==="laporan")tampilkanRekapSelisih();
+  setTimeout(()=>{
+    target.classList.add('active');
+  },10);
 
- window.scrollTo({
-  top:0,
-  behavior:"smooth"
- });
+  if(menu==='daftarRuang')tampilkanRuang();
+
+  if(menu==='laporan')tampilkanRekapSelisih();
+
+  if(menu==='dashboard')updateDashboard();
 
 }
 
 
 /* =========================
-TOAST
+   TOAST
 ========================= */
 
-function showToast(msg="✅ Data Tersimpan"){
+function showToast(pesan="✅ Data Tersimpan"){
 
- let t=document.getElementById("toast");
+  const t=document.getElementById('toast');
 
- t.innerText=msg;
- t.classList.add("show");
+  t.innerText=pesan;
 
- setTimeout(()=>{
-  t.classList.remove("show");
- },2200);
+  t.classList.add('show');
+
+  setTimeout(()=>{
+    t.classList.remove('show');
+  },2200);
 
 }
 
 
 /* =========================
-LOGIN
+   LOGIN
 ========================= */
 
 window.onload=function(){
 
- document.getElementById("tanggalOpname").valueAsDate=new Date();
+  let d=new Date();
 
- cekLogin();
+  document.getElementById('tanggalOpname')
+    .valueAsDate=d;
+
+  loadTheme();
+
+  cekLogin();
 
 };
 
+
 function cekLogin(){
 
- userLogin=
- JSON.parse(sessionStorage.getItem("userLogin"));
+  userLogin=
+    JSON.parse(sessionStorage.getItem('userLogin'));
 
- if(!userLogin)return;
+  if(userLogin){
 
- document.getElementById("loginPage").style.display="none";
- document.getElementById("mainApp").style.display="block";
+    document.getElementById('loginPage')
+      .style.display='none';
 
- document.getElementById("namaUser").innerText=
- userLogin.nama;
+    document.getElementById('mainApp')
+      .style.display='block';
 
- if(userLogin.role==="admin"){
-  document.getElementById("adminPanel").style.display="block";
- }
+    document.getElementById('namaUser')
+      .innerText=userLogin.nama;
 
- tampilkanListUser();
+    if(userLogin.role==='admin'){
 
- showMenu("home");
+      document.getElementById('adminPanel')
+        .style.display='block';
+
+    }
+
+    tampilkanListUser();
+
+    showMenu('home');
+
+  }
 
 }
+
 
 function login(){
 
- let nik=
- document.getElementById("inputNIK").value.trim();
+  let nik=
+    document.getElementById('inputNIK')
+      .value.trim();
 
- let pin=
- document.getElementById("inputPIN").value.trim();
+  let pin=
+    document.getElementById('inputPIN')
+      .value.trim();
 
- let user=
- users.find(u=>u.nik===nik&&u.pin===pin);
+  let user=
+    users.find(u=>
+      u.nik===nik &&
+      u.pin===pin
+    );
 
- if(!user){
+  if(user){
 
-  document.getElementById("loginError").innerText=
-  "❌ NIK atau PIN salah.";
+    userLogin=user;
 
-  return;
- }
+    sessionStorage.setItem(
+      'userLogin',
+      JSON.stringify(user)
+    );
 
- userLogin=user;
+    cekLogin();
 
- sessionStorage.setItem(
-  "userLogin",
-  JSON.stringify(user)
- );
+  }else{
 
- cekLogin();
+    document.getElementById('loginError')
+      .innerText='❌ NIK atau PIN salah.';
+
+  }
 
 }
+
 
 function logout(){
 
- sessionStorage.removeItem("userLogin");
+  sessionStorage.removeItem('userLogin');
 
- location.reload();
+  location.reload();
 
 }
 
 
 /* =========================
-TEMA
+   DARK MODE
 ========================= */
 
-function setTheme(theme){
+function toggleDark(){
 
- document.body.classList.remove(
-  "dark",
-  "theme-purple",
-  "theme-green",
-  "theme-orange",
-  "theme-pink",
-  "theme-dark"
- );
+  document.body.classList.toggle('dark');
 
- if(theme==="dark"){
-  document.body.classList.add("dark","theme-dark");
- }
+  localStorage.setItem(
+    'darkMode',
+    document.body.classList.contains('dark')
+  );
 
- if(theme!=="blue"&&theme!=="dark"){
-  document.body.classList.add("theme-"+theme);
- }
-
- localStorage.setItem("so_theme",theme);
-
- showToast("🎨 Tema diubah");
+  document.getElementById('darkBtn')
+    .innerText=
+    document.body.classList.contains('dark')
+      ? '☀️'
+      : '🌙';
 
 }
+
 
 function loadTheme(){
 
- let theme=
- localStorage.getItem("so_theme")||"blue";
+  let dark=
+    localStorage.getItem('darkMode')==='true';
 
- setTheme(theme);
+  if(dark)
+    document.body.classList.add('dark');
+
+  document.getElementById('darkBtn')
+    .innerText=dark?'☀️':'🌙';
+
+  let theme=
+    localStorage.getItem('soTheme');
+
+  if(theme)
+    setTheme(theme,false);
 
 }
 
 
 /* =========================
-USER ADMIN
+   TEMA
+========================= */
+
+function setTheme(theme,save=true){
+
+  const root=document.documentElement;
+
+  let themes={
+
+    ocean:[
+      '#2980b9',
+      '#00c6ff',
+      '#4facfe',
+      '#00f2fe'
+    ],
+
+    purple:[
+      '#667eea',
+      '#764ba2',
+      '#667eea',
+      '#764ba2'
+    ],
+
+    sunset:[
+      '#ff5e62',
+      '#ff9966',
+      '#ff9966',
+      '#ff5e62'
+    ],
+
+    green:[
+      '#11998e',
+      '#38ef7d',
+      '#11998e',
+      '#38ef7d'
+    ],
+
+    night:[
+      '#243b55',
+      '#141e30',
+      '#141e30',
+      '#243b55'
+    ],
+
+    pink:[
+      '#d63384',
+      '#ff758c',
+      '#ee9ca7',
+      '#ffdde1'
+    ]
+
+  };
+
+  let t=themes[theme]||themes.ocean;
+
+  root.style.setProperty('--primary',t[0]);
+  root.style.setProperty('--secondary',t[1]);
+  root.style.setProperty('--bg1',t[2]);
+  root.style.setProperty('--bg2',t[3]);
+
+  if(save)
+    localStorage.setItem('soTheme',theme);
+
+}
+
+
+/* =========================
+   USER ADMIN
 ========================= */
 
 function tambahUser(){
 
- if(userLogin?.role!=="admin"){
-  alert("Hanya Admin!");
-  return;
- }
+  if(!userLogin || userLogin.role!=='admin')
+    return alert('Hanya Admin!');
 
- let nik=
- document.getElementById("newNIK").value.trim();
+  let nik=document.getElementById('newNIK').value.trim();
+  let pin=document.getElementById('newPIN').value.trim();
+  let nama=document.getElementById('newNama').value.trim();
 
- let pin=
- document.getElementById("newPIN").value.trim();
+  if(!nik||!pin||!nama)
+    return alert('Lengkapi data user!');
 
- let nama=
- document.getElementById("newNama").value.trim();
+  if(users.find(u=>u.nik===nik))
+    return alert('NIK sudah ada!');
 
- if(!nik||!pin||!nama){
-  alert("Lengkapi semua data user!");
-  return;
- }
+  users.push({
+    nik,
+    pin,
+    nama,
+    role:'user'
+  });
 
- if(users.some(u=>u.nik===nik)){
-  alert("NIK sudah ada!");
-  return;
- }
+  localStorage.setItem(
+    'users_so',
+    JSON.stringify(users)
+  );
 
- users.push({
-  nik,
-  pin,
-  nama,
-  role:"user"
- });
+  document.getElementById('newNIK').value='';
+  document.getElementById('newPIN').value='';
+  document.getElementById('newNama').value='';
 
- localStorage.setItem(
-  "users_so",
-  JSON.stringify(users)
- );
+  tampilkanListUser();
 
- tampilkanListUser();
-
- document.getElementById("newNIK").value="";
- document.getElementById("newPIN").value="";
- document.getElementById("newNama").value="";
-
- showToast("👤 User berhasil ditambah");
+  showToast('✅ User berhasil ditambahkan');
 
 }
+
 
 function tampilkanListUser(){
 
- let html="<h4>Daftar User</h4>";
+  let html='<h4>👥 Daftar User</h4>';
 
- users.forEach((u,i)=>{
+  users.forEach(u=>{
 
-  html+=`
-  <div class="user-item">
+    html+=`
+      <div class="user-item">
+        <span>
+          <b>${u.nik}</b> -
+          ${u.nama}
+          ${u.role==='admin'?' 👑':''}
+        </span>
+      </div>
+    `;
 
-  <span>
-  ${u.nik} - ${u.nama}
-  ${u.role==="admin"?"👑":""}
-  </span>
+  });
 
-  ${
-   u.nik!=="ADMIN"
-   ?
-   `<button class="btn-danger"
-   onclick="hapusUser(${i})">
-   Hapus
-   </button>`
-   :""
-  }
-
-  </div>
-  `;
-
- });
-
- document.getElementById("listUser").innerHTML=html;
-
-}
-
-function hapusUser(i){
-
- if(!confirm("Hapus user ini?"))return;
-
- users.splice(i,1);
-
- localStorage.setItem(
-  "users_so",
-  JSON.stringify(users)
- );
-
- tampilkanListUser();
+  document.getElementById('listUser')
+    .innerHTML=html;
 
 }
 
 
 /* =========================
-RUANG
+   RUANG
 ========================= */
 
 function tambahRuang(){
 
- let nama=
- document.getElementById("namaRuangBaru").value.trim();
+  let nama=
+    document.getElementById('namaRuangBaru')
+      .value.trim();
 
- if(!nama){
-  alert("Isi nama ruang!");
-  return;
- }
+  if(!nama)
+    return alert('Isi nama ruang!');
 
- if(daftarRuang.some(r=>r.nama.toLowerCase()===nama.toLowerCase())){
-  alert("Ruang sudah ada!");
-  return;
- }
+  if(daftarRuang.find(r=>r.nama===nama))
+    return alert('Ruang sudah ada!');
 
- daftarRuang.push({
-  id:Date.now(),
-  nama,
-  data:[]
- });
+  daftarRuang.push({
+    id:Date.now(),
+    nama,
+    data:[]
+  });
 
- simpanRuang();
+  localStorage.setItem(
+    'daftar_ruang_so',
+    JSON.stringify(daftarRuang)
+  );
 
- document.getElementById("namaRuangBaru").value="";
+  document.getElementById('namaRuangBaru')
+    .value='';
 
- tampilkanRuang();
+  tampilkanRuang();
 
- showToast("🏠 Ruang berhasil ditambah");
-
-}
-
-function simpanRuang(){
-
- localStorage.setItem(
-  "daftar_ruang_so",
-  JSON.stringify(daftarRuang)
- );
+  showToast('✅ Ruang ditambahkan');
 
 }
+
 
 function tampilkanRuang(){
 
- let html="";
+  let html='';
 
- daftarRuang.forEach(r=>{
+  daftarRuang.forEach(r=>{
 
-  html+=`
+    html+=`
+      <div class="ruang-item">
 
-  <div class="ruang-item">
+        <div>
+          <b>🏠 ${r.nama}</b>
+          <br>
+          <small>${r.data.length} Produk</small>
+        </div>
 
-  <div>
-  <b>${escapeHTML(r.nama)}</b>
-  <br>
-  <small>${r.data.length} Produk</small>
-  </div>
+        <div>
 
-  <div>
+          <button
+            class="btn-aksi"
+            onclick="bukaRuang(${r.id})">
+            Buka
+          </button>
 
-  <button
-  class="btn-aksi"
-  onclick="bukaRuang(${r.id})">
-  Buka
-  </button>
+          <button
+            class="btn-danger"
+            onclick="hapusRuang(${r.id})">
+            🗑️
+          </button>
 
-  <button
-  class="btn-danger"
-  onclick="hapusRuang(${r.id})">
-  🗑️
-  </button>
+        </div>
 
-  </div>
+      </div>
+    `;
 
-  </div>
+  });
 
-  `;
-
- });
-
- document.getElementById("listRuang").innerHTML=
- html||"<p>Belum ada ruang SO.</p>";
+  document.getElementById('listRuang')
+    .innerHTML=
+    html||'<p style="text-align:center">Belum ada ruang.</p>';
 
 }
+
 
 function hapusRuang(id){
 
- if(!confirm("Yakin hapus ruang ini beserta datanya?"))return;
+  if(!confirm('Yakin hapus ruang ini?'))
+    return;
 
- daftarRuang=
- daftarRuang.filter(r=>r.id!==id);
+  daftarRuang=
+    daftarRuang.filter(r=>r.id!==id);
 
- simpanRuang();
+  localStorage.setItem(
+    'daftar_ruang_so',
+    JSON.stringify(daftarRuang)
+  );
 
- tampilkanRuang();
+  tampilkanRuang();
 
 }
 
+
 function bukaRuang(id){
 
- ruangAktif=
- daftarRuang.find(r=>r.id===id);
+  ruangAktif=
+    daftarRuang.find(r=>r.id===id);
 
- if(!ruangAktif)return;
+  if(!ruangAktif)return;
 
- document.getElementById("judulRuang").innerText=
- "📝 Input Opname: "+ruangAktif.nama;
+  document.getElementById('judulRuang')
+    .innerText=
+    `📝 Input Opname: ${ruangAktif.nama}`;
 
- document.getElementById("kodeToko").value=
- ruangAktif.nama;
+  document.getElementById('kodeToko')
+    .value=ruangAktif.nama;
 
- showMenu("opname");
+  showMenu('opname');
 
- document.getElementById("tanggalOpname").valueAsDate=
- new Date();
+  document.getElementById('tanggalOpname')
+    .valueAsDate=new Date();
 
- loadData();
+  loadData();
 
 }
 
 
 /* =========================
-PRODUK
+   PRODUK
 ========================= */
 
 function tambahProdukManual(){
 
- if(!ruangAktif){
-  alert("Pilih ruang terlebih dahulu!");
-  return;
- }
+  if(!ruangAktif)
+    return alert('Pilih ruang terlebih dahulu!');
 
- let kode=prompt("Kode Barang:");
+  let kode=prompt('Kode Barang:');
 
- if(!kode)return;
+  if(!kode)return;
 
- kode=kode.trim();
+  if(ruangAktif.data.find(x=>x.kode===kode))
+    return alert('Kode sudah ada!');
 
- if(ruangAktif.data.some(x=>x.kode===kode)){
-  alert("Kode sudah ada!");
-  return;
- }
+  let nama=prompt('Nama Barang:');
 
- let nama=prompt("Nama Barang:");
+  if(!nama)return;
 
- if(!nama)return;
+  let kategori=prompt('Kategori:');
 
- let kategori=prompt("Kategori:");
+  if(!kategori)return;
 
- if(!kategori)return;
+  ruangAktif.data.push({
 
- ruangAktif.data.push({
-  kategori:kategori.toUpperCase(),
-  kode,
-  nama,
-  oh:"0",
-  fisik:"0",
-  harga:"0"
- });
-
- simpanRuang();
-
- tampilkan();
-
- showToast("➕ Produk ditambahkan");
-
-}
-
-function hapusProduk(index){
-
- if(!confirm(
-  "Hapus "+ruangAktif.data[index].nama+"?"
- ))return;
-
- ruangAktif.data.splice(index,1);
-
- simpanRuang();
-
- tampilkan();
-
-}
-
-function loadItems(){
-
- if(!ruangAktif)return;
-
- if(!confirm(
-  "Load ulang 43 item template? Data produk ruang saat ini akan diganti."
- ))return;
-
- ruangAktif.data=
- JSON.parse(JSON.stringify(templateShift));
-
- simpanRuang();
-
- tampilkan();
-
- showToast("📥 43 item berhasil dimuat");
-
-}
-
-
-/* =========================
-TABEL
-========================= */
-
-function updateField(i,field,val){
-
- if(!ruangAktif)return;
-
- ruangAktif.data[i][field]=val;
-
- simpanRuang();
-
- updateDashboard();
-
- tampilkanRekapSelisih();
-
-}
-
-function tampilkan(){
-
- if(!ruangAktif)return;
-
- let container=
- document.getElementById("tabelContainer");
-
- let keyword=
- (document.getElementById("searchBarang")?.value||"")
- .toLowerCase()
- .trim();
-
- container.innerHTML="";
-
- let kategoriList=
- [...new Set(
-  ruangAktif.data.map(x=>x.kategori)
- )];
-
- let totalOH=0;
- let totalFisik=0;
-
- kategoriList.forEach(kat=>{
-
-  let items=
-  ruangAktif.data.filter(
-   x=>x.kategori===kat
-  );
-
-  let visibleItems=
-  items.filter(x=>
-   !keyword||
-   x.nama.toLowerCase().includes(keyword)||
-   x.kode.toLowerCase().includes(keyword)
-  );
-
-  if(!visibleItems.length)return;
-
-  let html=`
-  <h3>📦 ${escapeHTML(kat)}</h3>
-
-  <table>
-
-  <tr>
-  <th>No</th>
-  <th>Kode</th>
-  <th>Nama</th>
-  <th>OH</th>
-  <th>Fisik</th>
-  <th>Harga</th>
-  <th>Selisih</th>
-  <th>Nilai</th>
-  <th>Aksi</th>
-  </tr>
-  `;
-
-  let no=1;
-
-  visibleItems.forEach(item=>{
-
-   let index=
-   ruangAktif.data.indexOf(item);
-
-   let oh=Number(item.oh)||0;
-   let fisik=Number(item.fisik)||0;
-   let harga=Number(item.harga)||0;
-
-   totalOH+=oh;
-   totalFisik+=fisik;
-
-   let selisih=fisik-oh;
-   let nilai=selisih*harga;
-
-   let cls=
-   selisih<0
-   ?"sel-minus"
-   :selisih>0
-   ?"sel-plus"
-   :"";
-
-   html+=`
-
-   <tr id="row-${safeId(item.kode)}">
-
-   <td>${no++}</td>
-
-   <td>${escapeHTML(item.kode)}</td>
-
-   <td style="text-align:left">
-   ${escapeHTML(item.nama)}
-   </td>
-
-   <td>
-   <input
-   type="number"
-   value="${item.oh}"
-   onchange="updateField(${index},'oh',this.value)">
-   </td>
-
-   <td>
-   <input
-   type="number"
-   id="fisik-${safeId(item.kode)}"
-   value="${item.fisik}"
-   onchange="updateField(${index},'fisik',this.value)">
-   </td>
-
-   <td>
-   <input
-   type="number"
-   value="${item.harga}"
-   onchange="updateField(${index},'harga',this.value)">
-   </td>
-
-   <td class="${cls}">
-   ${selisih}
-   </td>
-
-   <td class="${cls}">
-   Rp ${nilai.toLocaleString("id-ID")}
-   </td>
-
-   <td>
-   <button
-   class="btn-danger"
-   onclick="hapusProduk(${index})">
-   🗑️
-   </button>
-   </td>
-
-   </tr>
-
-   `;
+    kategori:kategori.toUpperCase(),
+    kode,
+    nama,
+    oh:'0',
+    fisik:'0',
+    harga:'0'
 
   });
 
-  html+="</table>";
+  saveRuang();
 
-  container.innerHTML+=html;
-
- });
-
- document.getElementById("totalStok").innerHTML=
- `Total Produk: ${ruangAktif.data.length}
- | OH: ${totalOH}
- | Fisik: ${totalFisik}`;
-
- updateDashboard();
- tampilkanRekapSelisih();
+  tampilkan();
 
 }
 
-function filterBarang(){
 
- tampilkan();
+function hapusProduk(index){
+
+  if(!confirm(
+    `Hapus ${ruangAktif.data[index].nama}?`
+  ))return;
+
+  ruangAktif.data.splice(index,1);
+
+  saveRuang();
+
+  tampilkan();
+
+}
+
+
+function loadItems(){
+
+  if(!confirm(
+    'Reset data ruang ini ke 43 item template?'
+  ))return;
+
+  ruangAktif.data=
+    JSON.parse(
+      JSON.stringify(templateShift)
+    );
+
+  saveRuang();
+
+  tampilkan();
+
+}
+
+
+function updateField(i,field,val){
+
+  if(!ruangAktif)return;
+
+  ruangAktif.data[i][field]=val;
+
+  saveRuang();
+
+  tampilkan();
+
+}
+
+
+function saveRuang(){
+
+  if(!ruangAktif)return;
+
+  let index=
+    daftarRuang.findIndex(
+      r=>r.id===ruangAktif.id
+    );
+
+  if(index>=0){
+
+    daftarRuang[index].data=
+      ruangAktif.data;
+
+    localStorage.setItem(
+      'daftar_ruang_so',
+      JSON.stringify(daftarRuang)
+    );
+
+  }
 
 }
 
 
 /* =========================
-DASHBOARD
+   TABEL
+========================= */
+
+function tampilkan(){
+
+  if(!ruangAktif)return;
+
+  let container=
+    document.getElementById('tabelContainer');
+
+  container.innerHTML='';
+
+  let keyword=
+    document.getElementById('searchBarang')
+      ?.value.toLowerCase()||'';
+
+  let filtered=
+    ruangAktif.data.filter(x=>
+      x.nama.toLowerCase().includes(keyword)||
+      x.kode.toLowerCase().includes(keyword)
+    );
+
+  let kategoriList=[
+    ...new Set(filtered.map(x=>x.kategori))
+  ];
+
+  let totalOH=0;
+  let totalFisik=0;
+
+  kategoriList.forEach(kat=>{
+
+    let html=`
+      <h3>📦 ${kat}</h3>
+      <div class="table-wrap">
+      <table>
+      <tr>
+        <th>No</th>
+        <th>Kode</th>
+        <th>Nama</th>
+        <th>OH</th>
+        <th>Fisik</th>
+        <th>Harga</th>
+        <th>Selisih</th>
+        <th>Selisih Rp</th>
+        <th>Aksi</th>
+      </tr>
+    `;
+
+    let no=1;
+
+    filtered
+      .filter(x=>x.kategori===kat)
+      .forEach(item=>{
+
+        let index=
+          ruangAktif.data.indexOf(item);
+
+        let oh=Number(item.oh)||0;
+        let fisik=Number(item.fisik)||0;
+        let harga=Number(item.harga)||0;
+
+        totalOH+=oh;
+        totalFisik+=fisik;
+
+        let selisih=fisik-oh;
+
+        let nilai=selisih*harga;
+
+        let cls=
+          selisih<0
+            ?'selisih-minus'
+            :selisih>0
+            ?'selisih-plus'
+            :'';
+
+        html+=`
+
+          <tr id="row-${item.kode}">
+
+            <td>${no++}</td>
+
+            <td>${item.kode}</td>
+
+            <td style="text-align:left">
+              ${item.nama}
+            </td>
+
+            <td>
+              <input
+                type="number"
+                value="${item.oh}"
+                onchange="
+                  updateField(
+                    ${index},
+                    'oh',
+                    this.value
+                  )">
+            </td>
+
+            <td>
+              <input
+                type="number"
+                value="${item.fisik}"
+                onchange="
+                  updateField(
+                    ${index},
+                    'fisik',
+                    this.value
+                  )"
+                id="fisik-${item.kode}">
+            </td>
+
+            <td>
+              <input
+                type="number"
+                value="${item.harga}"
+                placeholder="Harga"
+                onchange="
+                  updateField(
+                    ${index},
+                    'harga',
+                    this.value
+                  )">
+            </td>
+
+            <td class="${cls}">
+              ${selisih}
+            </td>
+
+            <td class="${cls}">
+              Rp ${nilai.toLocaleString('id-ID')}
+            </td>
+
+            <td>
+              <button
+                class="btn-danger"
+                onclick="hapusProduk(${index})">
+                🗑️
+              </button>
+            </td>
+
+          </tr>
+
+        `;
+
+      });
+
+    html+=`
+      </table>
+      </div>
+    `;
+
+    container.innerHTML+=html;
+
+  });
+
+  document.getElementById('totalStok')
+    .innerHTML=
+      `Total Item: ${ruangAktif.data.length}
+       | OH: ${totalOH}
+       | Fisik: ${totalFisik}`;
+
+  tampilkanRekapSelisih();
+
+  updateDashboard();
+
+}
+
+
+function filterBarang(){
+
+  tampilkan();
+
+}
+
+
+/* =========================
+   DASHBOARD
 ========================= */
 
 function updateDashboard(){
 
- let data=
- ruangAktif?.data||[];
+  let data=
+    ruangAktif
+      ?ruangAktif.data
+      :[];
 
- let minus=
- data.filter(x=>
-  (Number(x.fisik)||0)<
-  (Number(x.oh)||0)
- );
+  let minus=
+    data.filter(x=>
+      (Number(x.fisik)||0)<
+      (Number(x.oh)||0)
+    );
 
- let rugi=0;
+  let totalRugi=0;
 
- minus.forEach(x=>{
+  minus.forEach(x=>{
 
-  let kurang=
-  Math.abs(
-   (Number(x.fisik)||0)-
-   (Number(x.oh)||0)
-  );
+    let kurang=
+      Math.abs(
+        (Number(x.fisik)||0)-
+        (Number(x.oh)||0)
+      );
 
-  rugi+=
-  kurang*(Number(x.harga)||0);
+    totalRugi+=
+      kurang*(Number(x.harga)||0);
 
- });
+  });
 
- document.getElementById("dashTotal2").innerText=
- data.length;
+  document.getElementById('dashTotal2')
+    .innerText=data.length;
 
- document.getElementById("dashMinus2").innerText=
- minus.length;
+  document.getElementById('dashMinus2')
+    .innerText=minus.length;
 
- document.getElementById("dashRugi2").innerText=
- "Rp "+rugi.toLocaleString("id-ID");
+  document.getElementById('dashRugi2')
+    .innerText=
+      'Rp '+totalRugi.toLocaleString('id-ID');
 
 }
 
 
 /* =========================
-REKAP
+   REKAP
 ========================= */
 
 function tampilkanRekapSelisih(){
 
- if(!ruangAktif)return;
+  let data=
+    ruangAktif
+      ?ruangAktif.data
+      :[];
 
- let keyword=
- (document.getElementById("searchLaporan")?.value||"")
- .toLowerCase()
- .trim();
+  let keyword=
+    document.getElementById('searchLaporan')
+      ?.value.toLowerCase()||'';
 
- let data=ruangAktif.data;
+  let minus=
+    data.filter(x=>
+      Number(x.fisik)<Number(x.oh)&&
+      x.nama.toLowerCase().includes(keyword)
+    );
 
- let minus=
- data.filter(x=>
-  Number(x.fisik)<Number(x.oh)&&
-  (
-   !keyword||
-   x.nama.toLowerCase().includes(keyword)||
-   x.kode.toLowerCase().includes(keyword)
-  )
- );
+  let plus=
+    data.filter(x=>
+      Number(x.fisik)>Number(x.oh)&&
+      x.nama.toLowerCase().includes(keyword)
+    );
 
- let plus=
- data.filter(x=>
-  Number(x.fisik)>Number(x.oh)&&
-  (
-   !keyword||
-   x.nama.toLowerCase().includes(keyword)||
-   x.kode.toLowerCase().includes(keyword)
-  )
- );
+  let total=0;
 
- let total=0;
+  data.forEach(x=>{
 
- data.forEach(x=>{
-
-  total+=
-  (
-   (Number(x.fisik)||0)-
-   (Number(x.oh)||0)
-  )*
-  (Number(x.harga)||0);
-
- });
-
- let html="";
-
- if(minus.length){
-
-  html+=`
-  <div class="rekap-box rekap-minus">
-
-  <h3>❌ BARANG MINUS (${minus.length})</h3>
-  `;
-
-  minus.forEach((m,i)=>{
-
-   let kurang=
-   Math.abs(
-    (Number(m.fisik)||0)-
-    (Number(m.oh)||0)
-   );
-
-   let rugi=
-   kurang*(Number(m.harga)||0);
-
-   html+=`
-   <p>
-   ${i+1}. ${escapeHTML(m.nama)}
-   <br>
-   Kurang <b>${kurang}</b>
-   = <b>Rp ${rugi.toLocaleString("id-ID")}</b>
-   </p>
-   `;
+    total+=
+      (
+        (Number(x.fisik)||0)-
+        (Number(x.oh)||0)
+      )*
+      (Number(x.harga)||0);
 
   });
 
-  html+="</div>";
+  let html='';
 
- }
+  if(minus.length){
+
+    html+=`
+      <div class="rekap-box rekap-minus">
+
+        <h3>
+          ❌ BARANG MINUS
+          (${minus.length} Item)
+        </h3>
+    `;
+
+    minus.forEach((m,i)=>{
+
+      let kurang=
+        Math.abs(
+          (Number(m.fisik)||0)-
+          (Number(m.oh)||0)
+        );
+
+      let rugi=
+        kurang*(Number(m.harga)||0);
+
+      html+=`
+        <p>
+          ${i+1}. ${m.nama}
+          — Kurang <b>${kurang}</b>
+          = <b>Rp ${rugi.toLocaleString('id-ID')}</b>
+        </p>
+      `;
+
+    });
+
+    html+='</div>';
+
+  }
 
 
- if(plus.length){
+  if(plus.length){
 
-  html+=`
-  <div class="rekap-box rekap-plus">
+    html+=`
+      <div class="rekap-box rekap-plus">
 
-  <h3>✅ BARANG PLUS (${plus.length})</h3>
-  `;
+        <h3>
+          ✅ BARANG PLUS
+          (${plus.length} Item)
+        </h3>
+    `;
 
-  plus.forEach((p,i)=>{
+    plus.forEach((p,i)=>{
 
-   let lebih=
-   (Number(p.fisik)||0)-
-   (Number(p.oh)||0);
+      let lebih=
+        (Number(p.fisik)||0)-
+        (Number(p.oh)||0);
 
-   let untung=
-   lebih*(Number(p.harga)||0);
+      let nilai=
+        lebih*(Number(p.harga)||0);
 
-   html+=`
-   <p>
-   ${i+1}. ${escapeHTML(p.nama)}
-   <br>
-   Lebih <b>${lebih}</b>
-   = <b>Rp ${untung.toLocaleString("id-ID")}</b>
-   </p>
-   `;
+      html+=`
+        <p>
+          ${i+1}. ${p.nama}
+          — Lebih <b>${lebih}</b>
+          = <b>Rp ${nilai.toLocaleString('id-ID')}</b>
+        </p>
+      `;
 
-  });
+    });
 
-  html+="</div>";
+    html+='</div>';
 
- }
+  }
 
- if(!html){
-  html="<p style='text-align:center;opacity:.6'>Tidak ada selisih.</p>";
- }
+  document.getElementById('rekapSelisih')
+    .innerHTML=
+      html||
+      '<p style="text-align:center">Tidak ada selisih.</p>';
 
- document.getElementById("rekapSelisih").innerHTML=html;
-
- document.getElementById("totalSelisihRp").innerHTML=
- "TOTAL SELISIH NILAI: Rp "+
- total.toLocaleString("id-ID");
+  document.getElementById('totalSelisihRp')
+    .innerHTML=
+      `TOTAL SELISIH NILAI:
+       Rp ${total.toLocaleString('id-ID')}`;
 
 }
 
 
 /* =========================
-BARCODE
+   BARCODE
 ========================= */
 
 function handleScan(kode){
 
- if(!ruangAktif)return;
+  if(!ruangAktif)return;
 
- let item=
- ruangAktif.data.find(x=>x.kode===kode);
+  let item=
+    ruangAktif.data.find(
+      x=>String(x.kode)===String(kode)
+    );
 
- if(!item){
+  if(item){
 
-  showToast("⚠️ Barcode tidak ditemukan");
+    item.fisik=
+      (Number(item.fisik)||0)+1;
 
-  return;
- }
+    saveRuang();
 
- item.fisik=
- (Number(item.fisik)||0)+1;
+    tampilkan();
 
- simpanRuang();
+    let row=
+      document.getElementById(
+        `row-${item.kode}`
+      );
 
- tampilkan();
+    if(row){
 
- let row=
- document.getElementById(
-  "row-"+safeId(kode)
- );
+      row.classList.add('highlight-row');
 
- if(row){
+      setTimeout(()=>{
+        row.classList.remove('highlight-row');
+      },1000);
 
-  row.classList.add("highlight-row");
+    }
 
-  setTimeout(()=>{
-   row.classList.remove("highlight-row");
-  },1000);
+    showToast(`✅ ${item.nama} +1`);
 
- }
+  }else{
 
- showToast("✅ "+item.nama+" +1");
+    showToast(
+      `⚠️ Kode ${kode} tidak ditemukan`
+    );
 
- let input=
- document.getElementById(
-  "fisik-"+safeId(kode)
- );
-
- if(input)input.focus();
+  }
 
 }
 
+
 function startScan(){
 
- if(!ruangAktif){
-  alert("Pilih ruang terlebih dahulu!");
-  return;
- }
+  const reader=
+    document.getElementById('reader');
 
- const reader=
- document.getElementById("reader");
+  const status=
+    document.getElementById('readerStatus');
 
- const status=
- document.getElementById("readerStatus");
-
- reader.style.display="block";
-
- status.innerText=
- "📷 Arahkan kamera ke barcode...";
-
- if(html5QrCode){
-  try{
-   html5QrCode.stop();
-  }catch(e){}
- }
-
- html5QrCode=
- new Html5Qrcode("reader");
-
- html5QrCode.start(
-
-  {facingMode:"environment"},
-
-  {
-   fps:10,
-   qrbox:{
-    width:250,
-    height:100
-   }
-  },
-
-  code=>{
-
-   handleScan(code);
-
-   html5QrCode.stop()
-   .then(()=>{
-    reader.style.display="none";
-    status.innerText="";
-   })
-   .catch(()=>{});
-
-  },
-
-  ()=>{}
-
- ).catch(()=>{
+  reader.style.display='block';
 
   status.innerText=
-  "❌ Kamera gagal dibuka. Periksa izin kamera.";
+    '📷 Arahkan kamera ke barcode...';
 
- });
+  if(html5QrCode){
+
+    try{
+      html5QrCode.stop();
+    }catch(e){}
+
+  }
+
+  html5QrCode=
+    new Html5Qrcode('reader');
+
+  html5QrCode.start(
+
+    {facingMode:'environment'},
+
+    {
+      fps:10,
+      qrbox:{
+        width:250,
+        height:100
+      }
+    },
+
+    code=>{
+
+      handleScan(code);
+
+      html5QrCode
+        .stop()
+        .catch(()=>{});
+
+      reader.style.display='none';
+
+      status.innerText='';
+
+    },
+
+    ()=>{}
+
+  ).catch(()=>{
+
+    status.innerText=
+      '❌ Kamera gagal dibuka. Periksa izin kamera.';
+
+  });
 
 }
 
 
 /* =========================
-SHIFT
+   SHIFT
 ========================= */
 
 function copyOHShiftSebelumnya(){
 
- let shift=
- document.getElementById("pilihShift").value;
+  let shift=
+    document.getElementById('pilihShift')
+      .value;
 
- let tgl=
- document.getElementById("tanggalOpname").value;
+  let tgl=
+    document.getElementById('tanggalOpname')
+      .value;
 
- let num=
- parseInt(shift.replace("SHIFT ",""));
+  let num=
+    parseInt(
+      shift.replace('SHIFT ','')
+    );
 
- if(num===1){
+  if(num===1)
+    return alert('Ini sudah SHIFT 1.');
 
-  alert("SHIFT 1 tidak memiliki shift sebelumnya.");
+  let prev=`SHIFT ${num-1}`;
 
-  return;
- }
+  let key=
+    `so_${ruangAktif.id}_${tgl}_${prev}`;
 
- let prev=
- "SHIFT "+(num-1);
+  let data=
+    JSON.parse(
+      localStorage.getItem(key)
+    );
 
- let key=
- `so_${ruangAktif.id}_${tgl}_${prev}`;
+  if(!data)
+    return alert(
+      `Data ${prev} belum ada!`
+    );
 
- let data=
- JSON.parse(localStorage.getItem(key));
+  ruangAktif.data.forEach(item=>{
 
- if(!data){
+    let old=
+      data.barang.find(
+        x=>x.kode===item.kode
+      );
 
-  alert(
-   `Data ${prev} belum tersimpan untuk tanggal tersebut.`
+    if(old)
+      item.oh=old.fisik;
+
+  });
+
+  saveRuang();
+
+  tampilkan();
+
+  showToast(
+    `✅ OH ${prev} berhasil diambil`
   );
-
-  return;
- }
-
- ruangAktif.data.forEach(item=>{
-
-  let prevItem=
-  data.barang.find(
-   p=>p.kode===item.kode
-  );
-
-  if(prevItem){
-   item.oh=prevItem.fisik;
-  }
-
- });
-
- simpanRuang();
-
- tampilkan();
-
- showToast(
-  "📋 OH berhasil diambil dari "+prev
- );
 
 }
 
 
 /* =========================
-SIMPAN
+   SIMPAN
 ========================= */
 
 function simpanOpname(){
 
- if(!ruangAktif)return;
+  if(!ruangAktif)
+    return alert('Pilih ruang!');
 
- let tgl=
- document.getElementById("tanggalOpname").value;
+  let tanggal=
+    document.getElementById('tanggalOpname')
+      .value;
 
- let shift=
- document.getElementById("pilihShift").value;
+  let shift=
+    document.getElementById('pilihShift')
+      .value;
 
- let pic=
- document.getElementById("namaPIC").value;
+  let pic=
+    document.getElementById('namaPIC')
+      .value;
 
- if(!tgl){
-  alert("Tanggal belum dipilih!");
-  return;
- }
+  if(!tanggal)
+    return alert('Tanggal belum dipilih!');
 
- let key=
- `so_${ruangAktif.id}_${tgl}_${shift}`;
+  let key=
+    `so_${ruangAktif.id}_${tanggal}_${shift}`;
 
- localStorage.setItem(
-  key,
-  JSON.stringify({
-   barang:JSON.parse(JSON.stringify(ruangAktif.data)),
-   pic
-  })
- );
+  localStorage.setItem(
+    key,
+    JSON.stringify({
+      barang:ruangAktif.data,
+      pic
+    })
+  );
 
- simpanRuang();
+  saveRuang();
 
- showToast("💾 Opname berhasil disimpan");
+  showToast(
+    '✅ Opname berhasil disimpan'
+  );
 
 }
 
 
 /* =========================
-LOAD DATA
+   LOAD DATA
 ========================= */
 
 function loadData(){
 
- if(!ruangAktif)return;
+  if(!ruangAktif)return;
 
- let tgl=
- document.getElementById("tanggalOpname").value;
+  let tanggal=
+    document.getElementById('tanggalOpname')
+      .value;
 
- let shift=
- document.getElementById("pilihShift").value;
+  let shift=
+    document.getElementById('pilihShift')
+      .value;
 
- let key=
- `so_${ruangAktif.id}_${tgl}_${shift}`;
+  let key=
+    `so_${ruangAktif.id}_${tanggal}_${shift}`;
 
- let data=
- JSON.parse(localStorage.getItem(key));
+  let data=
+    JSON.parse(
+      localStorage.getItem(key)
+    );
 
- if(data){
+  if(data){
 
-  ruangAktif.data=
-  data.barang||[];
+    ruangAktif.data=
+      data.barang||[];
 
-  document.getElementById("namaPIC").value=
-  data.pic||"";
+    document.getElementById('namaPIC')
+      .value=data.pic||'';
 
- }else{
+    saveRuang();
 
-  document.getElementById("namaPIC").value="";
+  }
 
- }
-
- tampilkan();
+  tampilkan();
 
 }
 
 
 /* =========================
-RIWAYAT
+   RIWAYAT
 ========================= */
 
 function lihatRiwayat(){
 
- if(!ruangAktif){
-  alert("Pilih ruang terlebih dahulu.");
-  return;
- }
+  if(!ruangAktif)
+    return alert('Pilih ruang!');
 
- let keys=
- Object.keys(localStorage)
- .filter(k=>
-  k.startsWith(`so_${ruangAktif.id}_`)
- );
+  let keys=
+    Object.keys(localStorage)
+      .filter(k=>
+        k.startsWith(
+          `so_${ruangAktif.id}_`
+        )
+      );
 
- if(!keys.length){
+  if(!keys.length)
+    return alert(
+      'Belum ada riwayat SO.'
+    );
 
-  alert("Belum ada riwayat SO.");
-
-  return;
- }
-
- let html=`
- <h3>📜 Riwayat SO</h3>
-
- <table>
-
- <tr>
- <th>Tanggal</th>
- <th>Shift</th>
- <th>PIC</th>
- <th>Aksi</th>
- </tr>
- `;
-
- keys.forEach(key=>{
-
-  let data=
-  JSON.parse(localStorage.getItem(key));
-
-  let parts=key.split("_");
-
-  html+=`
-
-  <tr>
-
-  <td>${parts[2]}</td>
-
-  <td>${parts[3]}</td>
-
-  <td>${escapeHTML(data.pic||"-")}</td>
-
-  <td>
-  <button
-  class="btn-aksi"
-  onclick="bukaRiwayat('${key}')">
-  Buka
-  </button>
-  </td>
-
-  </tr>
+  let html=`
+    <h3>📜 Riwayat SO</h3>
+    <div class="table-wrap">
+    <table>
+      <tr>
+        <th>Tanggal</th>
+        <th>Shift</th>
+        <th>PIC</th>
+        <th>Aksi</th>
+      </tr>
   `;
 
- });
+  keys.forEach(key=>{
 
- html+="</table>";
+    let data=
+      JSON.parse(
+        localStorage.getItem(key)
+      );
 
- document.getElementById("tabelContainer").innerHTML=html;
+    let parts=key.split('_');
+
+    let tanggal=parts[2];
+    let shift=parts[3];
+
+    html+=`
+      <tr>
+
+        <td>${tanggal}</td>
+        <td>${shift}</td>
+        <td>${data.pic||'-'}</td>
+
+        <td>
+          <button
+            class="btn-aksi"
+            onclick="bukaRiwayat('${key}')">
+            Buka
+          </button>
+        </td>
+
+      </tr>
+    `;
+
+  });
+
+  html+='</table></div>';
+
+  document.getElementById('tabelContainer')
+    .innerHTML=html;
+
+  showMenu('opname');
 
 }
+
 
 function bukaRiwayat(key){
 
- let parts=key.split("_");
+  let parts=key.split('_');
 
- document.getElementById("tanggalOpname").value=
- parts[2];
+  document.getElementById('tanggalOpname')
+    .value=parts[2];
 
- document.getElementById("pilihShift").value=
- parts[3];
+  document.getElementById('pilihShift')
+    .value=parts[3];
 
- loadData();
+  loadData();
 
- showMenu("opname");
+  showMenu('opname');
 
 }
 
 
 /* =========================
-WHATSAPP
+   WHATSAPP
 ========================= */
 
-function kirimRekapWA(mode){
+function kirimRekapWA(type){
 
- if(!ruangAktif){
-  alert("Pilih ruang terlebih dahulu.");
-  return;
- }
+  if(!ruangAktif)
+    return alert('Pilih ruang!');
 
- let data=ruangAktif.data;
+  let data=
+    ruangAktif.data.filter(x=>{
 
- let minus=
- data.filter(x=>
-  Number(x.fisik)<Number(x.oh)
- );
+      let selisih=
+        (Number(x.fisik)||0)-
+        (Number(x.oh)||0);
 
- let plus=
- data.filter(x=>
-  Number(x.fisik)>Number(x.oh)
- );
+      return type==='minus'
+        ?selisih<0
+        :selisih>0;
 
- if(mode==="minus"&&!minus.length){
-  alert("Tidak ada barang minus!");
-  return;
- }
+    });
 
- if(mode==="plus"&&!plus.length){
-  alert("Tidak ada barang plus!");
-  return;
- }
+  if(!data.length)
+    return alert(
+      `Tidak ada barang ${type}!`
+    );
 
- let pesan=
- `*SO RAHIL K792*
-*${ruangAktif.nama}*
+  let pesan=
+    `*REKAP ${type.toUpperCase()} ${ruangAktif.nama}*\n\n`+
+    `Tanggal: ${document.getElementById('tanggalOpname').value}\n`+
+    `Shift: ${document.getElementById('pilihShift').value}\n`+
+    `PIC: ${document.getElementById('namaPIC').value}\n\n`;
 
-Tanggal: ${
- document.getElementById("tanggalOpname").value
- }
+  data.forEach((m,i)=>{
 
-Shift: ${
- document.getElementById("pilihShift").value
- }
+    let selisih=
+      (Number(m.fisik)||0)-
+      (Number(m.oh)||0);
 
-PIC: ${
- document.getElementById("namaPIC").value||"-"
- }
+    let jumlah=
+      Math.abs(selisih);
 
-`;
+    let nilai=
+      jumlah*(Number(m.harga)||0);
 
- if(mode==="minus"||mode==="semua"){
-
-  pesan+=
-  `\n❌ *BARANG MINUS (${minus.length})*\n`;
-
-  minus.forEach((m,i)=>{
-
-   let kurang=
-   Math.abs(
-    Number(m.fisik)-Number(m.oh)
-   );
-
-   let rugi=
-   kurang*(Number(m.harga)||0);
-
-   pesan+=
-   `${i+1}. ${m.nama} | Kurang ${kurang} | Rp ${rugi.toLocaleString("id-ID")}\n`;
+    pesan+=
+      `${i+1}. ${m.nama}\n`+
+      `   ${type==='minus'?'Kurang':'Lebih'}: ${jumlah}\n`+
+      `   Nilai: Rp ${nilai.toLocaleString('id-ID')}\n\n`;
 
   });
 
- }
-
- if(mode==="plus"||mode==="semua"){
-
   pesan+=
-  `\n✅ *BARANG PLUS (${plus.length})*\n`;
+    '\n_Sent from SO RAHIL K792_';
 
-  plus.forEach((p,i)=>{
-
-   let lebih=
-   Number(p.fisik)-Number(p.oh);
-
-   let nilai=
-   lebih*(Number(p.harga)||0);
-
-   pesan+=
-   `${i+1}. ${p.nama} | Lebih ${lebih} | Rp ${nilai.toLocaleString("id-ID")}\n`;
-
-  });
-
- }
-
- pesan+=
- "\n_Dibuat menggunakan SO RAHIL K792_";
-
- window.open(
-  "https://wa.me/?text="+
-  encodeURIComponent(pesan),
-  "_blank"
- );
-
+  window.open(
+    `https://wa.me/?text=${encodeURIComponent(pesan)}`,
+    '_blank'
+  );
 
 }
 
 
 /* =========================
-EXPORT CSV
+   CSV
 ========================= */
 
 function exportExcel(){
 
- if(!ruangAktif){
-  alert("Pilih ruang!");
-  return;
- }
+  if(!ruangAktif)
+    return alert('Pilih ruang!');
 
- let rows=[
-  [
-   "KATEGORI",
-   "KODE",
-   "NAMA",
-   "OH",
-   "FISIK",
-   "HARGA",
-   "SELISIH",
-   "SELISIH_RP"
-  ]
- ];
+  let csv=
+    'KATEGORI,KODE,NAMA,OH,FISIK,HARGA,SELISIH,SELISIH_RP\n';
 
- ruangAktif.data.forEach(item=>{
+  ruangAktif.data.forEach(item=>{
 
-  let selisih=
-  (Number(item.fisik)||0)-
-  (Number(item.oh)||0);
+    let selisih=
+      (Number(item.fisik)||0)-
+      (Number(item.oh)||0);
 
-  rows.push([
-   item.kategori,
-   item.kode,
-   item.nama,
-   item.oh,
-   item.fisik,
-   item.harga,
-   selisih,
-   selisih*(Number(item.harga)||0)
-  ]);
+    let nilai=
+      selisih*(Number(item.harga)||0);
 
- });
+    let row=[
+      item.kategori,
+      item.kode,
+      `"${item.nama.replace(/"/g,'""')}"`,
+      item.oh,
+      item.fisik,
+      item.harga,
+      selisih,
+      nilai
+    ];
 
- let csv=
- rows.map(row=>
-  row.map(csvEscape).join(",")
- ).join("\n");
+    csv+=row.join(',')+'\n';
 
- downloadBlob(
-  csv,
-  `${ruangAktif.nama}_SO.csv`,
-  "text/csv;charset=utf-8"
- );
+  });
+
+  downloadFile(
+    csv,
+    `${ruangAktif.nama}_SO.csv`,
+    'text/csv'
+  );
 
 }
+
 
 function exportCSV(){
- exportExcel();
-}
 
-
-/* =========================
-BACKUP JSON
-========================= */
-
-function backupJSON(){
-
- let data={
-  daftarRuang,
-  users,
-  waktu:new Date().toISOString()
- };
-
- downloadBlob(
-  JSON.stringify(data,null,2),
-  "BACKUP_SO_RAHIL.json",
-  "application/json"
- );
-
- showToast("💾 Backup JSON berhasil");
+  exportExcel();
 
 }
 
 
 /* =========================
-PDF
+   PDF
 ========================= */
 
 function exportPDF(){
 
- if(!ruangAktif){
-  alert("Pilih ruang!");
-  return;
- }
+  if(!ruangAktif)
+    return alert('Pilih ruang!');
 
- const doc=new jsPDF();
+  const doc=new jsPDF();
 
- let tgl=
- document.getElementById("tanggalOpname").value;
+  let tgl=
+    document.getElementById('tanggalOpname')
+      .value;
 
- let shift=
- document.getElementById("pilihShift").value;
+  let shift=
+    document.getElementById('pilihShift')
+      .value;
 
- let pic=
- document.getElementById("namaPIC").value;
+  let pic=
+    document.getElementById('namaPIC')
+      .value;
 
- doc.setFontSize(16);
-
- doc.text(
-  "SO RAHIL K792",
-  105,
-  15,
-  {align:"center"}
- );
-
- doc.setFontSize(12);
-
- doc.text(
-  `Ruang: ${ruangAktif.nama}`,
-  14,25
- );
-
- doc.text(
-  `Tanggal: ${tgl}`,
-  14,32
- );
-
- doc.text(
-  `Shift: ${shift}`,
-  14,39
- );
-
- doc.text(
-  `PIC: ${pic}`,
-  14,46
- );
-
- let y=57;
-
- let minus=
- ruangAktif.data.filter(
-  x=>Number(x.fisik)<Number(x.oh)
- );
-
- doc.setFontSize(13);
-
- doc.text(
-  "REKAP BARANG MINUS",
-  14,y
- );
-
- y+=8;
-
- doc.setFontSize(9);
-
- let total=0;
-
- minus.forEach((m,i)=>{
-
-  let kurang=
-  Math.abs(
-   Number(m.fisik)-Number(m.oh)
-  );
-
-  let rugi=
-  kurang*(Number(m.harga)||0);
-
-  total+=rugi;
-
-  let text=
-  `${i+1}. ${m.nama} - Kurang ${kurang} - Rp ${rugi.toLocaleString("id-ID")}`;
+  doc.setFontSize(17);
 
   doc.text(
-   text.substring(0,100),
-   14,y
+    `LAPORAN ${ruangAktif.nama}`,
+    105,
+    15,
+    {align:'center'}
   );
 
-  y+=6;
+  doc.setFontSize(10);
 
-  if(y>275){
+  doc.text(`Tanggal: ${tgl}`,14,25);
+  doc.text(`Shift: ${shift}`,14,31);
+  doc.text(`PIC: ${pic}`,14,37);
 
-   doc.addPage();
-   y=20;
+  let y=48;
+
+  let minus=
+    ruangAktif.data.filter(x=>
+      Number(x.fisik)<Number(x.oh)
+    );
+
+  let total=0;
+
+  doc.setFontSize(13);
+
+  doc.text(
+    'REKAP BARANG MINUS',
+    14,
+    y
+  );
+
+  y+=8;
+
+  doc.setFontSize(9);
+
+  if(!minus.length){
+
+    doc.text(
+      'Tidak ada barang minus.',
+      14,
+      y
+    );
+
+    y+=7;
 
   }
 
- });
+  minus.forEach((m,i)=>{
 
- y+=8;
+    let kurang=
+      Math.abs(
+        Number(m.fisik)-Number(m.oh)
+      );
 
- doc.setFontSize(12);
+    let nilai=
+      kurang*(Number(m.harga)||0);
 
- doc.text(
-  `TOTAL RUGI: Rp ${total.toLocaleString("id-ID")}`,
-  14,y
- );
+    total+=nilai;
 
- doc.save(
-  `LAPORAN_${ruangAktif.nama}_${tgl}_${shift}.pdf`
- );
+    let text=
+      `${i+1}. ${m.nama} - Kurang ${kurang} - Rp ${nilai.toLocaleString('id-ID')}`;
 
- showToast("📑 PDF berhasil dibuat");
+    let lines=
+      doc.splitTextToSize(
+        text,
+        180
+      );
+
+    doc.text(lines,14,y);
+
+    y+=6*lines.length;
+
+    if(y>275){
+
+      doc.addPage();
+
+      y=20;
+
+    }
+
+  });
+
+  y+=8;
+
+  doc.setFontSize(12);
+
+  doc.text(
+    `TOTAL RUGI: Rp ${total.toLocaleString('id-ID')}`,
+    14,
+    y
+  );
+
+  doc.save(
+    `LAPORAN_${ruangAktif.nama}_${tgl}_${shift}.pdf`
+  );
+
+  showToast('✅ PDF berhasil dibuat');
 
 }
 
 
 /* =========================
-REHAT SEJENAK
+   BACKUP JSON
 ========================= */
 
-let rehatTimer=null;
-let rehatSeconds=60;
-let breathTimer=null;
-let audioCtx=null;
-let audioNodes=[];
-let soundType="rain";
-let soundOn=false;
+function backupJSON(){
 
-const messages=[
+  let backup={
 
- "Istirahat dulu, Bro 😌",
- "Pelan-pelan, yang penting teliti 💪",
- "Mata capek? Santai dulu 👀",
- "Tarik napas... kamu sudah bekerja keras 🌿",
- "Data bisa menunggu. Kesehatan jangan ❤️",
- "Rehat sebentar, lanjut dengan pikiran lebih fresh ☕"
+    version:'SO RAHIL K792',
+    date:new Date().toISOString(),
 
-];
+    daftarRuang,
 
-function bukaRehat(){
+    users,
 
- document.getElementById("rehatOverlay")
- .classList.add("show");
+    darkMode:
+      localStorage.getItem('darkMode'),
 
- randomMessage();
+    theme:
+      localStorage.getItem('soTheme'),
 
-}
+    localStorage:{}
 
-function tutupRehat(){
+  };
 
- stopRelaxSound();
+  Object.keys(localStorage)
+    .forEach(k=>{
+      backup.localStorage[k]=
+        localStorage.getItem(k);
+    });
 
- if(rehatTimer){
-  clearInterval(rehatTimer);
-  rehatTimer=null;
- }
+  downloadFile(
 
- if(breathTimer){
-  clearTimeout(breathTimer);
-  breathTimer=null;
- }
+    JSON.stringify(
+      backup,
+      null,
+      2
+    ),
 
- document.getElementById("rehatOverlay")
- .classList.remove("show");
+    `BACKUP_SO_RAHIL_${Date.now()}.json`,
+
+    'application/json'
+
+  );
+
+  showToast('✅ Backup berhasil');
 
 }
 
-function randomMessage(){
 
- let m=
- messages[
-  Math.floor(Math.random()*messages.length)
- ];
+function restoreJSON(){
 
- document.getElementById("rehatMessage")
- .innerText=m;
+  let file=
+    document.getElementById('restoreFile')
+      .files[0];
 
-}
+  if(!file)
+    return alert(
+      'Pilih file backup JSON!'
+    );
 
-function startRehat(){
+  let reader=new FileReader();
 
- if(rehatTimer)return;
+  reader.onload=function(e){
 
- rehatSeconds=60;
+    try{
 
- document.getElementById("rehatTimer")
- .innerText="01:00";
+      let data=
+        JSON.parse(e.target.result);
 
- randomMessage();
+      if(data.localStorage){
 
- startBreathing();
+        Object.keys(data.localStorage)
+          .forEach(k=>{
+            localStorage.setItem(
+              k,
+              data.localStorage[k]
+            );
+          });
 
- rehatTimer=setInterval(()=>{
+      }else{
 
-  rehatSeconds--;
+        if(data.daftarRuang){
 
-  let min=
-  Math.floor(rehatSeconds/60)
-  .toString()
-  .padStart(2,"0");
+          daftarRuang=
+            data.daftarRuang;
 
-  let sec=
-  (rehatSeconds%60)
-  .toString()
-  .padStart(2,"0");
+          localStorage.setItem(
+            'daftar_ruang_so',
+            JSON.stringify(daftarRuang)
+          );
 
-  document.getElementById("rehatTimer")
-  .innerText=min+":"+sec;
+        }
 
-  if(rehatSeconds<=0){
+        if(data.users){
 
-   clearInterval(rehatTimer);
-   rehatTimer=null;
+          users=data.users;
 
-   document.getElementById("rehatMessage")
-   .innerText="😌 Rehat selesai!";
+          localStorage.setItem(
+            'users_so',
+            JSON.stringify(users)
+          );
 
-   document.getElementById("breathText")
-   .innerText="Selesai ❤️";
+        }
 
-   if(navigator.vibrate){
-    navigator.vibrate([150,100,150]);
-   }
+      }
 
-  }
+      alert(
+        'Restore berhasil. Aplikasi akan dimuat ulang.'
+      );
 
- },1000);
+      location.reload();
+
+    }catch(err){
+
+      alert(
+        'File backup tidak valid!'
+      );
+
+    }
+
+  };
+
+  reader.readAsText(file);
 
 }
 
 
 /* =========================
-BREATHING
+   DOWNLOAD
 ========================= */
 
-function startBreathing(){
+function downloadFile(
+  content,
+  filename,
+  type
+){
 
- let circle=
- document.getElementById("breathCircle");
+  let blob=
+    new Blob(
+      [content],
+      {type}
+    );
 
- let text=
- document.getElementById("breathText");
+  let url=
+    URL.createObjectURL(blob);
 
- let phase=0;
+  let a=
+    document.createElement('a');
 
- function cycle(){
+  a.href=url;
+  a.download=filename;
 
-  if(!document.getElementById("rehatOverlay").classList.contains("show")){
-   return;
-  }
+  document.body.appendChild(a);
 
-  phase++;
+  a.click();
 
-  if(phase%2===1){
+  a.remove();
 
-   circle.classList.remove("out");
-   circle.classList.add("in");
-
-   text.innerText="Tarik Napas";
-
-   breathTimer=setTimeout(cycle,4000);
-
-  }else{
-
-   circle.classList.remove("in");
-   circle.classList.add("out");
-
-   text.innerText="Buang Perlahan";
-
-   breathTimer=setTimeout(cycle,6000);
-
-  }
-
- }
-
- clearTimeout(breathTimer);
-
- circle.classList.remove("in","out");
-
- text.innerText="Siap?";
-
- setTimeout(cycle,1000);
+  setTimeout(()=>{
+    URL.revokeObjectURL(url);
+  },1000);
 
 }
 
 
 /* =========================
-JAVASCRIPT AUDIO
+   SUARA REHAT
 ========================= */
 
-function initAudio(){
+function startRelaxSound(){
 
- if(!audioCtx){
+  try{
 
-  audioCtx=
-  new(
-   window.AudioContext||
-   window.webkitAudioContext
-  )();
+    if(audioContext)
+      stopRelaxSound();
 
- }
+    audioContext=
+      new (
+        window.AudioContext||
+        window.webkitAudioContext
+      )();
 
- if(audioCtx.state==="suspended"){
-  audioCtx.resume();
- }
+    audioOscillator=
+      audioContext.createOscillator();
+
+    let gain=
+      audioContext.createGain();
+
+    audioOscillator.type='sine';
+
+    audioOscillator.frequency.value=432;
+
+    gain.gain.value=.025;
+
+    audioOscillator.connect(gain);
+
+    gain.connect(
+      audioContext.destination
+    );
+
+    audioOscillator.start();
+
+    showToast(
+      '🔊 Suara relaksasi aktif'
+    );
+
+  }catch(e){
+
+    alert(
+      'Browser tidak mendukung audio relaksasi.'
+    );
+
+  }
 
 }
+
 
 function stopRelaxSound(){
 
- soundOn=false;
+  if(audioOscillator){
 
- audioNodes.forEach(n=>{
+    try{
+      audioOscillator.stop();
+    }catch(e){}
 
-  try{
+    audioOscillator=null;
 
-   if(n.stop)n.stop();
-
-  }catch(e){}
-
- });
-
- audioNodes=[];
-
- if(audioCtx){
-
-  try{
-   audioCtx.close();
-  }catch(e){}
-
-  audioCtx=null;
-
- }
-
- document.getElementById("soundIcon").innerText="🔇";
-
-}
-
-function toggleSound(){
-
- if(soundOn){
-
-  stopRelaxSound();
-
-  return;
-
- }
-
- startRelaxSound(soundType);
-
-}
-
-function setRelaxSound(type){
-
- soundType=type;
-
- document.querySelectorAll(".sound-row button")
- .forEach(b=>b.classList.remove("active"));
-
- let id=
- type==="rain"
- ?"soundRain"
- :type==="ocean"
- ?"soundOcean"
- :type==="wind"
- ?"soundWind"
- :"soundZen";
-
- document.getElementById(id)
- .classList.add("active");
-
- if(soundOn){
-  startRelaxSound(type);
- }
-
-}
-
-function startRelaxSound(type){
-
- stopRelaxSound();
-
- initAudio();
-
- soundOn=true;
-
- document.getElementById("soundIcon")
- .innerText="🔊";
-
- if(type==="zen"){
-
-  playZen();
-
-  return;
-
- }
-
- playNoise(type);
-
-}
-
-
-/* suara noise sintetis */
-
-function playNoise(type){
-
- let bufferSize=
- 2*audioCtx.sampleRate;
-
- let buffer=
- audioCtx.createBuffer(
-  1,
-  bufferSize,
-  audioCtx.sampleRate
- );
-
- let data=buffer.getChannelData(0);
-
- for(let i=0;i<bufferSize;i++){
-
-  let white=
-  Math.random()*2-1;
-
-  if(type==="rain"){
-   data[i]=white*.18;
   }
 
-  if(type==="ocean"){
-   data[i]=white*
-   (0.08+
-   Math.sin(i/70000)*.08);
+  if(audioContext){
+
+    try{
+      audioContext.close();
+    }catch(e){}
+
+    audioContext=null;
+
   }
 
-  if(type==="wind"){
-   data[i]=white*.10;
+  showToast(
+    '🔇 Suara dihentikan'
+  );
+
+}
+
+
+/* =========================
+   KEYBOARD
+========================= */
+
+document.addEventListener(
+  'keydown',
+  e=>{
+
+    if(
+      e.key==='Enter' &&
+      document.activeElement?.id==='inputPIN'
+    ){
+
+      login();
+
+    }
+
   }
-
- }
-
- let source=
- audioCtx.createBufferSource();
-
- source.buffer=buffer;
- source.loop=true;
-
- let filter=
- audioCtx.createBiquadFilter();
-
- if(type==="rain"){
-  filter.type="highpass";
-  filter.frequency.value=900;
- }
-
- if(type==="ocean"){
-  filter.type="lowpass";
-  filter.frequency.value=700;
- }
-
- if(type==="wind"){
-  filter.type="lowpass";
-  filter.frequency.value=500;
- }
-
- let gain=
- audioCtx.createGain();
-
- gain.gain.value=.28;
-
- source
- .connect(filter)
- .connect(gain)
- .connect(audioCtx.destination);
-
- source.start();
-
- audioNodes.push(source);
-
-}
-
-
-/* bunyi zen lembut */
-
-function playZen(){
-
- function bell(){
-
-  if(!soundOn||!audioCtx)return;
-
-  let osc=
-  audioCtx.createOscillator();
-
-  let gain=
-  audioCtx.createGain();
-
-  osc.type="sine";
-
-  osc.frequency.value=
-  [261.63,329.63,392,523.25]
-  [Math.floor(Math.random()*4)];
-
-  gain.gain.setValueAtTime(
-   .0001,
-   audioCtx.currentTime
-  );
-
-  gain.gain.exponentialRampToValueAtTime(
-   .12,
-   audioCtx.currentTime+.05
-  );
-
-  gain.gain.exponentialRampToValueAtTime(
-   .0001,
-   audioCtx.currentTime+3
-  );
-
-  osc.connect(gain);
-  gain.connect(audioCtx.destination);
-
-  osc.start();
-  osc.stop(audioCtx.currentTime+3);
-
-  audioNodes.push(osc);
-
-  setTimeout(bell,5000);
-
- }
-
- bell();
-
-}
-
-
-/* =========================
-REFRESH
-========================= */
-
-function refreshApp(){
-
- showToast("🔄 Memuat ulang...");
-
- setTimeout(()=>{
-  location.reload();
- },700);
-
-}
-
-function clearCacheInfo(){
-
- showToast(
-  "🧹 Tampilan diperbarui tanpa menghapus data SO"
- );
-
- if(ruangAktif)tampilkan();
-
-}
-
-
-/* =========================
-RESET
-========================= */
-
-function resetAplikasi(){
-
- let yakin=
- confirm(
-  "PERINGATAN!\n\n"+
-  "Semua ruang dan data SO lokal akan dihapus.\n\n"+
-  "Lanjutkan?"
- );
-
- if(!yakin)return;
-
- localStorage.clear();
- sessionStorage.clear();
-
- location.reload();
-
-}
-
-
-/* =========================
-UTILITY
-========================= */
-
-function escapeHTML(str){
-
- return String(str)
- .replace(/&/g,"&amp;")
- .replace(/</g,"&lt;")
- .replace(/>/g,"&gt;")
- .replace(/"/g,"&quot;")
- .replace(/'/g,"&#039;");
-
-}
-
-function safeId(str){
-
- return String(str)
- .replace(/[^a-zA-Z0-9_-]/g,"_");
-
-}
-
-function csvEscape(value){
-
- let s=String(value??"");
-
- return `"${s.replace(/"/g,'""')}"`;
-
-}
-
-function downloadBlob(content,name,type){
-
- let blob=
- new Blob([content],{type});
-
- let url=
- URL.createObjectURL(blob);
-
- let a=
- document.createElement("a");
-
- a.href=url;
- a.download=name;
-
- document.body.appendChild(a);
-
- a.click();
-
- a.remove();
-
- setTimeout(()=>{
-  URL.revokeObjectURL(url);
- },1000);
-
-}
-
-
-/* =========================
-KEYBOARD LOGIN
-========================= */
-
-document.addEventListener("keydown",e=>{
-
- if(
-  e.key==="Enter"&&
-  document.getElementById("loginPage").style.display!=="none"
- ){
-  login();
- }
-
-});
-
-
-/* =========================
-INIT THEME
-========================= */
-
-loadTheme();
+);
 
 </script>
 
