@@ -2,3216 +2,940 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#2980b9">
-<meta name="description" content="SO RAHIL K792 - Aplikasi Stock Opname">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="theme-color" content="#087cff">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
 <title>SO RAHIL K792</title>
 
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" href="icon-rahil.png">
+<link rel="apple-touch-icon" href="icon-rahil.png">
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
+:root{
+  --primary:#087cff;
+  --secondary:#00d4ff;
+  --accent:#7c4dff;
+  --success:#16c784;
+  --danger:#ff4d67;
+  --warning:#ffb020;
+  --bg:#eef6ff;
+  --card:#ffffff;
+  --text:#152238;
+  --muted:#718096;
+  --border:rgba(20,50,90,.10);
+  --shadow:0 12px 35px rgba(20,70,120,.13);
+  --nav:#ffffff;
+}
+
 *{
   box-sizing:border-box;
-  font-family:'Poppins',sans-serif;
   -webkit-tap-highlight-color:transparent;
 }
 
-:root{
-  --primary:#2980b9;
-  --secondary:#00c6ff;
-  --accent:#8e44ad;
-  --success:#27ae60;
-  --danger:#e74c3c;
-  --warning:#f39c12;
-  --bg1:#4facfe;
-  --bg2:#00f2fe;
-  --card:#ffffff;
-  --text:#1f2937;
-  --muted:#6b7280;
-  --border:#e5e7eb;
+html{
+  scroll-behavior:smooth;
 }
 
 body{
   margin:0;
   min-height:100vh;
-  padding:15px;
+  font-family:'Poppins',sans-serif;
   color:var(--text);
   background:
-    radial-gradient(circle at 20% 20%,rgba(255,255,255,.35),transparent 25%),
-    radial-gradient(circle at 80% 80%,rgba(255,255,255,.25),transparent 25%),
-    linear-gradient(135deg,var(--bg1),var(--bg2));
-  background-size:200% 200%;
-  animation:bgMove 12s ease infinite;
+    radial-gradient(circle at 10% 10%,rgba(0,212,255,.20),transparent 30%),
+    radial-gradient(circle at 90% 20%,rgba(124,77,255,.16),transparent 30%),
+    linear-gradient(135deg,#eaf7ff,#f8fbff);
+  overflow-x:hidden;
   transition:.4s;
 }
 
-@keyframes bgMove{
-  0%{background-position:0% 50%}
-  50%{background-position:100% 50%}
-  100%{background-position:0% 50%}
-}
-
 body.dark{
-  --card:#111827;
-  --text:#f3f4f6;
-  --muted:#9ca3af;
-  --border:#374151;
-  --bg1:#111827;
-  --bg2:#172554;
+  --bg:#07111f;
+  --card:#101d2d;
+  --text:#f4f8ff;
+  --muted:#9baac0;
+  --border:rgba(255,255,255,.09);
+  --shadow:0 15px 40px rgba(0,0,0,.35);
+  --nav:#0d1928;
+
   background:
-    radial-gradient(circle at 20% 20%,rgba(59,130,246,.2),transparent 30%),
-    linear-gradient(135deg,#020617,#172554);
-}
-
-.container{
-  width:100%;
-  max-width:1200px;
-  margin:auto;
-  background:rgba(255,255,255,.94);
-  border-radius:28px;
-  padding:25px;
-  box-shadow:
-    0 25px 70px rgba(0,0,0,.25),
-    inset 0 1px rgba(255,255,255,.8);
-  backdrop-filter:blur(15px);
-  min-height:calc(100vh - 30px);
-  animation:containerIn .7s ease;
-}
-
-body.dark .container{
-  background:rgba(15,23,42,.95);
-}
-
-@keyframes containerIn{
-  from{opacity:0;transform:scale(.96) translateY(20px)}
-  to{opacity:1;transform:scale(1) translateY(0)}
+    radial-gradient(circle at 10% 10%,rgba(0,140,255,.15),transparent 30%),
+    radial-gradient(circle at 90% 20%,rgba(124,77,255,.13),transparent 30%),
+    #07111f;
 }
 
 button,input,select{
-  width:100%;
-  padding:13px;
-  margin:6px 0;
-  border-radius:12px;
-  border:2px solid var(--border);
-  font-size:14px;
-  outline:none;
-  transition:.25s;
-}
-
-input,select{
-  background:var(--card);
-  color:var(--text);
-}
-
-input:focus,select:focus{
-  border-color:var(--primary);
-  box-shadow:0 0 0 4px rgba(41,128,185,.12);
-  transform:translateY(-1px);
+  font-family:inherit;
 }
 
 button{
   border:0;
   cursor:pointer;
-  color:white;
-  font-weight:700;
-  background:linear-gradient(135deg,var(--primary),var(--secondary));
-  box-shadow:0 7px 18px rgba(41,128,185,.2);
-  position:relative;
-  overflow:hidden;
-}
-
-button::after{
-  content:"";
-  position:absolute;
-  top:-100%;
-  left:-100%;
-  width:50%;
-  height:300%;
-  background:rgba(255,255,255,.18);
-  transform:rotate(25deg);
-  transition:.6s;
-}
-
-button:hover::after{
-  left:130%;
-}
-
-button:hover{
-  transform:translateY(-2px);
 }
 
 button:active{
   transform:scale(.96);
 }
 
+input,select{
+  width:100%;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.85);
+  color:var(--text);
+  padding:13px 14px;
+  border-radius:13px;
+  outline:none;
+  font-size:14px;
+  transition:.25s;
+}
+
+body.dark input,
+body.dark select{
+  background:#0d1a2a;
+  color:#fff;
+}
+
+input:focus,select:focus{
+  border-color:var(--primary);
+  box-shadow:0 0 0 4px rgba(8,124,255,.10);
+}
+
+::-webkit-scrollbar{
+  width:5px;
+}
+
+::-webkit-scrollbar-thumb{
+  background:var(--primary);
+  border-radius:20px;
+}
+
+.bg-orb{
+  position:fixed;
+  border-radius:50%;
+  filter:blur(3px);
+  pointer-events:none;
+  z-index:-1;
+  animation:orbFloat 8s ease-in-out infinite;
+}
+
+.orb1{
+  width:170px;
+  height:170px;
+  background:rgba(0,212,255,.18);
+  top:5%;
+  left:-60px;
+}
+
+.orb2{
+  width:220px;
+  height:220px;
+  background:rgba(124,77,255,.13);
+  bottom:10%;
+  right:-80px;
+  animation-delay:2s;
+}
+
+.orb3{
+  width:90px;
+  height:90px;
+  background:rgba(22,199,132,.13);
+  top:50%;
+  left:45%;
+  animation-delay:4s;
+}
+
+@keyframes orbFloat{
+  0%,100%{transform:translate3d(0,0,0) scale(1)}
+  50%{transform:translate3d(0,-25px,0) scale(1.08)}
+}
+
+#loginPage{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:22px;
+}
+
+.login-wrapper{
+  width:100%;
+  max-width:430px;
+  perspective:1200px;
+}
+
+.login-card{
+  position:relative;
+  overflow:hidden;
+  padding:30px 24px 25px;
+  border-radius:30px;
+  background:rgba(255,255,255,.82);
+  backdrop-filter:blur(22px);
+  -webkit-backdrop-filter:blur(22px);
+  border:1px solid rgba(255,255,255,.65);
+  box-shadow:0 30px 70px rgba(0,75,140,.20);
+  animation:loginEnter 1s cubic-bezier(.2,.8,.2,1);
+}
+
+body.dark .login-card{
+  background:rgba(12,27,45,.88);
+  border-color:rgba(255,255,255,.08);
+}
+
+.login-logo{
+  width:94px;
+  height:94px;
+  object-fit:cover;
+  display:block;
+  margin:0 auto 15px;
+  border-radius:25px;
+  background:#fff;
+  padding:6px;
+  box-shadow:0 12px 30px rgba(8,124,255,.25);
+  position:relative;
+  z-index:2;
+}
+
+.login-title{
+  text-align:center;
+  margin:0;
+  font-size:28px;
+  font-weight:800;
+  letter-spacing:-1px;
+}
+
+.login-subtitle{
+  text-align:center;
+  color:var(--muted);
+  font-size:13px;
+  margin:5px 0 25px;
+}
+
+.login-field{
+  position:relative;
+  margin-bottom:12px;
+}
+
+.login-field span{
+  position:absolute;
+  left:14px;
+  top:13px;
+  z-index:2;
+}
+
+.login-field input{
+  padding-left:43px;
+}
+
+.login-button{
+  width:100%;
+  padding:15px;
+  margin-top:8px;
+  border-radius:15px;
+  color:#fff;
+  font-size:16px;
+  font-weight:700;
+  background:linear-gradient(135deg,var(--primary),var(--secondary),var(--accent));
+  box-shadow:0 12px 25px rgba(8,124,255,.25);
+}
+
+.login-info{
+  text-align:center;
+  color:var(--muted);
+  font-size:11px;
+  margin-top:18px;
+}
+
+#mainApp{
+  display:none;
+  width:100%;
+  max-width:1180px;
+  margin:auto;
+  padding:0 14px 100px;
+}
+
 .page{
   display:none;
+  animation:pageIn .45s ease;
 }
 
 .page.active{
   display:block;
-  animation:pageIn .45s ease;
 }
 
 @keyframes pageIn{
-  from{opacity:0;transform:translateY(20px)}
-  to{opacity:1;transform:translateY(0)}
+  from{opacity:0;transform:translateY(18px) scale(.98);}
+  to{opacity:1;transform:none;}
 }
 
-/* LOGIN */
-
-#loginPage{
-  max-width:430px;
-  margin:8vh auto 0;
-  text-align:center;
-  position:relative;
-}
-
-.login-orb{
-  width:125px;
-  height:125px;
-  margin:0 auto 20px;
-  border-radius:35px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  font-size:38px;
-  color:white;
-  background:linear-gradient(135deg,#2980b9,#00f2fe);
-  box-shadow:
-    0 25px 50px rgba(41,128,185,.35),
-    inset 8px 8px 18px rgba(255,255,255,.25),
-    inset -8px -8px 18px rgba(0,0,0,.12);
-  animation:
-    float3d 3s ease-in-out infinite,
-    rotateSoft 8s linear infinite;
-  transform-style:preserve-3d;
-}
-
-@keyframes float3d{
-  0%,100%{transform:translateY(0) rotateX(0) rotateY(0)}
-  50%{transform:translateY(-12px) rotateX(8deg) rotateY(-8deg)}
-}
-
-@keyframes rotateSoft{
-  0%{box-shadow:0 25px 50px rgba(41,128,185,.35)}
-  50%{box-shadow:0 35px 70px rgba(0,242,254,.4)}
-  100%{box-shadow:0 25px 50px rgba(41,128,185,.35)}
-}
-
-#loginPage h2{
-  font-size:27px;
-  margin:10px 0;
-  color:var(--primary);
-}
-
-.login-sub{
-  color:var(--muted);
-  font-size:13px;
-  margin-bottom:20px;
-}
-
-.login-card{
-  padding:22px;
-  border-radius:22px;
-  background:rgba(255,255,255,.75);
-  box-shadow:0 15px 40px rgba(0,0,0,.12);
-}
-
-body.dark .login-card{
-  background:rgba(30,41,59,.8);
-}
-
-.login-card button{
-  margin-top:12px;
-  height:50px;
-}
-
-/* THEME */
-
-.theme-btn{
-  position:fixed;
-  right:18px;
-  top:18px;
-  width:52px;
-  height:52px;
-  padding:0;
-  border-radius:50%;
-  z-index:999;
-  font-size:21px;
-}
-
-/* HEADER */
-
-.header-toko{
-  text-align:center;
-  padding:10px 10px 20px;
-  border-bottom:2px solid var(--border);
-  margin-bottom:20px;
-}
-
-.header-logo{
-  width:82px;
-  height:82px;
-  border-radius:24px;
-  object-fit:cover;
-  margin-bottom:8px;
-  animation:float3d 4s ease-in-out infinite;
-  box-shadow:0 12px 25px rgba(0,0,0,.18);
-}
-
-.header-toko h1{
-  margin:5px 0;
-  font-size:27px;
-  color:var(--primary);
-}
-
-.header-toko p{
-  margin:0;
-  color:var(--muted);
-  font-size:13px;
-}
-
-/* HOME */
-
-.welcome{
-  text-align:center;
-  margin:25px 0;
-}
-
-.welcome h2{
-  color:var(--primary);
-  margin-bottom:5px;
-}
-
-.welcome p{
-  color:var(--muted);
-  font-size:13px;
-}
-
-.menu-grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:14px;
-  margin-top:25px;
-}
-
-.menu-card{
-  min-height:125px;
-  border-radius:22px;
-  padding:20px;
-  text-align:left;
-  color:white;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  box-shadow:0 14px 30px rgba(0,0,0,.14);
-  animation:menuFloat 4s ease-in-out infinite;
-}
-
-.menu-card:nth-child(2){animation-delay:.2s}
-.menu-card:nth-child(3){animation-delay:.4s}
-.menu-card:nth-child(4){animation-delay:.6s}
-.menu-card:nth-child(5){animation-delay:.8s}
-
-@keyframes menuFloat{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-5px)}
-}
-
-.menu-card .icon{
-  font-size:32px;
-}
-
-.menu-card strong{
-  font-size:17px;
-}
-
-.menu-card small{
-  opacity:.85;
-}
-
-.menu-blue{background:linear-gradient(135deg,#2980b9,#00c6ff)}
-.menu-purple{background:linear-gradient(135deg,#8e44ad,#c471ed)}
-.menu-green{background:linear-gradient(135deg,#16a085,#2ecc71)}
-.menu-orange{background:linear-gradient(135deg,#e67e22,#f1c40f)}
-.menu-pink{background:linear-gradient(135deg,#d63384,#ff758c)}
-
-.logout{
-  background:linear-gradient(135deg,#e74c3c,#c0392b);
-  margin-top:15px;
-}
-
-/* DASHBOARD */
-
-.dashboard{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:14px;
-  margin:20px 0;
-}
-
-.dash-card{
-  padding:20px;
-  border-radius:20px;
-  color:white;
-  text-align:center;
-  box-shadow:0 12px 25px rgba(0,0,0,.15);
-}
-
-.dash-card h4{
-  margin:0;
-  font-size:12px;
-  opacity:.85;
-}
-
-.dash-card h2{
-  margin:8px 0 0;
-  font-size:25px;
-}
-
-.card-item{background:linear-gradient(135deg,#2980b9,#00c6ff)}
-.card-minus{background:linear-gradient(135deg,#e74c3c,#ff7675)}
-.card-rugi{background:linear-gradient(135deg,#f39c12,#feca57)}
-
-/* BUTTONS */
-
-.btn-aksi{background:#27ae60;width:auto;padding:10px 15px}
-.btn-admin{background:#8e44ad;width:auto;padding:10px 15px}
-.btn-wa{background:#25D366;width:auto;padding:10px 15px}
-.btn-danger{background:#e74c3c;width:auto;padding:8px 12px;font-size:12px}
-.btn-pdf{background:#e67e22;width:auto;padding:10px 15px}
-.btn-back{background:#7f8c8d;width:auto;padding:10px 15px}
-.btn-tambah{background:#8e44ad;width:auto;padding:10px 15px}
-
-/* RUANG */
-
-.ruang-list{
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-  margin-top:20px;
-}
-
-.ruang-item{
-  padding:18px;
-  border-radius:18px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-  background:rgba(41,128,185,.08);
-  border:2px solid rgba(41,128,185,.25);
-  animation:pageIn .4s ease;
-}
-
-.ruang-item b{
-  font-size:16px;
-}
-
-/* TABLE */
-
-.table-wrap{
-  overflow-x:auto;
-  border-radius:15px;
-}
-
-table{
-  width:100%;
-  border-collapse:collapse;
-  margin-top:10px;
-  font-size:12px;
-  min-width:850px;
-}
-
-th{
-  background:var(--primary);
-  color:white;
-  padding:10px;
+.topbar{
   position:sticky;
   top:0;
-  z-index:2;
-}
-
-td{
-  padding:8px;
+  z-index:50;
+  margin:0 -14px;
+  padding:13px 16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:rgba(255,255,255,.78);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
   border-bottom:1px solid var(--border);
+}
+
+body.dark .topbar{
+  background:rgba(7,17,31,.80);
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.brand img{
+  width:43px;
+  height:43px;
+  border-radius:13px;
+  background:#fff;
+  padding:3px;
+  box-shadow:0 6px 18px rgba(8,124,255,.20);
+}
+
+.brand-text b{display:block;font-size:15px;}
+.brand-text small{color:var(--muted);font-size:10px;}
+
+.top-actions{display:flex;gap:7px;}
+
+.icon-btn{
+  width:40px;
+  height:40px;
+  border-radius:13px;
+  display:grid;
+  place-items:center;
+  background:var(--card);
+  color:var(--text);
+  border:1px solid var(--border);
+  box-shadow:var(--shadow);
+}
+
+.home-hero{
+  position:relative;
+  overflow:hidden;
+  margin-top:18px;
+  padding:25px;
+  border-radius:27px;
+  color:#fff;
+  background:linear-gradient(135deg,#0868e8,#00bfe8 55%,#6950e8);
+  box-shadow:0 20px 40px rgba(8,124,255,.25);
+  min-height:190px;
+}
+
+.hero-name{font-size:27px;font-weight:800;margin:4px 0;}
+.hero-desc{font-size:12px;opacity:.9;}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin:15px 0;
+}
+
+.stat-card{
+  padding:15px 10px;
+  border-radius:18px;
+  background:var(--card);
+  border:1px solid var(--border);
+  box-shadow:var(--shadow);
   text-align:center;
 }
 
-td input{
-  margin:0;
-  padding:7px;
+.stat-title{color:var(--muted);font-size:10px;margin-top:4px;}
+.stat-value{font-size:19px;font-weight:800;margin-top:2px;}
+
+.quick-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:11px;
 }
 
-.selisih-minus{
-  color:#e74c3c;
-  font-weight:800;
-}
-
-.selisih-plus{
-  color:#27ae60;
-  font-weight:800;
-}
-
-.highlight-row{
-  animation:highlight .8s ease;
-}
-
-@keyframes highlight{
-  0%{background:#fff3cd}
-  50%{background:#b8f7ce}
-  100%{background:transparent}
-}
-
-/* REKAP */
-
-.rekap-box{
-  margin-top:15px;
-  padding:18px;
-  border-radius:16px;
-}
-
-.rekap-minus{
-  background:#ffebee;
-  border-left:6px solid #e74c3c;
-}
-
-.rekap-plus{
-  background:#e8f5e9;
-  border-left:6px solid #27ae60;
-}
-
-body.dark .rekap-minus{
-  background:#3b1f25;
-}
-
-body.dark .rekap-plus{
-  background:#173523;
-}
-
-.total-rp-box{
-  background:linear-gradient(135deg,#ffc107,#ffca28);
-  color:#111;
+.quick-card{
+  position:relative;
+  overflow:hidden;
+  min-height:105px;
   padding:17px;
-  border-radius:15px;
-  margin-top:15px;
-  font-weight:800;
-  text-align:center;
+  text-align:left;
+  color:var(--text);
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:19px;
+  box-shadow:var(--shadow);
 }
 
-/* READER */
+.quick-icon{font-size:27px;margin-bottom:6px;}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:17px;
+  box-shadow:var(--shadow);
+  margin-bottom:13px;
+}
+
+.page-header{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:18px 0;
+}
+
+.back-btn{
+  width:42px;
+  height:42px;
+  border-radius:13px;
+  background:var(--card);
+  color:var(--text);
+  border:1px solid var(--border);
+}
+
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  border-radius:12px;
+  padding:11px 15px;
+  font-weight:600;
+  font-size:13px;
+  color:#fff;
+  margin:4px;
+}
+
+.btn-primary{background:linear-gradient(135deg,var(--primary),var(--secondary));}
+.btn-purple{background:linear-gradient(135deg,#7048e8,#a66cff);}
+.btn-danger{background:linear-gradient(135deg,#ff405f,#ff697d);}
+
+.opname-info{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+}
+
+.form-group{margin-bottom:10px;}
+.form-group label{display:block;font-size:11px;font-weight:600;color:var(--muted);margin:0 0 5px 3px;}
+
+.search-row{display:flex;gap:8px;}
+.search-row input{flex:1;}
+
+.scan-btn{
+  width:52px;
+  flex:none;
+  border-radius:13px;
+  color:#fff;
+  background:linear-gradient(135deg,var(--primary),var(--secondary));
+}
 
 #reader{
+  display:none;
   width:100%;
+  margin:10px 0;
   border-radius:15px;
   overflow:hidden;
-  display:none;
-  margin-top:10px;
   border:2px solid var(--primary);
 }
 
-#readerStatus{
-  text-align:center;
-  color:var(--primary);
-  font-size:12px;
+.table-wrap{overflow-x:auto;border-radius:14px;}
+table{width:100%;border-collapse:collapse;font-size:11px;}
+th{padding:9px;color:#fff;background:linear-gradient(135deg,var(--primary),#0066cc);white-space:nowrap;}
+td{padding:8px;border-bottom:1px solid var(--border);text-align:center;white-space:nowrap;}
+td input{padding:7px;width:65px;text-align:center;}
+
+.bottom-nav{
+  position:fixed;
+  left:50%;
+  bottom:12px;
+  transform:translateX(-50%);
+  width:min(700px,calc(100% - 22px));
+  height:67px;
+  z-index:100;
+  padding:7px;
+  display:grid;
+  grid-template-columns:1fr 1fr 1.15fr 1fr 1fr;
+  gap:3px;
+  border-radius:22px;
+  background:rgba(255,255,255,.86);
+  border:1px solid rgba(255,255,255,.7);
+  backdrop-filter:blur(22px);
+  box-shadow:0 15px 40px rgba(0,40,90,.20);
 }
 
-/* TOAST */
+body.dark .bottom-nav{
+  background:rgba(13,25,40,.90);
+  border-color:rgba(255,255,255,.08);
+}
+
+.nav-btn{
+  background:transparent;
+  color:var(--muted);
+  border-radius:16px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  font-size:9px;
+  font-weight:600;
+}
+
+.nav-btn.active{
+  color:var(--primary);
+  background:rgba(8,124,255,.08);
+}
+
+.nav-add{
+  width:52px;
+  height:52px;
+  margin:auto;
+  margin-top:-18px;
+  border-radius:50%;
+  color:#fff;
+  font-size:25px;
+  background:linear-gradient(135deg,var(--primary),var(--secondary),var(--accent));
+  box-shadow:0 9px 25px rgba(8,124,255,.35);
+  border:4px solid var(--nav);
+}
 
 #toast{
   position:fixed;
   top:-80px;
   left:50%;
   transform:translateX(-50%);
-  background:#27ae60;
-  color:white;
-  padding:13px 22px;
-  border-radius:25px;
-  z-index:2000;
-  font-weight:700;
-  box-shadow:0 10px 30px rgba(0,0,0,.25);
-  transition:.5s;
-}
-
-#toast.show{
-  top:20px;
-}
-
-/* SETTINGS */
-
-.setting-card{
-  padding:18px;
-  border-radius:18px;
-  border:1px solid var(--border);
-  margin:12px 0;
-  background:rgba(128,128,128,.05);
-}
-
-.setting-card h3{
-  margin-top:0;
-}
-
-.theme-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
-}
-
-.theme-choice{
-  height:55px;
-  border-radius:14px;
-  border:3px solid transparent;
-}
-
-.theme-choice.active{
-  border-color:#111;
-  transform:scale(1.03);
-}
-
-.theme-ocean{background:linear-gradient(135deg,#4facfe,#00f2fe)}
-.theme-purple{background:linear-gradient(135deg,#667eea,#764ba2)}
-.theme-sunset{background:linear-gradient(135deg,#ff9966,#ff5e62)}
-.theme-green{background:linear-gradient(135deg,#11998e,#38ef7d)}
-.theme-night{background:linear-gradient(135deg,#141e30,#243b55)}
-.theme-pink{background:linear-gradient(135deg,#ee9ca7,#ffdde1)}
-
-/* TUTORIAL */
-
-.tutorial-section{
-  padding:15px;
-  border-radius:15px;
-  margin:10px 0;
-  background:rgba(41,128,185,.07);
-  border-left:4px solid var(--primary);
-}
-
-.tutorial-section h4{
-  margin:0 0 6px;
-}
-
-.tutorial-section p{
-  font-size:13px;
-  line-height:1.7;
-  margin:5px 0;
-}
-
-/* REST */
-
-.rest-box{
-  text-align:center;
-  padding:25px 10px;
-}
-
-.cube-scene{
-  width:180px;
-  height:180px;
-  margin:30px auto;
-  perspective:700px;
-}
-
-.cube{
-  width:110px;
-  height:110px;
-  position:relative;
-  margin:35px auto;
-  transform-style:preserve-3d;
-  animation:cubeRotate 8s linear infinite;
-}
-
-.face{
-  position:absolute;
-  width:110px;
-  height:110px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  font-size:35px;
-  color:white;
-  border:2px solid rgba(255,255,255,.5);
-  background:linear-gradient(135deg,rgba(41,128,185,.85),rgba(0,242,254,.7));
-  box-shadow:inset 0 0 30px rgba(255,255,255,.15);
-}
-
-.front{transform:translateZ(55px)}
-.back{transform:rotateY(180deg) translateZ(55px)}
-.right{transform:rotateY(90deg) translateZ(55px)}
-.left{transform:rotateY(-90deg) translateZ(55px)}
-.top{transform:rotateX(90deg) translateZ(55px)}
-.bottom{transform:rotateX(-90deg) translateZ(55px)}
-
-@keyframes cubeRotate{
-  from{transform:rotateX(0) rotateY(0) rotateZ(0)}
-  to{transform:rotateX(360deg) rotateY(360deg) rotateZ(180deg)}
-}
-
-.breath{
-  animation:breathing 5s ease-in-out infinite;
-}
-
-@keyframes breathing{
-  0%,100%{transform:scale(1);opacity:.75}
-  50%{transform:scale(1.08);opacity:1}
-}
-
-.version{
-  text-align:center;
-  color:var(--muted);
+  z-index:9999;
+  padding:12px 20px;
+  border-radius:16px;
+  color:#fff;
+  background:#172a3d;
+  box-shadow:0 12px 30px rgba(0,0,0,.25);
   font-size:12px;
-  margin-top:25px;
+  font-weight:600;
+  transition:.45s cubic-bezier(.68,-.55,.27,1.55);
 }
 
-/* ADMIN */
+#toast.show{top:20px;}
 
-.admin-panel{
-  border:2px dashed var(--accent);
-  padding:18px;
-  border-radius:18px;
-  margin:15px 0;
-  background:rgba(142,68,173,.08);
-}
-
-.user-item{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:10px 0;
-  border-bottom:1px solid var(--border);
-}
-
-/* RESPONSIVE */
-
-@media(max-width:700px){
-  .container{
-    padding:16px;
-    border-radius:20px;
-  }
-
-  .menu-grid{
-    grid-template-columns:1fr;
-  }
-
-  .dashboard{
-    grid-template-columns:1fr;
-  }
-
-  .theme-grid{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .header-toko h1{
-    font-size:22px;
-  }
-
-  .ruang-item{
-    align-items:flex-start;
-    flex-direction:column;
-  }
-
-  .ruang-item div:last-child{
-    width:100%;
-  }
-
-  .ruang-item button{
-    margin-right:5px;
-  }
+@media(max-width:650px){
+  #mainApp{padding-bottom:100px;}
+  .stats{gap:7px;}
+  .opname-info{grid-template-columns:1fr;}
 }
 </style>
 </head>
 
 <body>
 
-<button class="theme-btn" onclick="toggleDark()" id="darkBtn">🌙</button>
+<div class="bg-orb orb1"></div>
+<div class="bg-orb orb2"></div>
+<div class="bg-orb orb3"></div>
 
 <div id="toast">✅ Data Tersimpan</div>
 
-<div class="container">
-
-<!-- LOGIN -->
-<div id="loginPage">
-
-  <div class="login-orb">📦</div>
-
-  <h2>SO RAHIL K792</h2>
-  <div class="login-sub">
-    Stock Opname Management System
-  </div>
-
-  <div class="login-card">
-
-    <input type="text" id="inputNIK" placeholder="👤 NIK Karyawan">
-
-    <input type="password" id="inputPIN" placeholder="🔐 PIN">
-
-    <button onclick="login()">🚀 LOGIN</button>
-
-    <p id="loginError" style="color:#e74c3c;font-size:13px"></p>
-
-  </div>
-
-  <div class="version">
-    Versi APK • SO RAHIL K792<br>
-    By <b>Ade Supriatna</b>
-  </div>
-
-</div>
-
-
-<!-- MAIN -->
-<div id="mainApp" style="display:none">
-
-<!-- HOME -->
-<div id="home" class="page">
-
-  <div class="header-toko">
-
-    <img
-      src="icon-rahil.png"
-      class="header-logo"
-      onerror="this.style.display='none'"
-      alt="SO RAHIL">
-
-    <h1>SO RAHIL K792</h1>
-
-    <p>Alfamart Karbela 2</p>
-
-  </div>
-
-  <div class="welcome">
-
-    <h2>
-      Selamat Datang,
-      <span id="namaUser"></span> 👋
-    </h2>
-
-    <p>
-      Siap melakukan Stock Opname hari ini?
-    </p>
-
-  </div>
-
-  <div class="menu-grid">
-
-    <button class="menu-card menu-blue"
-      onclick="showMenu('daftarRuang')">
-
-      <span class="icon">🏠</span>
-      <strong>Daftar Ruang SO</strong>
-      <small>Kelola ruang opname</small>
-
-    </button>
-
-    <button class="menu-card menu-purple"
-      onclick="showMenu('dashboard')">
-
-      <span class="icon">📊</span>
-      <strong>Dashboard</strong>
-      <small>Ringkasan stok</small>
-
-    </button>
-
-    <button class="menu-card menu-green"
-      onclick="showMenu('laporan')">
-
-      <span class="icon">📋</span>
-      <strong>Laporan & Rekap</strong>
-      <small>Minus, plus & laporan</small>
-
-    </button>
-
-    <button class="menu-card menu-orange"
-      onclick="showMenu('backup')">
-
-      <span class="icon">💾</span>
-      <strong>Backup & Data</strong>
-      <small>Simpan dan backup data</small>
-
-    </button>
-
-    <button class="menu-card menu-pink"
-      onclick="showMenu('setting')">
-
-      <span class="icon">⚙️</span>
-      <strong>Pengaturan</strong>
-      <small>Tema, tutorial & rehat</small>
-
-    </button>
-
-  </div>
-
-  <button class="logout" onclick="logout()">
-    🚪 Logout
-  </button>
-
-</div>
-
-
-<!-- RUANG -->
-<div id="menuDaftarRuang" class="page">
-
-  <button class="btn-back" onclick="showMenu('home')">
-    ⬅️ Kembali
-  </button>
-
-  <h2>🏠 Daftar Ruang SO</h2>
-
-  <div style="display:flex;gap:8px">
-
-    <input
-      type="text"
-      id="namaRuangBaru"
-      placeholder="Contoh: SO RAHIL A">
-
-    <button
-      class="btn-tambah"
-      onclick="tambahRuang()">
-      ➕ Tambah
-    </button>
-
-  </div>
-
-  <div id="listRuang" class="ruang-list"></div>
-
-</div>
-
-
-<!-- DASHBOARD -->
-<div id="menuDashboard" class="page">
-
-  <button class="btn-back" onclick="showMenu('home')">
-    ⬅️ Kembali
-  </button>
-
-  <h2>📊 Dashboard</h2>
-
-  <div class="dashboard">
-
-    <div class="dash-card card-item">
-      <h4>Total Item</h4>
-      <h2 id="dashTotal2">0</h2>
-    </div>
-
-    <div class="dash-card card-minus">
-      <h4>Minus</h4>
-      <h2 id="dashMinus2">0</h2>
-    </div>
-
-    <div class="dash-card card-rugi">
-      <h4>Total Rugi</h4>
-      <h2 id="dashRugi2">Rp 0</h2>
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- OPNAME -->
-<div id="menuOpname" class="page">
-
-  <button class="btn-back"
-    onclick="showMenu('daftarRuang')">
-    ⬅️ Daftar Ruang
-  </button>
-
-  <h2 id="judulRuang">📝 Input Opname</h2>
-
-  <input
-    type="text"
-    id="kodeToko"
-    value="K792/KARBELA2">
-
-  <div style="display:flex;gap:8px">
-
-    <input
-      type="date"
-      id="tanggalOpname">
-
-    <select id="pilihShift" onchange="loadData()">
-      <option>SHIFT 1</option>
-      <option>SHIFT 2</option>
-      <option>SHIFT 3</option>
-    </select>
-
-  </div>
-
-  <input
-    type="text"
-    id="namaPIC"
-    placeholder="👤 Nama PIC">
-
-  <div style="display:flex;gap:8px">
-
-    <input
-      type="text"
-      id="searchBarang"
-      placeholder="🔍 Cari Barang / Scan Barcode..."
-      oninput="filterBarang()">
-
-    <button
-      onclick="startScan()"
-      style="width:60px">
-      📷
-    </button>
-
-  </div>
-
-  <div id="reader"></div>
-  <p id="readerStatus"></p>
-
-  <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
-
-    <button
-      class="btn-aksi"
-      onclick="loadItems()">
-      📥 Load 43 Item
-    </button>
-
-    <button
-      class="btn-tambah"
-      onclick="tambahProdukManual()">
-      ➕ Produk
-    </button>
-
-    <button
-      class="btn-aksi"
-      onclick="copyOHShiftSebelumnya()">
-      📋 Ambil OH
-    </button>
-
-    <button
-      class="btn-aksi"
-      onclick="simpanOpname()">
-      💾 Simpan
-    </button>
-
-  </div>
-
-  <div id="tabelContainer"></div>
-
-  <div id="totalStok"
-    style="margin-top:15px;font-weight:700;background:var(--primary);color:white;padding:15px;border-radius:15px;text-align:center">
-  </div>
-
-</div>
-
-
-<!-- LAPORAN -->
-<div id="menuLaporan" class="page">
-
-  <button class="btn-back" onclick="showMenu('home')">
-    ⬅️ Kembali
-  </button>
-
-  <h2>📋 Laporan & Rekap</h2>
-
-  <input
-    type="text"
-    id="searchLaporan"
-    placeholder="🔍 Cari barang..."
-    oninput="tampilkanRekapSelisih()">
-
-  <div style="display:flex;flex-wrap:wrap;gap:5px">
-
-    <button class="btn-aksi"
-      onclick="lihatRiwayat()">
-      📜 Riwayat
-    </button>
-
-    <button class="btn-wa"
-      onclick="kirimRekapWA('minus')">
-      📲 WA Minus
-    </button>
-
-    <button class="btn-wa"
-      onclick="kirimRekapWA('plus')">
-      📲 WA Plus
-    </button>
-
-    <button class="btn-aksi"
-      onclick="exportExcel()">
-      📤 Excel/CSV
-    </button>
-
-    <button class="btn-pdf"
-      onclick="exportPDF()">
-      📑 PDF
-    </button>
-
-  </div>
-
-  <div id="rekapSelisih"></div>
-
-  <div
-    id="totalSelisihRp"
-    class="total-rp-box">
-  </div>
-
-</div>
-
-
-<!-- BACKUP -->
-<div id="menuBackup" class="page">
-
-  <button class="btn-back" onclick="showMenu('home')">
-    ⬅️ Kembali
-  </button>
-
-  <h2>💾 Backup & Data</h2>
-
-  <div class="setting-card">
-
-    <h3>📤 Backup</h3>
-
-    <p>
-      Simpan seluruh data aplikasi ke file JSON.
-    </p>
-
-    <button
-      class="btn-aksi"
-      onclick="backupJSON()">
-      💾 Backup Semua Data
-    </button>
-
-  </div>
-
-  <div class="setting-card">
-
-    <h3>📥 Restore</h3>
-
-    <p>
-      Pulihkan data dari file backup.
-    </p>
-
-    <input
-      type="file"
-      id="restoreFile"
-      accept=".json">
-
-    <button
-      class="btn-tambah"
-      onclick="restoreJSON()">
-      📥 Restore Data
-    </button>
-
-  </div>
-
-  <button
-    class="btn-aksi"
-    onclick="exportCSV()">
-    📤 Backup CSV
-  </button>
-
-</div>
-
-
-<!-- SETTING -->
-<div id="menuSetting" class="page">
-
-  <button class="btn-back" onclick="showMenu('home')">
-    ⬅️ Kembali
-  </button>
-
-  <h2>⚙️ Pengaturan</h2>
-
-  <!-- ADMIN -->
-  <div
-    id="adminPanel"
-    class="admin-panel"
-    style="display:none">
-
-    <h3>👑 Panel Admin</h3>
-
-    <input
-      type="text"
-      id="newNIK"
-      placeholder="NIK Baru">
-
-    <input
-      type="text"
-      id="newPIN"
-      placeholder="PIN Baru">
-
-    <input
-      type="text"
-      id="newNama"
-      placeholder="Nama Karyawan">
-
-    <button
-      class="btn-admin"
-      onclick="tambahUser()">
-      ➕ Tambah User
-    </button>
-
-    <div id="listUser"></div>
-
-  </div>
-
-
-  <!-- TEMA -->
-  <div class="setting-card">
-
-    <h3>🎨 Tema Profesional</h3>
-
-    <p>
-      Pilih warna tampilan aplikasi.
-    </p>
-
-    <div class="theme-grid">
-
-      <button class="theme-choice theme-ocean"
-        onclick="setTheme('ocean')"></button>
-
-      <button class="theme-choice theme-purple"
-        onclick="setTheme('purple')"></button>
-
-      <button class="theme-choice theme-sunset"
-        onclick="setTheme('sunset')"></button>
-
-      <button class="theme-choice theme-green"
-        onclick="setTheme('green')"></button>
-
-      <button class="theme-choice theme-night"
-        onclick="setTheme('night')"></button>
-
-      <button class="theme-choice theme-pink"
-        onclick="setTheme('pink')"></button>
-
-    </div>
-
-  </div>
-
-
-  <!-- REHAT -->
-  <div class="setting-card">
-
-    <h3>😌 Rehat Sejenak</h3>
-
-    <p>
-      Stock opname membutuhkan ketelitian.
-      Istirahat sebentar agar fokus kembali.
-    </p>
-
-    <button
-      class="btn-purple"
-      onclick="showMenu('rehat')">
-      🧘 Buka Rehat 3D
-    </button>
-
-  </div>
-
-
-  <!-- TUTORIAL -->
-  <div class="setting-card">
-
-    <h3>📖 Tutorial Cara Pakai</h3>
-
-    <div class="tutorial-section">
-      <h4>🔐 1. Login</h4>
-      <p>
-        Masukkan NIK dan PIN yang sudah terdaftar.
-        Admin awal: <b>ADMIN / 1234</b>.
-      </p>
-    </div>
-
-    <div class="tutorial-section">
-      <h4>🏠 2. Daftar Ruang SO</h4>
-      <p>
-        Buat ruang baru sesuai kebutuhan, misalnya
-        SO RAHIL A, SO RAHIL B, atau ruangan tertentu.
-      </p>
-    </div>
-
-    <div class="tutorial-section">
-      <h4>📦 3. Input Barang</h4>
-      <p>
-        Gunakan tombol Load 43 Item untuk memuat template.
-        Kamu juga dapat menambahkan produk secara manual.
-      </p>
-    </div>
-
-    <div class="tutorial-section">
-      <h4>📷 4. Scan Barcode</h4>
-      <p>
-        Tekan tombol kamera lalu arahkan kamera ke barcode.
-        Jika kode ditemukan, jumlah Fisik otomatis bertambah 1.
-      </p>
-    </div>
-
-    <div class="tutorial-section">
-      <h4>📋 5. OH Shift Sebelumnya</h4>
-      <p>
-        Pada Shift 2 atau Shift 3, gunakan tombol
-        Ambil OH untuk mengambil Fisik dari shift sebelumnya.
-      </p>
-    </div>
-
-    <div class="tutorial-section">
-      <h4>📊 6. Rekap Minus & Plus</h4>
-      <p>
-        Minus berarti Fisik lebih kecil dari OH.
-        Plus berarti Fisik lebih besar dari OH.
-        Nilai rupiah dihitung berdasarkan harga barang.
-      </p>
-    </div>
-
-    <div class="tutorial-section">
-      <h4>📲 7. Kirim WhatsApp</h4>
-      <p>
-        Dari menu Laporan, gunakan WA Minus atau WA Plus.
-        Aplikasi akan membuat pesan otomatis.
-      </p>
-    </div>
-
-    <div class="tutorial-section">
-      <h4>💾 8. Backup Data</h4>
-      <p>
-        Gunakan Backup Semua Data secara berkala agar data
-        tetap aman jika perangkat bermasalah.
-      </p>
-    </div>
-
-    <div class="tutorial-section">
-      <h4>🎨 9. Tema</h4>
-      <p>
-        Pilih salah satu tema warna profesional.
-        Tema tersimpan otomatis di perangkat.
-      </p>
-    </div>
-
-  </div>
-
-
-  <div class="version">
-    SO RAHIL K792<br>
-    Versi APK • Stock Opname System<br>
-    <b>By Ade Supriatna</b>
-  </div>
-
-</div>
-
-
-<!-- REHAT -->
-<div id="menuRehat" class="page">
-
-  <button
-    class="btn-back"
-    onclick="showMenu('setting')">
-    ⬅️ Kembali
-  </button>
-
-  <div class="rest-box">
-
-    <h2>😌 Rehat Sejenak</h2>
-
-    <p>
-      Tarik napas perlahan...<br>
-      Lepaskan ketegangan...<br>
-      Kamu sudah bekerja dengan baik. ❤️
-    </p>
-
-    <div class="cube-scene">
-
-      <div class="cube">
-
-        <div class="face front">🌿</div>
-        <div class="face back">😌</div>
-        <div class="face right">✨</div>
-        <div class="face left">💙</div>
-        <div class="face top">🌙</div>
-        <div class="face bottom">☁️</div>
-
+<!-- ================= LOGIN ================= -->
+<section id="loginPage">
+  <div class="login-wrapper">
+    <div class="login-card">
+      <img class="login-logo" src="icon-rahil.png" alt="SO RAHIL">
+      <h1 class="login-title">SO RAHIL K792</h1>
+      <p class="login-subtitle">Sistem Stock Opname • Alfamart Karbela 2</p>
+
+      <div class="login-field">
+        <span>👤</span>
+        <input id="inputNIK" type="text" placeholder="NIK Karyawan" autocomplete="username">
       </div>
 
+      <div class="login-field">
+        <span>🔐</span>
+        <input id="inputPIN" type="password" placeholder="PIN" autocomplete="current-password">
+      </div>
+
+      <button class="login-button" onclick="login()">🚀 MASUK KE SO RAHIL</button>
+      <p id="loginError" style="color:#ff405f;text-align:center;font-size:11px;margin-top:10px;"></p>
+
+      <div class="login-info">
+        <b>SO RAHIL K792</b><br>
+        Versi APK 1.0.0 • By Ade Supriatna
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MAIN APP ================= -->
+<div id="mainApp">
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="brand">
+      <img src="icon-rahil.png" alt="Logo">
+      <div class="brand-text">
+        <b>SO RAHIL K792</b>
+        <small>Alfamart Karbela 2</small>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button class="icon-btn" onclick="refreshApp()">🔄</button>
+      <button class="icon-btn" onclick="toggleDark()">🌙</button>
+    </div>
+  </div>
+
+  <!-- HOME PAGE -->
+  <div id="home" class="page active">
+    <div class="home-hero">
+      <div class="hero-content">
+        <div style="font-size:12px;opacity:.88;">Selamat datang kembali 👋</div>
+        <div class="hero-name"><span id="namaUser">Admin</span></div>
+        <div class="hero-desc">Tetap teliti, tetap santai. Semangat melakukan Stock Opname! 💪</div>
+      </div>
     </div>
 
-    <h3 class="breath">
-      Tarik napas... 4 detik
-    </h3>
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-title">Total Item</div>
+        <div class="stat-value" id="dashTotal2">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-title">Minus</div>
+        <div class="stat-value" id="dashMinus2">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-title">Rugi</div>
+        <div class="stat-value" id="dashRugi2">Rp 0</div>
+      </div>
+    </div>
 
-    <p>
-      Fokus sebentar pada pernapasan.
-    </p>
+    <div class="quick-grid">
+      <button class="quick-card" onclick="showMenu('daftarRuang')">
+        <div class="quick-icon">🏠</div>
+        <b>Daftar Ruang</b>
+        <small>Kelola ruang SO</small>
+      </button>
+      <button class="quick-card" onclick="showMenu('dashboard')">
+        <div class="quick-icon">📊</div>
+        <b>Dashboard</b>
+        <small>Ringkasan SO</small>
+      </button>
+      <button class="quick-card" onclick="showMenu('laporan')">
+        <div class="quick-icon">📋</div>
+        <b>Laporan</b>
+        <small>Rekap minus & plus</small>
+      </button>
+      <button class="quick-card" onclick="showMenu('rehat')">
+        <div class="quick-icon">🌿</div>
+        <b>Rehat Sejenak</b>
+        <small>Musik relaksasi</small>
+      </button>
+    </div>
+  </div>
 
-    <button
-      class="btn-aksi"
-      onclick="startRelaxSound()">
-      🔊 Suara Relaksasi
+  <!-- DAFTAR RUANG PAGE -->
+  <div id="menuDaftarRuang" class="page">
+    <div class="page-header">
+      <button class="back-btn" onclick="showMenu('home')">←</button>
+      <h2 style="margin:0;font-size:21px;">🏠 Daftar Ruang SO</h2>
+    </div>
+
+    <div class="card">
+      <div class="form-group">
+        <label>Nama Ruang Baru</label>
+        <div style="display:flex;gap:8px">
+          <input id="namaRuangBaru" placeholder="Contoh: SO RAHIL A">
+          <button class="btn btn-purple" onclick="tambahRuang()">➕</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="listRuang"></div>
+  </div>
+
+  <!-- OPNAME PAGE -->
+  <div id="menuOpname" class="page">
+    <div class="page-header">
+      <button class="back-btn" onclick="showMenu('daftarRuang')">←</button>
+      <h2 id="judulRuang" style="margin:0;font-size:21px;">📝 Input Opname</h2>
+    </div>
+
+    <div class="card">
+      <div class="opname-info">
+        <div class="form-group">
+          <label>Kode / Ruang</label>
+          <input id="kodeToko" value="K792/KARBELA2">
+        </div>
+        <div class="form-group">
+          <label>Tanggal Opname</label>
+          <input type="date" id="tanggalOpname">
+        </div>
+      </div>
+
+      <div class="opname-info">
+        <div class="form-group">
+          <label>Shift</label>
+          <select id="pilihShift">
+            <option>SHIFT 1</option>
+            <option>SHIFT 2</option>
+            <option>SHIFT 3</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Nama PIC</label>
+          <input id="namaPIC" placeholder="Nama PIC">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Cari Barang / Barcode</label>
+        <div class="search-row">
+          <input id="searchBarang" placeholder="🔍 Cari kode / nama barang..." oninput="filterBarang()">
+          <button class="scan-btn" onclick="startScan()">📷</button>
+        </div>
+      </div>
+
+      <div id="reader"></div>
+      <div id="readerStatus" style="text-align:center;font-size:11px;color:var(--primary);margin-top:5px;"></div>
+    </div>
+
+    <div class="card">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Kode</th>
+              <th>Nama Barang</th>
+              <th>Harga</th>
+              <th>Fisik</th>
+            </tr>
+          </thead>
+          <tbody id="tabelOpname">
+            <!-- Data Opname diisi via JavaScript -->
+          </tbody>
+        </table>
+      </div>
+      <button class="btn btn-primary" style="width:100%;margin-top:15px;" onclick="simpanOpname()">💾 Simpan Data Opname</button>
+    </div>
+  </div>
+
+  <!-- DASHBOARD PAGE -->
+  <div id="menuDashboard" class="page">
+    <div class="page-header">
+      <button class="back-btn" onclick="showMenu('home')">←</button>
+      <h2 style="margin:0;font-size:21px;">📊 Dashboard Ringkasan</h2>
+    </div>
+    <div class="card">
+      <p style="font-size:12px;color:var(--muted)">Pantau selisih fisik dan sistem secara real-time.</p>
+    </div>
+  </div>
+
+  <!-- REHAT PAGE -->
+  <div id="menuRehat" class="page">
+    <div class="page-header">
+      <button class="back-btn" onclick="showMenu('home')">←</button>
+      <h2 style="margin:0;font-size:21px;">🌿 Ruang Rehat</h2>
+    </div>
+    <div class="card" style="text-align:center;">
+      <p style="font-size:13px;color:var(--text);">Putar musik tenang untuk menemani aktivitas Stock Opname.</p>
+      <button class="btn btn-primary" onclick="showToast('🎵 Musik Relaksasi Dimulai')">▶ Putar Musik Ambient</button>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAVIGATION BAR -->
+  <div class="bottom-nav">
+    <button class="nav-btn active" onclick="showMenu('home')">
+      <span>🏠</span>
+      <span>Home</span>
     </button>
-
-    <button
-      class="btn-danger"
-      onclick="stopRelaxSound()">
-      🔇 Stop Suara
+    <button class="nav-btn" onclick="showMenu('daftarRuang')">
+      <span>📦</span>
+      <span>Ruang</span>
     </button>
-
+    <button class="nav-add" onclick="showMenu('menuOpname')">➕</button>
+    <button class="nav-btn" onclick="showMenu('dashboard')">
+      <span>📊</span>
+      <span>Dashboard</span>
+    </button>
+    <button class="nav-btn" onclick="showMenu('rehat')">
+      <span>🌿</span>
+      <span>Rehat</span>
+    </button>
   </div>
 
 </div>
 
-</div>
-</div>
-
-
+<!-- ================= JAVASCRIPT LOGIC ================= -->
 <script>
+let currentRuang = "SO RAHIL A";
+let dataRuang = JSON.parse(localStorage.getItem('so_ruang')) || ["SO RAHIL A", "SO RAHIL B"];
+let html5QrcodeScanner = null;
 
-const {jsPDF}=window.jspdf;
-
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('sw.js?v=20').catch(()=>{});
-}
-
-let html5QrCode=null;
-let ruangAktif=null;
-
-let daftarRuang=
-JSON.parse(localStorage.getItem('daftar_ruang_so'))||[];
-
-let users=
-JSON.parse(localStorage.getItem('users_so'))||[
-  {
-    nik:"ADMIN",
-    pin:"1234",
-    nama:"ADMIN",
-    role:"admin"
-  }
+// Contoh database barang dasar
+const databaseBarang = [
+  { kode: "8999908001", nama: "INDOMIE GORENG 85G", harga: 3100, fisik: 0 },
+  { kode: "8991001101", nama: "AQUA AIR MINERAL 600ML", harga: 3500, fisik: 0 },
+  { kode: "8998009001", nama: "POKKA GREEN TEA 450ML", harga: 6800, fisik: 0 }
 ];
 
-let userLogin=null;
-
-let audioContext=null;
-let audioOscillator=null;
-
-
-/* =========================
-   TEMPLATE BARANG
-========================= */
-
-const templateShift=[
-
-{kategori:"KANZLER SINGLE",kode:"417806",nama:"kanzler sgl mini 65g",oh:"0",fisik:"0",harga:"0"},
-{kategori:"KANZLER SINGLE",kode:"417804",nama:"kanzler sgl ori 65g",oh:"0",fisik:"0",harga:"0"},
-{kategori:"KANZLER SINGLE",kode:"417805",nama:"kanzler single keju",oh:"0",fisik:"0",harga:"0"},
-{kategori:"KANZLER SINGLE",kode:"423992",nama:"kanzler single hot",oh:"0",fisik:"0",harga:"0"},
-{kategori:"KANZLER SINGLE",kode:"435578",nama:"kanzler single gochujang",oh:"0",fisik:"0",harga:"0"},
-
-{kategori:"KANZLER BAKSO",kode:"435736",nama:"kanzler bakso hot 48g",oh:"0",fisik:"0",harga:"0"},
-{kategori:"KANZLER BAKSO",kode:"465771",nama:"kanzler bakso gochujang 55g",oh:"0",fisik:"0",harga:"0"},
-{kategori:"KANZLER BAKSO",kode:"428660",nama:"kanzler bakso ori 48g",oh:"0",fisik:"0",harga:"0"},
-{kategori:"KANZLER BAKSO",kode:"428662",nama:"kanzler bakso keju 48g",oh:"0",fisik:"0",harga:"0"},
-
-{kategori:"FIESTA SOSIS",kode:"443704",nama:"fiesta rtg sosis spicykorean",oh:"0",fisik:"0",harga:"0"},
-
-{kategori:"ECO BAG",kode:"ECO1",nama:"Alfamart ECO",oh:"0",fisik:"0",harga:"0"},
-{kategori:"ECO BAG",kode:"ECO2",nama:"ECO bag kecil",oh:"0",fisik:"0",harga:"0"},
-{kategori:"ECO BAG",kode:"ECO3",nama:"ECO bag gede",oh:"0",fisik:"0",harga:"0"},
-
-{kategori:"FRESHMILK",kode:"FM1",nama:"Diamond",oh:"0",fisik:"0",harga:"0"},
-{kategori:"FRESHMILK",kode:"FM2",nama:"Greenfield milk",oh:"0",fisik:"0",harga:"0"},
-{kategori:"FRESHMILK",kode:"FM3",nama:"Omela",oh:"0",fisik:"0",harga:"0"},
-{kategori:"FRESHMILK",kode:"460235",nama:"NPL 15L",oh:"0",fisik:"0",harga:"0"},
-{kategori:"FRESHMILK",kode:"422782",nama:"Le mineral 15L",oh:"0",fisik:"0",harga:"0"},
-
-{kategori:"GULA",kode:"401698",nama:"PSM Gula Premium 1kg",oh:"0",fisik:"0",harga:"0"},
-{kategori:"GULA",kode:"405970",nama:"Rose Brand Gula Tebu premium 1kg",oh:"0",fisik:"0",harga:"0"},
-{kategori:"GULA",kode:"466054",nama:"Gula vigula kristal putih 1kg",oh:"0",fisik:"0",harga:"0"},
-{kategori:"GULA",kode:"221587",nama:"Gulaku gula tebu premium",oh:"0",fisik:"0",harga:"0"},
-{kategori:"GULA",kode:"406643",nama:"GMP Gula Kristal putih 1kg",oh:"0",fisik:"0",harga:"0"},
-
-{kategori:"MINYAK",kode:"113079",nama:"Tropical myk grg pet 2L",oh:"0",fisik:"0",harga:"0"},
-{kategori:"MINYAK",kode:"451350",nama:"Tropical myk grg pet 1,5L",oh:"0",fisik:"0",harga:"0"},
-{kategori:"MINYAK",kode:"61132",nama:"Tropical myk grg pet 1L",oh:"0",fisik:"0",harga:"0"},
-{kategori:"MINYAK",kode:"195673",nama:"sania mnyk grg pch 1L",oh:"0",fisik:"0",harga:"0"},
-{kategori:"MINYAK",kode:"211141",nama:"Bimoli myk pch grg 1L",oh:"0",fisik:"0",harga:"0"},
-{kategori:"MINYAK",kode:"6965",nama:"Barco myk grg pch 1L",oh:"0",fisik:"0",harga:"0"},
-{kategori:"MINYAK",kode:"244111",nama:"SunCo myk grg pch 2L",oh:"0",fisik:"0",harga:"0"},
-{kategori:"MINYAK",kode:"156747",nama:"Filma myk grg pch 2L",oh:"0",fisik:"0",harga:"0"},
-{kategori:"MINYAK",kode:"192730",nama:"Bimoli myk grg pch 2L",oh:"0",fisik:"0",harga:"0"},
-{kategori:"MINYAK",kode:"113222",nama:"Fortune myk grg pch 2L",oh:"0",fisik:"0",harga:"0"},
-{kategori:"MINYAK",kode:"195674",nama:"Sania myk grg pch 2L",oh:"0",fisik:"0",harga:"0"},
-{kategori:"MINYAK",kode:"211378",nama:"Bimoli myk grg spesial pch 2L",oh:"0",fisik:"0",harga:"0"},
-{kategori:"MINYAK",kode:"121905",nama:"Sovia myk grg pch 2L",oh:"0",fisik:"0",harga:"0"},
-{kategori:"MINYAK",kode:"437794",nama:"Harumnas myk grg pch 2L",oh:"0",fisik:"0",harga:"0"},
-{kategori:"MINYAK",kode:"433436",nama:"Camar myk grg pch 2L",oh:"0",fisik:"0",harga:"0"},
-{kategori:"MINYAK",kode:"123332",nama:"Alfamart myk grg pch 2L",oh:"0",fisik:"0",harga:"0"},
-{kategori:"MINYAK",kode:"453308",nama:"Vipco myk 2L",oh:"0",fisik:"0",harga:"0"},
-{kategori:"MINYAK",kode:"45258",nama:"Merah pth myk 2L",oh:"0",fisik:"0",harga:"0"},
-{kategori:"MINYAK",kode:"436397",nama:"ikan dorang myk grng kelapa",oh:"0",fisik:"0",harga:"0"}
-
-];
-
-
-/* =========================
-   NAVIGASI
-========================= */
-
-function showMenu(menu){
-
-  document
-    .querySelectorAll('.page')
-    .forEach(p=>{
-      p.classList.remove('active');
-      p.style.display='none';
-    });
-
-  let id=
-    menu==='home'
-      ? 'home'
-      : 'menu'+menu.charAt(0).toUpperCase()+menu.slice(1);
-
-  let target=document.getElementById(id);
-
-  if(!target)return;
-
-  target.style.display='block';
-
-  setTimeout(()=>{
-    target.classList.add('active');
-  },10);
-
-  if(menu==='daftarRuang')tampilkanRuang();
-
-  if(menu==='laporan')tampilkanRekapSelisih();
-
-  if(menu==='dashboard')updateDashboard();
-
-}
-
-
-/* =========================
-   TOAST
-========================= */
-
-function showToast(pesan="✅ Data Tersimpan"){
-
-  const t=document.getElementById('toast');
-
-  t.innerText=pesan;
-
-  t.classList.add('show');
-
-  setTimeout(()=>{
-    t.classList.remove('show');
-  },2200);
-
-}
-
-
-/* =========================
-   LOGIN
-========================= */
-
-window.onload=function(){
-
-  let d=new Date();
-
-  document.getElementById('tanggalOpname')
-    .valueAsDate=d;
-
-  loadTheme();
-
-  cekLogin();
-
+window.onload = function() {
+  document.getElementById('tanggalOpname').valueAsDate = new Date();
+  renderRuang();
 };
 
+function login() {
+  const nik = document.getElementById('inputNIK').value;
+  const pin = document.getElementById('inputPIN').value;
 
-function cekLogin(){
-
-  userLogin=
-    JSON.parse(sessionStorage.getItem('userLogin'));
-
-  if(userLogin){
-
-    document.getElementById('loginPage')
-      .style.display='none';
-
-    document.getElementById('mainApp')
-      .style.display='block';
-
-    document.getElementById('namaUser')
-      .innerText=userLogin.nama;
-
-    if(userLogin.role==='admin'){
-
-      document.getElementById('adminPanel')
-        .style.display='block';
-
-    }
-
-    tampilkanListUser();
-
-    showMenu('home');
-
+  if (nik !== "" && pin !== "") {
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('mainApp').style.display = 'block';
+    document.getElementById('namaUser').innerText = "NIK: " + nik;
+    loadTableBarang();
+    showToast("Selamat Datang!");
+  } else {
+    document.getElementById('loginError').innerText = "Mohon isi NIK dan PIN dengan benar.";
   }
-
 }
 
+function showMenu(pageId) {
+  const pages = document.querySelectorAll('.page');
+  pages.forEach(p => p.classList.remove('active'));
 
-function login(){
+  let target = pageId;
+  if(pageId === 'daftarRuang') target = 'menuDaftarRuang';
+  if(pageId === 'dashboard') target = 'menuDashboard';
+  if(pageId === 'rehat') target = 'menuRehat';
 
-  let nik=
-    document.getElementById('inputNIK')
-      .value.trim();
-
-  let pin=
-    document.getElementById('inputPIN')
-      .value.trim();
-
-  let user=
-    users.find(u=>
-      u.nik===nik &&
-      u.pin===pin
-    );
-
-  if(user){
-
-    userLogin=user;
-
-    sessionStorage.setItem(
-      'userLogin',
-      JSON.stringify(user)
-    );
-
-    cekLogin();
-
-  }else{
-
-    document.getElementById('loginError')
-      .innerText='❌ NIK atau PIN salah.';
-
+  const activePage = document.getElementById(target);
+  if (activePage) {
+    activePage.classList.add('active');
   }
-
+  
+  if (pageId !== 'menuOpname' && html5QrcodeScanner) {
+    stopScan();
+  }
 }
 
-
-function logout(){
-
-  sessionStorage.removeItem('userLogin');
-
-  location.reload();
-
-}
-
-
-/* =========================
-   DARK MODE
-========================= */
-
-function toggleDark(){
-
+function toggleDark() {
   document.body.classList.toggle('dark');
-
-  localStorage.setItem(
-    'darkMode',
-    document.body.classList.contains('dark')
-  );
-
-  document.getElementById('darkBtn')
-    .innerText=
-    document.body.classList.contains('dark')
-      ? '☀️'
-      : '🌙';
-
 }
 
-
-function loadTheme(){
-
-  let dark=
-    localStorage.getItem('darkMode')==='true';
-
-  if(dark)
-    document.body.classList.add('dark');
-
-  document.getElementById('darkBtn')
-    .innerText=dark?'☀️':'🌙';
-
-  let theme=
-    localStorage.getItem('soTheme');
-
-  if(theme)
-    setTheme(theme,false);
-
+function refreshApp() {
+  location.reload();
 }
 
-
-/* =========================
-   TEMA
-========================= */
-
-function setTheme(theme,save=true){
-
-  const root=document.documentElement;
-
-  let themes={
-
-    ocean:[
-      '#2980b9',
-      '#00c6ff',
-      '#4facfe',
-      '#00f2fe'
-    ],
-
-    purple:[
-      '#667eea',
-      '#764ba2',
-      '#667eea',
-      '#764ba2'
-    ],
-
-    sunset:[
-      '#ff5e62',
-      '#ff9966',
-      '#ff9966',
-      '#ff5e62'
-    ],
-
-    green:[
-      '#11998e',
-      '#38ef7d',
-      '#11998e',
-      '#38ef7d'
-    ],
-
-    night:[
-      '#243b55',
-      '#141e30',
-      '#141e30',
-      '#243b55'
-    ],
-
-    pink:[
-      '#d63384',
-      '#ff758c',
-      '#ee9ca7',
-      '#ffdde1'
-    ]
-
-  };
-
-  let t=themes[theme]||themes.ocean;
-
-  root.style.setProperty('--primary',t[0]);
-  root.style.setProperty('--secondary',t[1]);
-  root.style.setProperty('--bg1',t[2]);
-  root.style.setProperty('--bg2',t[3]);
-
-  if(save)
-    localStorage.setItem('soTheme',theme);
-
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.innerText = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2500);
 }
 
-
-/* =========================
-   USER ADMIN
-========================= */
-
-function tambahUser(){
-
-  if(!userLogin || userLogin.role!=='admin')
-    return alert('Hanya Admin!');
-
-  let nik=document.getElementById('newNIK').value.trim();
-  let pin=document.getElementById('newPIN').value.trim();
-  let nama=document.getElementById('newNama').value.trim();
-
-  if(!nik||!pin||!nama)
-    return alert('Lengkapi data user!');
-
-  if(users.find(u=>u.nik===nik))
-    return alert('NIK sudah ada!');
-
-  users.push({
-    nik,
-    pin,
-    nama,
-    role:'user'
-  });
-
-  localStorage.setItem(
-    'users_so',
-    JSON.stringify(users)
-  );
-
-  document.getElementById('newNIK').value='';
-  document.getElementById('newPIN').value='';
-  document.getElementById('newNama').value='';
-
-  tampilkanListUser();
-
-  showToast('✅ User berhasil ditambahkan');
-
+function tambahRuang() {
+  const val = document.getElementById('namaRuangBaru').value.trim();
+  if (val) {
+    dataRuang.push(val);
+    localStorage.setItem('so_ruang', JSON.stringify(dataRuang));
+    document.getElementById('namaRuangBaru').value = '';
+    renderRuang();
+    showToast("Ruang berhasil ditambahkan!");
+  }
 }
 
-
-function tampilkanListUser(){
-
-  let html='<h4>👥 Daftar User</h4>';
-
-  users.forEach(u=>{
-
-    html+=`
-      <div class="user-item">
-        <span>
-          <b>${u.nik}</b> -
-          ${u.nama}
-          ${u.role==='admin'?' 👑':''}
-        </span>
-      </div>
-    `;
-
-  });
-
-  document.getElementById('listUser')
-    .innerHTML=html;
-
-}
-
-
-/* =========================
-   RUANG
-========================= */
-
-function tambahRuang(){
-
-  let nama=
-    document.getElementById('namaRuangBaru')
-      .value.trim();
-
-  if(!nama)
-    return alert('Isi nama ruang!');
-
-  if(daftarRuang.find(r=>r.nama===nama))
-    return alert('Ruang sudah ada!');
-
-  daftarRuang.push({
-    id:Date.now(),
-    nama,
-    data:[]
-  });
-
-  localStorage.setItem(
-    'daftar_ruang_so',
-    JSON.stringify(daftarRuang)
-  );
-
-  document.getElementById('namaRuangBaru')
-    .value='';
-
-  tampilkanRuang();
-
-  showToast('✅ Ruang ditambahkan');
-
-}
-
-
-function tampilkanRuang(){
-
-  let html='';
-
-  daftarRuang.forEach(r=>{
-
-    html+=`
-      <div class="ruang-item">
-
+function renderRuang() {
+  const list = document.getElementById('listRuang');
+  list.innerHTML = "";
+  dataRuang.forEach((r, idx) => {
+    list.innerHTML += `
+      <div class="card" style="display:flex;justify-content:space-between;align-items:center;">
+        <div><b>${r}</b></div>
         <div>
-          <b>🏠 ${r.nama}</b>
-          <br>
-          <small>${r.data.length} Produk</small>
+          <button class="btn btn-primary" onclick="bukaRuang('${r}')">Buka</button>
+          <button class="btn btn-danger" onclick="hapusRuang(${idx})">🗑️</button>
         </div>
-
-        <div>
-
-          <button
-            class="btn-aksi"
-            onclick="bukaRuang(${r.id})">
-            Buka
-          </button>
-
-          <button
-            class="btn-danger"
-            onclick="hapusRuang(${r.id})">
-            🗑️
-          </button>
-
-        </div>
-
       </div>
     `;
-
   });
-
-  document.getElementById('listRuang')
-    .innerHTML=
-    html||'<p style="text-align:center">Belum ada ruang.</p>';
-
 }
 
-
-function hapusRuang(id){
-
-  if(!confirm('Yakin hapus ruang ini?'))
-    return;
-
-  daftarRuang=
-    daftarRuang.filter(r=>r.id!==id);
-
-  localStorage.setItem(
-    'daftar_ruang_so',
-    JSON.stringify(daftarRuang)
-  );
-
-  tampilkanRuang();
-
+function hapusRuang(idx) {
+  dataRuang.splice(idx, 1);
+  localStorage.setItem('so_ruang', JSON.stringify(dataRuang));
+  renderRuang();
 }
 
-
-function bukaRuang(id){
-
-  ruangAktif=
-    daftarRuang.find(r=>r.id===id);
-
-  if(!ruangAktif)return;
-
-  document.getElementById('judulRuang')
-    .innerText=
-    `📝 Input Opname: ${ruangAktif.nama}`;
-
-  document.getElementById('kodeToko')
-    .value=ruangAktif.nama;
-
-  showMenu('opname');
-
-  document.getElementById('tanggalOpname')
-    .valueAsDate=new Date();
-
-  loadData();
-
+function bukaRuang(nama) {
+  currentRuang = nama;
+  document.getElementById('judulRuang').innerText = "📝 Input Opname - " + nama;
+  showMenu('menuOpname');
 }
 
-
-/* =========================
-   PRODUK
-========================= */
-
-function tambahProdukManual(){
-
-  if(!ruangAktif)
-    return alert('Pilih ruang terlebih dahulu!');
-
-  let kode=prompt('Kode Barang:');
-
-  if(!kode)return;
-
-  if(ruangAktif.data.find(x=>x.kode===kode))
-    return alert('Kode sudah ada!');
-
-  let nama=prompt('Nama Barang:');
-
-  if(!nama)return;
-
-  let kategori=prompt('Kategori:');
-
-  if(!kategori)return;
-
-  ruangAktif.data.push({
-
-    kategori:kategori.toUpperCase(),
-    kode,
-    nama,
-    oh:'0',
-    fisik:'0',
-    harga:'0'
-
-  });
-
-  saveRuang();
-
-  tampilkan();
-
-}
-
-
-function hapusProduk(index){
-
-  if(!confirm(
-    `Hapus ${ruangAktif.data[index].nama}?`
-  ))return;
-
-  ruangAktif.data.splice(index,1);
-
-  saveRuang();
-
-  tampilkan();
-
-}
-
-
-function loadItems(){
-
-  if(!confirm(
-    'Reset data ruang ini ke 43 item template?'
-  ))return;
-
-  ruangAktif.data=
-    JSON.parse(
-      JSON.stringify(templateShift)
-    );
-
-  saveRuang();
-
-  tampilkan();
-
-}
-
-
-function updateField(i,field,val){
-
-  if(!ruangAktif)return;
-
-  ruangAktif.data[i][field]=val;
-
-  saveRuang();
-
-  tampilkan();
-
-}
-
-
-function saveRuang(){
-
-  if(!ruangAktif)return;
-
-  let index=
-    daftarRuang.findIndex(
-      r=>r.id===ruangAktif.id
-    );
-
-  if(index>=0){
-
-    daftarRuang[index].data=
-      ruangAktif.data;
-
-    localStorage.setItem(
-      'daftar_ruang_so',
-      JSON.stringify(daftarRuang)
-    );
-
-  }
-
-}
-
-
-/* =========================
-   TABEL
-========================= */
-
-function tampilkan(){
-
-  if(!ruangAktif)return;
-
-  let container=
-    document.getElementById('tabelContainer');
-
-  container.innerHTML='';
-
-  let keyword=
-    document.getElementById('searchBarang')
-      ?.value.toLowerCase()||'';
-
-  let filtered=
-    ruangAktif.data.filter(x=>
-      x.nama.toLowerCase().includes(keyword)||
-      x.kode.toLowerCase().includes(keyword)
-    );
-
-  let kategoriList=[
-    ...new Set(filtered.map(x=>x.kategori))
-  ];
-
-  let totalOH=0;
-  let totalFisik=0;
-
-  kategoriList.forEach(kat=>{
-
-    let html=`
-      <h3>📦 ${kat}</h3>
-      <div class="table-wrap">
-      <table>
+function loadTableBarang() {
+  const tbody = document.getElementById('tabelOpname');
+  tbody.innerHTML = "";
+  databaseBarang.forEach((b, i) => {
+    tbody.innerHTML += `
       <tr>
-        <th>No</th>
-        <th>Kode</th>
-        <th>Nama</th>
-        <th>OH</th>
-        <th>Fisik</th>
-        <th>Harga</th>
-        <th>Selisih</th>
-        <th>Selisih Rp</th>
-        <th>Aksi</th>
+        <td>${b.kode}</td>
+        <td style="text-align:left;">${b.nama}</td>
+        <td>Rp ${b.harga.toLocaleString()}</td>
+        <td><input type="number" id="qty_${i}" value="${b.fisik}" min="0"></td>
       </tr>
     `;
-
-    let no=1;
-
-    filtered
-      .filter(x=>x.kategori===kat)
-      .forEach(item=>{
-
-        let index=
-          ruangAktif.data.indexOf(item);
-
-        let oh=Number(item.oh)||0;
-        let fisik=Number(item.fisik)||0;
-        let harga=Number(item.harga)||0;
-
-        totalOH+=oh;
-        totalFisik+=fisik;
-
-        let selisih=fisik-oh;
-
-        let nilai=selisih*harga;
-
-        let cls=
-          selisih<0
-            ?'selisih-minus'
-            :selisih>0
-            ?'selisih-plus'
-            :'';
-
-        html+=`
-
-          <tr id="row-${item.kode}">
-
-            <td>${no++}</td>
-
-            <td>${item.kode}</td>
-
-            <td style="text-align:left">
-              ${item.nama}
-            </td>
-
-            <td>
-              <input
-                type="number"
-                value="${item.oh}"
-                onchange="
-                  updateField(
-                    ${index},
-                    'oh',
-                    this.value
-                  )">
-            </td>
-
-            <td>
-              <input
-                type="number"
-                value="${item.fisik}"
-                onchange="
-                  updateField(
-                    ${index},
-                    'fisik',
-                    this.value
-                  )"
-                id="fisik-${item.kode}">
-            </td>
-
-            <td>
-              <input
-                type="number"
-                value="${item.harga}"
-                placeholder="Harga"
-                onchange="
-                  updateField(
-                    ${index},
-                    'harga',
-                    this.value
-                  )">
-            </td>
-
-            <td class="${cls}">
-              ${selisih}
-            </td>
-
-            <td class="${cls}">
-              Rp ${nilai.toLocaleString('id-ID')}
-            </td>
-
-            <td>
-              <button
-                class="btn-danger"
-                onclick="hapusProduk(${index})">
-                🗑️
-              </button>
-            </td>
-
-          </tr>
-
-        `;
-
-      });
-
-    html+=`
-      </table>
-      </div>
-    `;
-
-    container.innerHTML+=html;
-
   });
-
-  document.getElementById('totalStok')
-    .innerHTML=
-      `Total Item: ${ruangAktif.data.length}
-       | OH: ${totalOH}
-       | Fisik: ${totalFisik}`;
-
-  tampilkanRekapSelisih();
-
-  updateDashboard();
-
 }
 
-
-function filterBarang(){
-
-  tampilkan();
-
-}
-
-
-/* =========================
-   DASHBOARD
-========================= */
-
-function updateDashboard(){
-
-  let data=
-    ruangAktif
-      ?ruangAktif.data
-      :[];
-
-  let minus=
-    data.filter(x=>
-      (Number(x.fisik)||0)<
-      (Number(x.oh)||0)
-    );
-
-  let totalRugi=0;
-
-  minus.forEach(x=>{
-
-    let kurang=
-      Math.abs(
-        (Number(x.fisik)||0)-
-        (Number(x.oh)||0)
-      );
-
-    totalRugi+=
-      kurang*(Number(x.harga)||0);
-
+function filterBarang() {
+  const q = document.getElementById('searchBarang').value.toLowerCase();
+  const rows = document.querySelectorAll('#tabelOpname tr');
+  rows.forEach(row => {
+    const text = row.innerText.toLowerCase();
+    row.style.display = text.includes(q) ? "" : "none";
   });
-
-  document.getElementById('dashTotal2')
-    .innerText=data.length;
-
-  document.getElementById('dashMinus2')
-    .innerText=minus.length;
-
-  document.getElementById('dashRugi2')
-    .innerText=
-      'Rp '+totalRugi.toLocaleString('id-ID');
-
 }
 
-
-/* =========================
-   REKAP
-========================= */
-
-function tampilkanRekapSelisih(){
-
-  let data=
-    ruangAktif
-      ?ruangAktif.data
-      :[];
-
-  let keyword=
-    document.getElementById('searchLaporan')
-      ?.value.toLowerCase()||'';
-
-  let minus=
-    data.filter(x=>
-      Number(x.fisik)<Number(x.oh)&&
-      x.nama.toLowerCase().includes(keyword)
-    );
-
-  let plus=
-    data.filter(x=>
-      Number(x.fisik)>Number(x.oh)&&
-      x.nama.toLowerCase().includes(keyword)
-    );
-
-  let total=0;
-
-  data.forEach(x=>{
-
-    total+=
-      (
-        (Number(x.fisik)||0)-
-        (Number(x.oh)||0)
-      )*
-      (Number(x.harga)||0);
-
+function simpanOpname() {
+  databaseBarang.forEach((b, i) => {
+    const val = document.getElementById(`qty_${i}`).value;
+    b.fisik = parseInt(val) || 0;
   });
-
-  let html='';
-
-  if(minus.length){
-
-    html+=`
-      <div class="rekap-box rekap-minus">
-
-        <h3>
-          ❌ BARANG MINUS
-          (${minus.length} Item)
-        </h3>
-    `;
-
-    minus.forEach((m,i)=>{
-
-      let kurang=
-        Math.abs(
-          (Number(m.fisik)||0)-
-          (Number(m.oh)||0)
-        );
-
-      let rugi=
-        kurang*(Number(m.harga)||0);
-
-      html+=`
-        <p>
-          ${i+1}. ${m.nama}
-          — Kurang <b>${kurang}</b>
-          = <b>Rp ${rugi.toLocaleString('id-ID')}</b>
-        </p>
-      `;
-
-    });
-
-    html+='</div>';
-
-  }
-
-
-  if(plus.length){
-
-    html+=`
-      <div class="rekap-box rekap-plus">
-
-        <h3>
-          ✅ BARANG PLUS
-          (${plus.length} Item)
-        </h3>
-    `;
-
-    plus.forEach((p,i)=>{
-
-      let lebih=
-        (Number(p.fisik)||0)-
-        (Number(p.oh)||0);
-
-      let nilai=
-        lebih*(Number(p.harga)||0);
-
-      html+=`
-        <p>
-          ${i+1}. ${p.nama}
-          — Lebih <b>${lebih}</b>
-          = <b>Rp ${nilai.toLocaleString('id-ID')}</b>
-        </p>
-      `;
-
-    });
-
-    html+='</div>';
-
-  }
-
-  document.getElementById('rekapSelisih')
-    .innerHTML=
-      html||
-      '<p style="text-align:center">Tidak ada selisih.</p>';
-
-  document.getElementById('totalSelisihRp')
-    .innerHTML=
-      `TOTAL SELISIH NILAI:
-       Rp ${total.toLocaleString('id-ID')}`;
-
+  showToast("✅ Data Opname Disimpan!");
 }
 
-
-/* =========================
-   BARCODE
-========================= */
-
-function handleScan(kode){
-
-  if(!ruangAktif)return;
-
-  let item=
-    ruangAktif.data.find(
-      x=>String(x.kode)===String(kode)
-    );
-
-  if(item){
-
-    item.fisik=
-      (Number(item.fisik)||0)+1;
-
-    saveRuang();
-
-    tampilkan();
-
-    let row=
-      document.getElementById(
-        `row-${item.kode}`
-      );
-
-    if(row){
-
-      row.classList.add('highlight-row');
-
-      setTimeout(()=>{
-        row.classList.remove('highlight-row');
-      },1000);
-
-    }
-
-    showToast(`✅ ${item.nama} +1`);
-
-  }else{
-
-    showToast(
-      `⚠️ Kode ${kode} tidak ditemukan`
-    );
-
+function startScan() {
+  const readerDiv = document.getElementById('reader');
+  readerDiv.style.display = 'block';
+  
+  if(!html5QrcodeScanner) {
+    html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
   }
-
-}
-
-
-function startScan(){
-
-  const reader=
-    document.getElementById('reader');
-
-  const status=
-    document.getElementById('readerStatus');
-
-  reader.style.display='block';
-
-  status.innerText=
-    '📷 Arahkan kamera ke barcode...';
-
-  if(html5QrCode){
-
-    try{
-      html5QrCode.stop();
-    }catch(e){}
-
-  }
-
-  html5QrCode=
-    new Html5Qrcode('reader');
-
-  html5QrCode.start(
-
-    {facingMode:'environment'},
-
-    {
-      fps:10,
-      qrbox:{
-        width:250,
-        height:100
-      }
-    },
-
-    code=>{
-
-      handleScan(code);
-
-      html5QrCode
-        .stop()
-        .catch(()=>{});
-
-      reader.style.display='none';
-
-      status.innerText='';
-
-    },
-
-    ()=>{}
-
-  ).catch(()=>{
-
-    status.innerText=
-      '❌ Kamera gagal dibuka. Periksa izin kamera.';
-
+  
+  html5QrcodeScanner.render((decodedText) => {
+    document.getElementById('searchBarang').value = decodedText;
+    filterBarang();
+    showToast("Barcode terdeteksi!");
+    stopScan();
+  }, (error) => {
+    // Scan error handling jika diperlukan
   });
-
 }
 
-
-/* =========================
-   SHIFT
-========================= */
-
-function copyOHShiftSebelumnya(){
-
-  let shift=
-    document.getElementById('pilihShift')
-      .value;
-
-  let tgl=
-    document.getElementById('tanggalOpname')
-      .value;
-
-  let num=
-    parseInt(
-      shift.replace('SHIFT ','')
-    );
-
-  if(num===1)
-    return alert('Ini sudah SHIFT 1.');
-
-  let prev=`SHIFT ${num-1}`;
-
-  let key=
-    `so_${ruangAktif.id}_${tgl}_${prev}`;
-
-  let data=
-    JSON.parse(
-      localStorage.getItem(key)
-    );
-
-  if(!data)
-    return alert(
-      `Data ${prev} belum ada!`
-    );
-
-  ruangAktif.data.forEach(item=>{
-
-    let old=
-      data.barang.find(
-        x=>x.kode===item.kode
-      );
-
-    if(old)
-      item.oh=old.fisik;
-
-  });
-
-  saveRuang();
-
-  tampilkan();
-
-  showToast(
-    `✅ OH ${prev} berhasil diambil`
-  );
-
-}
-
-
-/* =========================
-   SIMPAN
-========================= */
-
-function simpanOpname(){
-
-  if(!ruangAktif)
-    return alert('Pilih ruang!');
-
-  let tanggal=
-    document.getElementById('tanggalOpname')
-      .value;
-
-  let shift=
-    document.getElementById('pilihShift')
-      .value;
-
-  let pic=
-    document.getElementById('namaPIC')
-      .value;
-
-  if(!tanggal)
-    return alert('Tanggal belum dipilih!');
-
-  let key=
-    `so_${ruangAktif.id}_${tanggal}_${shift}`;
-
-  localStorage.setItem(
-    key,
-    JSON.stringify({
-      barang:ruangAktif.data,
-      pic
-    })
-  );
-
-  saveRuang();
-
-  showToast(
-    '✅ Opname berhasil disimpan'
-  );
-
-}
-
-
-/* =========================
-   LOAD DATA
-========================= */
-
-function loadData(){
-
-  if(!ruangAktif)return;
-
-  let tanggal=
-    document.getElementById('tanggalOpname')
-      .value;
-
-  let shift=
-    document.getElementById('pilihShift')
-      .value;
-
-  let key=
-    `so_${ruangAktif.id}_${tanggal}_${shift}`;
-
-  let data=
-    JSON.parse(
-      localStorage.getItem(key)
-    );
-
-  if(data){
-
-    ruangAktif.data=
-      data.barang||[];
-
-    document.getElementById('namaPIC')
-      .value=data.pic||'';
-
-    saveRuang();
-
+function stopScan() {
+  if (html5QrcodeScanner) {
+    html5QrcodeScanner.clear();
+    document.getElementById('reader').style.display = 'none';
   }
-
-  tampilkan();
-
 }
-
-
-/* =========================
-   RIWAYAT
-========================= */
-
-function lihatRiwayat(){
-
-  if(!ruangAktif)
-    return alert('Pilih ruang!');
-
-  let keys=
-    Object.keys(localStorage)
-      .filter(k=>
-        k.startsWith(
-          `so_${ruangAktif.id}_`
-        )
-      );
-
-  if(!keys.length)
-    return alert(
-      'Belum ada riwayat SO.'
-    );
-
-  let html=`
-    <h3>📜 Riwayat SO</h3>
-    <div class="table-wrap">
-    <table>
-      <tr>
-        <th>Tanggal</th>
-        <th>Shift</th>
-        <th>PIC</th>
-        <th>Aksi</th>
-      </tr>
-  `;
-
-  keys.forEach(key=>{
-
-    let data=
-      JSON.parse(
-        localStorage.getItem(key)
-      );
-
-    let parts=key.split('_');
-
-    let tanggal=parts[2];
-    let shift=parts[3];
-
-    html+=`
-      <tr>
-
-        <td>${tanggal}</td>
-        <td>${shift}</td>
-        <td>${data.pic||'-'}</td>
-
-        <td>
-          <button
-            class="btn-aksi"
-            onclick="bukaRiwayat('${key}')">
-            Buka
-          </button>
-        </td>
-
-      </tr>
-    `;
-
-  });
-
-  html+='</table></div>';
-
-  document.getElementById('tabelContainer')
-    .innerHTML=html;
-
-  showMenu('opname');
-
-}
-
-
-function bukaRiwayat(key){
-
-  let parts=key.split('_');
-
-  document.getElementById('tanggalOpname')
-    .value=parts[2];
-
-  document.getElementById('pilihShift')
-    .value=parts[3];
-
-  loadData();
-
-  showMenu('opname');
-
-}
-
-
-/* =========================
-   WHATSAPP
-========================= */
-
-function kirimRekapWA(type){
-
-  if(!ruangAktif)
-    return alert('Pilih ruang!');
-
-  let data=
-    ruangAktif.data.filter(x=>{
-
-      let selisih=
-        (Number(x.fisik)||0)-
-        (Number(x.oh)||0);
-
-      return type==='minus'
-        ?selisih<0
-        :selisih>0;
-
-    });
-
-  if(!data.length)
-    return alert(
-      `Tidak ada barang ${type}!`
-    );
-
-  let pesan=
-    `*REKAP ${type.toUpperCase()} ${ruangAktif.nama}*\n\n`+
-    `Tanggal: ${document.getElementById('tanggalOpname').value}\n`+
-    `Shift: ${document.getElementById('pilihShift').value}\n`+
-    `PIC: ${document.getElementById('namaPIC').value}\n\n`;
-
-  data.forEach((m,i)=>{
-
-    let selisih=
-      (Number(m.fisik)||0)-
-      (Number(m.oh)||0);
-
-    let jumlah=
-      Math.abs(selisih);
-
-    let nilai=
-      jumlah*(Number(m.harga)||0);
-
-    pesan+=
-      `${i+1}. ${m.nama}\n`+
-      `   ${type==='minus'?'Kurang':'Lebih'}: ${jumlah}\n`+
-      `   Nilai: Rp ${nilai.toLocaleString('id-ID')}\n\n`;
-
-  });
-
-  pesan+=
-    '\n_Sent from SO RAHIL K792_';
-
-  window.open(
-    `https://wa.me/?text=${encodeURIComponent(pesan)}`,
-    '_blank'
-  );
-
-}
-
-
-/* =========================
-   CSV
-========================= */
-
-function exportExcel(){
-
-  if(!ruangAktif)
-    return alert('Pilih ruang!');
-
-  let csv=
-    'KATEGORI,KODE,NAMA,OH,FISIK,HARGA,SELISIH,SELISIH_RP\n';
-
-  ruangAktif.data.forEach(item=>{
-
-    let selisih=
-      (Number(item.fisik)||0)-
-      (Number(item.oh)||0);
-
-    let nilai=
-      selisih*(Number(item.harga)||0);
-
-    let row=[
-      item.kategori,
-      item.kode,
-      `"${item.nama.replace(/"/g,'""')}"`,
-      item.oh,
-      item.fisik,
-      item.harga,
-      selisih,
-      nilai
-    ];
-
-    csv+=row.join(',')+'\n';
-
-  });
-
-  downloadFile(
-    csv,
-    `${ruangAktif.nama}_SO.csv`,
-    'text/csv'
-  );
-
-}
-
-
-function exportCSV(){
-
-  exportExcel();
-
-}
-
-
-/* =========================
-   PDF
-========================= */
-
-function exportPDF(){
-
-  if(!ruangAktif)
-    return alert('Pilih ruang!');
-
-  const doc=new jsPDF();
-
-  let tgl=
-    document.getElementById('tanggalOpname')
-      .value;
-
-  let shift=
-    document.getElementById('pilihShift')
-      .value;
-
-  let pic=
-    document.getElementById('namaPIC')
-      .value;
-
-  doc.setFontSize(17);
-
-  doc.text(
-    `LAPORAN ${ruangAktif.nama}`,
-    105,
-    15,
-    {align:'center'}
-  );
-
-  doc.setFontSize(10);
-
-  doc.text(`Tanggal: ${tgl}`,14,25);
-  doc.text(`Shift: ${shift}`,14,31);
-  doc.text(`PIC: ${pic}`,14,37);
-
-  let y=48;
-
-  let minus=
-    ruangAktif.data.filter(x=>
-      Number(x.fisik)<Number(x.oh)
-    );
-
-  let total=0;
-
-  doc.setFontSize(13);
-
-  doc.text(
-    'REKAP BARANG MINUS',
-    14,
-    y
-  );
-
-  y+=8;
-
-  doc.setFontSize(9);
-
-  if(!minus.length){
-
-    doc.text(
-      'Tidak ada barang minus.',
-      14,
-      y
-    );
-
-    y+=7;
-
-  }
-
-  minus.forEach((m,i)=>{
-
-    let kurang=
-      Math.abs(
-        Number(m.fisik)-Number(m.oh)
-      );
-
-    let nilai=
-      kurang*(Number(m.harga)||0);
-
-    total+=nilai;
-
-    let text=
-      `${i+1}. ${m.nama} - Kurang ${kurang} - Rp ${nilai.toLocaleString('id-ID')}`;
-
-    let lines=
-      doc.splitTextToSize(
-        text,
-        180
-      );
-
-    doc.text(lines,14,y);
-
-    y+=6*lines.length;
-
-    if(y>275){
-
-      doc.addPage();
-
-      y=20;
-
-    }
-
-  });
-
-  y+=8;
-
-  doc.setFontSize(12);
-
-  doc.text(
-    `TOTAL RUGI: Rp ${total.toLocaleString('id-ID')}`,
-    14,
-    y
-  );
-
-  doc.save(
-    `LAPORAN_${ruangAktif.nama}_${tgl}_${shift}.pdf`
-  );
-
-  showToast('✅ PDF berhasil dibuat');
-
-}
-
-
-/* =========================
-   BACKUP JSON
-========================= */
-
-function backupJSON(){
-
-  let backup={
-
-    version:'SO RAHIL K792',
-    date:new Date().toISOString(),
-
-    daftarRuang,
-
-    users,
-
-    darkMode:
-      localStorage.getItem('darkMode'),
-
-    theme:
-      localStorage.getItem('soTheme'),
-
-    localStorage:{}
-
-  };
-
-  Object.keys(localStorage)
-    .forEach(k=>{
-      backup.localStorage[k]=
-        localStorage.getItem(k);
-    });
-
-  downloadFile(
-
-    JSON.stringify(
-      backup,
-      null,
-      2
-    ),
-
-    `BACKUP_SO_RAHIL_${Date.now()}.json`,
-
-    'application/json'
-
-  );
-
-  showToast('✅ Backup berhasil');
-
-}
-
-
-function restoreJSON(){
-
-  let file=
-    document.getElementById('restoreFile')
-      .files[0];
-
-  if(!file)
-    return alert(
-      'Pilih file backup JSON!'
-    );
-
-  let reader=new FileReader();
-
-  reader.onload=function(e){
-
-    try{
-
-      let data=
-        JSON.parse(e.target.result);
-
-      if(data.localStorage){
-
-        Object.keys(data.localStorage)
-          .forEach(k=>{
-            localStorage.setItem(
-              k,
-              data.localStorage[k]
-            );
-          });
-
-      }else{
-
-        if(data.daftarRuang){
-
-          daftarRuang=
-            data.daftarRuang;
-
-          localStorage.setItem(
-            'daftar_ruang_so',
-            JSON.stringify(daftarRuang)
-          );
-
-        }
-
-        if(data.users){
-
-          users=data.users;
-
-          localStorage.setItem(
-            'users_so',
-            JSON.stringify(users)
-          );
-
-        }
-
-      }
-
-      alert(
-        'Restore berhasil. Aplikasi akan dimuat ulang.'
-      );
-
-      location.reload();
-
-    }catch(err){
-
-      alert(
-        'File backup tidak valid!'
-      );
-
-    }
-
-  };
-
-  reader.readAsText(file);
-
-}
-
-
-/* =========================
-   DOWNLOAD
-========================= */
-
-function downloadFile(
-  content,
-  filename,
-  type
-){
-
-  let blob=
-    new Blob(
-      [content],
-      {type}
-    );
-
-  let url=
-    URL.createObjectURL(blob);
-
-  let a=
-    document.createElement('a');
-
-  a.href=url;
-  a.download=filename;
-
-  document.body.appendChild(a);
-
-  a.click();
-
-  a.remove();
-
-  setTimeout(()=>{
-    URL.revokeObjectURL(url);
-  },1000);
-
-}
-
-
-/* =========================
-   SUARA REHAT
-========================= */
-
-function startRelaxSound(){
-
-  try{
-
-    if(audioContext)
-      stopRelaxSound();
-
-    audioContext=
-      new (
-        window.AudioContext||
-        window.webkitAudioContext
-      )();
-
-    audioOscillator=
-      audioContext.createOscillator();
-
-    let gain=
-      audioContext.createGain();
-
-    audioOscillator.type='sine';
-
-    audioOscillator.frequency.value=432;
-
-    gain.gain.value=.025;
-
-    audioOscillator.connect(gain);
-
-    gain.connect(
-      audioContext.destination
-    );
-
-    audioOscillator.start();
-
-    showToast(
-      '🔊 Suara relaksasi aktif'
-    );
-
-  }catch(e){
-
-    alert(
-      'Browser tidak mendukung audio relaksasi.'
-    );
-
-  }
-
-}
-
-
-function stopRelaxSound(){
-
-  if(audioOscillator){
-
-    try{
-      audioOscillator.stop();
-    }catch(e){}
-
-    audioOscillator=null;
-
-  }
-
-  if(audioContext){
-
-    try{
-      audioContext.close();
-    }catch(e){}
-
-    audioContext=null;
-
-  }
-
-  showToast(
-    '🔇 Suara dihentikan'
-  );
-
-}
-
-
-/* =========================
-   KEYBOARD
-========================= */
-
-document.addEventListener(
-  'keydown',
-  e=>{
-
-    if(
-      e.key==='Enter' &&
-      document.activeElement?.id==='inputPIN'
-    ){
-
-      login();
-
-    }
-
-  }
-);
-
 </script>
 
 </body>
