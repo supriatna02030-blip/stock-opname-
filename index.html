@@ -75,7 +75,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .search-box button{width:52px}
 #reader{display:none;width:100%;margin-top:10px;border:2px solid var(--p);border-radius:12px;overflow:hidden}
 #readerStatus{text-align:center;color:var(--p);font-size:12px}
-#tabelContainer{overflow-x:auto}
+#tabelContainer,#riwayatContainer{overflow-x:auto}
 table{width:100%;border-collapse:collapse;margin:10px 0;font-size:12px;border:1px solid var(--line);border-radius:10px;overflow:hidden}
 th{background:var(--p2);color:#fff;padding:9px 8px;font-weight:600;position:sticky;top:0;z-index:2}
 td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:center}
@@ -235,7 +235,7 @@ Versi 2.0 • By Ade Supriatna<br>
 <h2 id="judulRuang">📝 Input Opname</h2>
 <input id="kodeToko" value="K792/KARBELA2">
 <div style="display:flex;gap:8px">
-<input type="date" id="tanggalOpname">
+<input type="date" id="tanggalOpname" onchange="loadData()">
 <select id="pilihShift" onchange="loadData()"><option>SHIFT 1</option><option>SHIFT 2</option><option>SHIFT 3</option></select>
 </div>
 <input id="namaPIC" placeholder="👤 Nama PIC">
@@ -246,7 +246,7 @@ Versi 2.0 • By Ade Supriatna<br>
 <div id="reader"></div>
 <p id="readerStatus"></p>
 <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center">
-<button class="btn-aksi" onclick="loadItems()">📥 Load 43 Item</button>
+<button class="btn-aksi" onclick="loadItems()">📥 Load Template</button>
 <button class="btn-tambah" onclick="tambahProdukManual()">➕ Produk</button>
 <button class="btn-aksi" onclick="copyOHShiftSebelumnya()">📋 Ambil OH Sebelumnya</button>
 <button class="btn-aksi" onclick="simpanOpname()">💾 Simpan</button>
@@ -268,6 +268,7 @@ Versi 2.0 • By Ade Supriatna<br>
 <button class="btn-pdf" onclick="exportPDF()">📑 PDF</button>
 </div>
 <div id="rekapSelisih"></div>
+<div id="riwayatContainer"></div>
 <div id="totalSelisihRp" class="total-rp-box"></div>
 </div>
 
@@ -385,7 +386,7 @@ By Ade Supriatna<br>
 const {jsPDF}=window.jspdf,$=id=>document.getElementById(id),LS=localStorage,rp=n=>"Rp "+n.toLocaleString("id-ID"),N=v=>Number(v)||0;
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js?v=20").catch(()=>{});
 
-let html5QrCode=null,ruangAktif=null,userLogin=null,
+let html5QrCode=null,keyAktif=null,ruangAktif=null,userLogin=null,
 daftarRuang=JSON.parse(LS.getItem("daftar_ruang_so"))||[],
 users=JSON.parse(LS.getItem("users_so"))||[{nik:"ADMIN",pin:"1234",nama:"ADMIN",role:"admin"}];
 
@@ -404,7 +405,7 @@ const templateShift=[
 $("tutorial").innerHTML=[
 ["🔐 1. Login","Masukkan NIK dan PIN yang sudah terdaftar. Admin awal:<br><b>NIK: ADMIN</b><br><b>PIN: 1234</b>"],
 ["🏠 2. Daftar Ruang SO","Buat ruang SO sesuai kebutuhan. Misalnya: SO RAHIL A, SO RAHIL B, MINYAK, GULA, dan sebagainya."],
-["📦 3. Input Barang","Buka ruang lalu tekan <b>Load 43 Item</b> untuk memasukkan template barang. Kamu juga bisa menambahkan produk secara manual."],
+["📦 3. Input Barang","Buka ruang lalu tekan <b>Load Template</b> untuk memasukkan template barang. Kamu juga bisa menambahkan produk secara manual."],
 ["📷 4. Scan Barcode","Tekan tombol kamera lalu arahkan kamera ke barcode. Jika kode ditemukan, nilai Fisik akan otomatis bertambah 1."],
 ["📊 5. OH & Fisik","<b>OH</b> = stok menurut sistem.<br><b>Fisik</b> = stok hasil perhitungan langsung.<br>Selisih otomatis dihitung oleh aplikasi."],
 ["❌ 6. Minus","Jika Fisik lebih kecil daripada OH, barang masuk kategori <b>Minus</b> dan nilai kerugian dihitung berdasarkan harga."],
@@ -459,12 +460,12 @@ function login(){
 function logout(){sessionStorage.removeItem("userLogin");location.reload()}
 
 /* TEMA */
-function setTheme(t){
+function setTheme(t,silent){
  document.body.classList.remove("dark","theme-purple","theme-green","theme-orange","theme-pink","theme-dark");
  if(t==="dark")document.body.classList.add("dark","theme-dark");
  if(t!=="blue"&&t!=="dark")document.body.classList.add("theme-"+t);
  LS.setItem("so_theme",t);
- showToast("🎨 Tema diubah");
+ if(!silent)showToast("🎨 Tema diubah");
 }
 
 /* USER ADMIN */
@@ -522,6 +523,7 @@ function bukaRuang(id){
  $("kodeToko").value=ruangAktif.nama;
  showMenu("opname");
  $("tanggalOpname").valueAsDate=new Date();
+ keyAktif=null;
  loadData();
 }
 
@@ -548,10 +550,10 @@ function hapusProduk(i){
 
 function loadItems(){
  if(!ruangAktif)return;
- if(!confirm("Load ulang 43 item template? Data produk ruang saat ini akan diganti."))return;
+ if(!confirm(`Load ulang ${templateShift.length} item template? Data produk ruang saat ini akan diganti.`))return;
  ruangAktif.data=JSON.parse(JSON.stringify(templateShift));
  simpanRuang();tampilkan();
- showToast("📥 43 item berhasil dimuat");
+ showToast(`📥 ${templateShift.length} item berhasil dimuat`);
 }
 
 /* TABEL */
@@ -664,14 +666,17 @@ function simpanOpname(){
  if(!ruangAktif)return;
  if(!$("tanggalOpname").value){alert("Tanggal belum dipilih!");return}
  LS.setItem(keySO(),JSON.stringify({barang:JSON.parse(JSON.stringify(ruangAktif.data)),pic:$("namaPIC").value}));
+ keyAktif=keySO();
  simpanRuang();
  showToast("💾 Opname berhasil disimpan");
 }
 
 function loadData(){
  if(!ruangAktif)return;
- let data=JSON.parse(LS.getItem(keySO()));
- if(data)ruangAktif.data=data.barang||[];
+ let k=keySO(),data=JSON.parse(LS.getItem(k));
+ if(data){ruangAktif.data=data.barang||[]}
+ else if(keyAktif&&keyAktif!==k){ruangAktif.data.forEach(x=>{x.oh="0";x.fisik="0"})}
+ keyAktif=k;
  $("namaPIC").value=data?data.pic||"":"";
  tampilkan();
 }
@@ -681,7 +686,7 @@ function lihatRiwayat(){
  if(!ruangAktif){alert("Pilih ruang terlebih dahulu.");return}
  let keys=Object.keys(LS).filter(k=>k.startsWith(`so_${ruangAktif.id}_`));
  if(!keys.length){alert("Belum ada riwayat SO.");return}
- $("tabelContainer").innerHTML=`<h3>📜 Riwayat SO</h3><table><tr><th>Tanggal</th><th>Shift</th><th>PIC</th><th>Aksi</th></tr>${keys.map(key=>{
+ $("riwayatContainer").innerHTML=`<h3>📜 Riwayat SO</h3><table><tr><th>Tanggal</th><th>Shift</th><th>PIC</th><th>Aksi</th></tr>${keys.map(key=>{
   let d=JSON.parse(LS.getItem(key)),p=key.split("_");
   return `<tr><td>${p[2]}</td><td>${p[3]}</td><td>${escapeHTML(d.pic||"-")}</td><td><button class="btn-aksi" onclick="bukaRiwayat('${key}')">Buka</button></td></tr>`;
  }).join("")}</table>`;
@@ -761,7 +766,7 @@ function exportPDF(){
 }
 
 /* REHAT SEJENAK */
-let rehatTimer=null,rehatSeconds=60,breathTimer=null,audioCtx=null,audioNodes=[],soundType="rain",soundOn=false;
+let rehatTimer=null,rehatSeconds=60,breathTimer=null,audioCtx=null,audioNodes=[],soundType="rain",soundOn=false,zenTimer=null;
 const messages=["Istirahat dulu, Bro 😌","Pelan-pelan, yang penting teliti 💪","Mata capek? Santai dulu 👀","Tarik napas... kamu sudah bekerja keras 🌿","Data bisa menunggu. Kesehatan jangan ❤️","Rehat sebentar, lanjut dengan pikiran lebih fresh ☕"];
 
 function bukaRehat(){$("rehatOverlay").classList.add("show");randomMessage()}
@@ -817,6 +822,7 @@ function initAudio(){
 }
 
 function stopRelaxSound(){
+ clearTimeout(zenTimer);
  soundOn=false;
  audioNodes.forEach(n=>{try{if(n.stop)n.stop()}catch(e){}});
  audioNodes=[];
@@ -870,7 +876,7 @@ function playZen(){
  o.connect(g);g.connect(audioCtx.destination);
  o.start();o.stop(t+3);
  audioNodes.push(o);
- setTimeout(playZen,5000);
+ zenTimer=setTimeout(playZen,5000);
 }
 
 /* MAINTENANCE */
@@ -902,7 +908,7 @@ document.addEventListener("keydown",e=>{
  if(e.key==="Enter"&&$("loginPage").style.display!=="none")login();
 });
 
-setTheme(LS.getItem("so_theme")||"blue");
+setTheme(LS.getItem("so_theme")||"blue",true);
 </script>
 </body>
 </html>
