@@ -244,7 +244,7 @@ td input,.rehat-icon-btn{box-shadow:none!important}
 #sceneCanvas{display:none;width:100%;max-width:340px;aspect-ratio:340/190;touch-action:none;cursor:grab;margin:auto;filter:drop-shadow(0 18px 28px rgba(0,0,0,.45))}
 #sceneCanvas:active{cursor:grabbing}
 .scene-pick{display:flex;gap:6px;justify-content:center;margin:0 0 12px}
-.scene-pick button{width:auto;flex:1;max-width:120px;font-size:11px;padding:8px 6px;min-height:36px;margin:0;border-radius:20px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);box-shadow:none;backdrop-filter:blur(8px)}
+.scene-pick button{width:auto;flex:1;max-width:120px;font-size:10px;padding:8px 2px;white-space:nowrap;min-height:36px;margin:0;border-radius:20px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);box-shadow:none;backdrop-filter:blur(8px)}
 .scene-pick button.active{background:linear-gradient(135deg,#087cff,#00d9ff);border-color:transparent;box-shadow:0 8px 18px -6px rgba(0,200,255,.6)}
 @media(max-height:760px){.scene-stage{height:165px}.breath{width:90px;height:90px;margin:8px auto}.rehat-card{padding:14px}.rehat-timer{font-size:22px;margin:4px}}
 @media(max-width:600px){
@@ -478,6 +478,7 @@ By Ade Supriatna<br>
 <button data-s="coffee" onclick="setScene('coffee')">☕ Kopi</button>
 <button data-s="earth" onclick="setScene('earth')">🌍 Bola Dunia</button>
 <button data-s="solar" onclick="setScene('solar')">🪐 Tata Surya</button>
+<button data-s="galaxy" onclick="setScene('galaxy')">🌌 Galaksi</button>
 </div>
 <div class="rehat-card">
 <h2 id="rehatMessage">Istirahat dulu, Bro 😌</h2>
@@ -530,7 +531,7 @@ $("tutorial").innerHTML=[
 ["📋 8. Rekap","Menu Laporan menampilkan barang Minus, Plus dan total nilai selisih."],
 ["📲 9. WhatsApp","Tersedia tombol untuk mengirim:<br>❌ Rekap Minus<br>✅ Rekap Plus<br>📋 Rekap Semua"],
 ["📑 10. PDF & CSV","Gunakan PDF untuk laporan dan CSV untuk backup atau dibuka menggunakan Excel."],
-["☕ 11. Rehat Sejenak","Gunakan fitur ini ketika sudah terlalu lama melakukan SO. Pilih suasana: ☕ Kopi, 🌍 Bola Dunia 3D atau 🪐 Tata Surya 3D (geser kursor/jari pada tata surya untuk memiringkan sudut pandang). Tersedia juga latihan napas, timer, partikel dan suara relaksasi yang dibuat langsung menggunakan JavaScript."],
+["☕ 11. Rehat Sejenak","Gunakan fitur ini ketika sudah terlalu lama melakukan SO. Pilih suasana: ☕ Kopi, 🌍 Bola Dunia 3D atau 🪐 Tata Surya 3D atau 🌌 Galaksi Bima Sakti (geser kursor/jari pada tata surya untuk memiringkan sudut pandang). Tersedia juga latihan napas, timer, partikel dan suara relaksasi yang dibuat langsung menggunakan JavaScript."],
 ["💾 12. Penyimpanan","Data disimpan di penyimpanan browser perangkat. Gunakan menu Backup secara berkala. Backup JSON memuat ruang, user &amp; riwayat, dan bisa dikembalikan lewat tombol Restore."]
 ].map(([h,p])=>`<h4>${h}</h4><p>${p}</p>`).join("");
 
@@ -1037,7 +1038,7 @@ function playZen(){
 const GW=340,GH=190,cv=$("sceneCanvas"),cx2=cv.getContext("2d");
 cv.width=GW*2;cv.height=GH*2;cx2.scale(2,2);
 let sceneType=LS.getItem("rehat_scene")||"coffee",sceneRAF=null,dragRot=0,dragTilt=0,drag=null,earthTex=null;
-if(!["coffee","earth","solar"].includes(sceneType))sceneType="coffee";
+if(!["coffee","earth","solar","galaxy"].includes(sceneType))sceneType="coffee";
 
 cv.addEventListener("pointerdown",e=>{drag={x:e.clientX,y:e.clientY};cv.setPointerCapture(e.pointerId)});
 cv.addEventListener("pointermove",e=>{if(!drag)return;dragRot-=(e.clientX-drag.x)*.012;dragTilt=Math.max(-.22,Math.min(.14,dragTilt+(e.clientY-drag.y)*.002));drag={x:e.clientX,y:e.clientY}});
@@ -1172,10 +1173,60 @@ function drawSolar(c,t){
  labels.forEach(l=>c.fillText(l[0],l[1],l[2]));
 }
 
+/* ---------- GALAKSI BIMA SAKTI ---------- */
+let galaxy=null;
+function buildGalaxy(){
+ let s=20261028;const rnd=()=>((s=(Math.imul(s,1664525)+1013904223)>>>0)/4294967296),
+ gauss=()=>(rnd()+rnd()+rnd()+rnd()-2)/2,P=[],ARMS=4;
+ for(let i=0;i<3200;i++){
+  const bulge=i<700,r=bulge?Math.pow(rnd(),1.8)*.3:.1+Math.pow(rnd(),.8)*.9,arm=(Math.random()*0+Math.floor(rnd()*ARMS))*(Math.PI*2/ARMS),
+  a=bulge?rnd()*6.283:arm+r*5.4+gauss()*(.16+.3*(1-r)*.0+.22*r),
+  th=bulge?gauss()*.16:gauss()*.05*(1.2-r),
+  warm=Math.max(0,1-r*1.6),pink=!bulge&&rnd()<.07,
+  col=pink?[255,120,185]:[Math.round(150+105*warm),Math.round(180+40*warm),Math.round(255-105*warm)];
+  P.push({r,a,z:th,col,sz:bulge?.8+rnd()*.7:.5+rnd()*.9,al:bulge?.5+rnd()*.4:.25+rnd()*.55,pink});
+ }
+ const bg=Array.from({length:110},()=>({x:rnd()*340,y:rnd()*190,r:rnd()*1+.2,p:rnd()*6.28,s:.8+rnd()*1.8}));
+ galaxy={P,bg};
+}
+
+function drawGalaxy(c,t){
+ if(!galaxy)buildGalaxy();
+ const cx=GW/2,cy=GH/2+2,R=150,sq=Math.min(.55,Math.max(.22,.42+dragTilt*1.2)),rot=t*.07+dragRot*.6,G=galaxy;
+ c.fillStyle="#fff";
+ G.bg.forEach(b=>{c.globalAlpha=.25+.6*Math.abs(Math.sin(t*b.s+b.p));c.beginPath();c.arc(b.x,b.y,b.r,0,7);c.fill()});
+ c.globalAlpha=1;
+ c.save();c.translate(cx,cy);c.scale(1,sq);
+ let g=c.createRadialGradient(0,0,0,0,0,R*1.05);
+ g.addColorStop(0,"rgba(255,225,170,.55)");g.addColorStop(.18,"rgba(255,170,110,.26)");g.addColorStop(.5,"rgba(110,130,255,.15)");g.addColorStop(1,"rgba(60,70,200,0)");
+ c.fillStyle=g;c.beginPath();c.arc(0,0,R*1.05,0,7);c.fill();
+ c.restore();
+ c.globalCompositeOperation="lighter";
+ galaxy.P.forEach(p=>{
+  const a=p.a+rot,x=cx+Math.cos(a)*p.r*R,y=cy+Math.sin(a)*p.r*R*sq-p.z*R*.9;
+  c.globalAlpha=p.al;c.fillStyle=`rgb(${p.col[0]},${p.col[1]},${p.col[2]})`;
+  const s=p.sz*(p.pink?1.5:1);c.fillRect(x-s/2,y-s/2,s,s);
+ });
+ c.globalAlpha=1;
+ /* inti terang */
+ c.save();c.translate(cx,cy);c.scale(1,Math.max(.5,sq*1.4));
+ g=c.createRadialGradient(0,0,0,0,0,22*(1+.05*Math.sin(t*2)));
+ g.addColorStop(0,"rgba(255,248,220,.95)");g.addColorStop(.35,"rgba(255,200,120,.5)");g.addColorStop(1,"rgba(255,150,70,0)");
+ c.fillStyle=g;c.beginPath();c.arc(0,0,22,0,7);c.fill();c.restore();
+ c.globalCompositeOperation="source-over";
+ /* posisi Tata Surya kita (lengan Orion) */
+ const ra=.58,aa=1*(Math.PI*2/4)+ra*5.4+rot,mx=cx+Math.cos(aa)*ra*R,my=cy+Math.sin(aa)*ra*R*sq,pu=(t*.9)%1;
+ c.strokeStyle=`rgba(253,224,71,${.8*(1-pu)})`;c.lineWidth=1;c.beginPath();c.arc(mx,my,3+pu*10,0,7);c.stroke();
+ c.fillStyle="#fde047";c.beginPath();c.arc(mx,my,2.2,0,7);c.fill();
+ c.font="600 6.5px Poppins,sans-serif";c.textAlign="center";c.fillStyle="rgba(254,240,138,.95)";
+ c.fillText("☉ Kita di sini",mx,my-8);
+ c.fillStyle="rgba(226,232,240,.6)";c.fillText("Bima Sakti • ±100.000 tahun cahaya",cx,GH-5);
+}
+
 function sceneLoop(ts){
  if(!$("rehatOverlay").classList.contains("show")||sceneType==="coffee"){sceneRAF=null;return}
  cx2.clearRect(0,0,GW,GH);
- sceneType==="earth"?drawGlobe(cx2,ts/1000):drawSolar(cx2,ts/1000);
+ ({earth:drawGlobe,solar:drawSolar,galaxy:drawGalaxy})[sceneType](cx2,ts/1000);
  sceneRAF=requestAnimationFrame(sceneLoop);
 }
 
