@@ -152,16 +152,6 @@ td input,.rehat-icon-btn{box-shadow:none!important}
 .highlight-row td{animation:flash 1s}
 #toast{transition:top .5s cubic-bezier(.34,1.56,.64,1)}
 @media(prefers-reduced-motion:reduce){.container *,#toast{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
-@media(max-width:600px){
-.tbl-item,.tbl-item tbody{display:block;border:0}
-.tbl-item tr:first-child{display:none}
-.tbl-item tr{display:flex;flex-direction:column;margin:10px 0;padding:10px 12px;border:1px solid var(--line);border-radius:14px;background:var(--soft)}
-.tbl-item td,.tbl-item tr:nth-child(even) td{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:5px 0;border:0;text-align:right!important;background:transparent}
-.tbl-item td:before{content:attr(data-label);color:var(--muted);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;text-align:left}
-.tbl-item td.nm{order:-1;display:block;text-align:left!important;font-weight:600;font-size:13px;padding-bottom:6px;margin-bottom:4px;border-bottom:1px dashed var(--line)}
-.tbl-item td.nm:before,.tbl-item td[data-label="No"]{display:none}
-.tbl-item td input{width:110px;min-height:38px}
-}
 #rehatOverlay{display:none;position:fixed;inset:0;z-index:5000;overflow:hidden;background:radial-gradient(circle at 50% 35%,#164c72,#071b31 55%,#020711);color:#fff}
 #rehatOverlay.show{display:block;animation:rehatIn .5s ease}
 @keyframes rehatIn{from{opacity:0;transform:scale(1.04)}to{opacity:1;transform:scale(1)}}
@@ -626,17 +616,17 @@ function tampilkan(){
  [...new Set(ruangAktif.data.map(x=>x.kategori))].forEach(kat=>{
   let vis=ruangAktif.data.filter(x=>x.kategori===kat&&cocok(x,k));
   if(!vis.length)return;
-  html+=`<h3>📦 ${escapeHTML(kat)}</h3><table class="tbl-item"><tr><th>No</th><th>Kode</th><th>Nama</th><th>OH</th><th>Fisik</th><th>Harga</th><th>Selisih</th><th>Nilai</th><th>Aksi</th></tr>`;
+  html+=`<h3>📦 ${escapeHTML(kat)}</h3><table><tr><th>No</th><th>Kode</th><th>Nama</th><th>OH</th><th>Fisik</th><th>Harga</th><th>Selisih</th><th>Nilai</th><th>Aksi</th></tr>`;
   vis.forEach((item,n)=>{
    let i=ruangAktif.data.indexOf(item),oh=N(item.oh),fisik=N(item.fisik),harga=N(item.harga),
    sel=fisik-oh,cls=sel<0?"sel-minus":sel>0?"sel-plus":"",sid=safeId(item.kode);
    totalOH+=oh;totalFisik+=fisik;
-   html+=`<tr id="row-${sid}"><td data-label="No">${n+1}</td><td data-label="Kode">${escapeHTML(item.kode)}</td><td class="nm" data-label="Nama" style="text-align:left">${escapeHTML(item.nama)}</td>
-<td data-label="OH"><input type="number" value="${item.oh}" onchange="updateField(${i},'oh',this.value)"></td>
-<td data-label="Fisik"><input type="number" id="fisik-${sid}" value="${item.fisik}" onchange="updateField(${i},'fisik',this.value)"></td>
-<td data-label="Harga"><input type="number" value="${item.harga}" onchange="updateField(${i},'harga',this.value)"></td>
-<td data-label="Selisih" class="${cls}">${sel}</td><td data-label="Nilai" class="${cls}">${rp(sel*harga)}</td>
-<td data-label="Aksi"><button class="btn-danger" onclick="hapusProduk(${i})">🗑️</button></td></tr>`;
+   html+=`<tr id="row-${sid}"><td>${n+1}</td><td>${escapeHTML(item.kode)}</td><td style="text-align:left">${escapeHTML(item.nama)}</td>
+<td><input type="number" value="${item.oh}" onchange="updateField(${i},'oh',this.value)"></td>
+<td><input type="number" id="fisik-${sid}" value="${item.fisik}" onchange="updateField(${i},'fisik',this.value)"></td>
+<td><input type="number" value="${item.harga}" onchange="updateField(${i},'harga',this.value)"></td>
+<td class="${cls}">${sel}</td><td class="${cls}">${rp(sel*harga)}</td>
+<td><button class="btn-danger" onclick="hapusProduk(${i})">🗑️</button></td></tr>`;
   });
   html+="</table>";
  });
