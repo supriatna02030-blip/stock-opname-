@@ -152,6 +152,16 @@ td input,.rehat-icon-btn{box-shadow:none!important}
 .highlight-row td{animation:flash 1s}
 #toast{transition:top .5s cubic-bezier(.34,1.56,.64,1)}
 @media(prefers-reduced-motion:reduce){.container *,#toast{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+@media(max-width:600px){
+.tbl-item,.tbl-item tbody{display:block;border:0}
+.tbl-item tr:first-child{display:none}
+.tbl-item tr{display:flex;flex-direction:column;margin:10px 0;padding:10px 12px;border:1px solid var(--line);border-radius:14px;background:var(--soft)}
+.tbl-item td,.tbl-item tr:nth-child(even) td{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:5px 0;border:0;text-align:right!important;background:transparent}
+.tbl-item td:before{content:attr(data-label);color:var(--muted);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;text-align:left}
+.tbl-item td.nm{order:-1;display:block;text-align:left!important;font-weight:600;font-size:13px;padding-bottom:6px;margin-bottom:4px;border-bottom:1px dashed var(--line)}
+.tbl-item td.nm:before,.tbl-item td[data-label="No"]{display:none}
+.tbl-item td input{width:110px;min-height:38px}
+}
 #rehatOverlay{display:none;position:fixed;inset:0;z-index:5000;overflow:hidden;background:radial-gradient(circle at 50% 35%,#164c72,#071b31 55%,#020711);color:#fff}
 #rehatOverlay.show{display:block;animation:rehatIn .5s ease}
 @keyframes rehatIn{from{opacity:0;transform:scale(1.04)}to{opacity:1;transform:scale(1)}}
@@ -286,6 +296,7 @@ Versi 2.0 • By Ade Supriatna<br>
 </div>
 <div id="reader"></div>
 <p id="readerStatus"></p>
+<button id="btnTutupScan" class="btn-back" style="display:none" onclick="stopScan()">✖ Tutup Kamera</button>
 <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center">
 <button class="btn-aksi" onclick="loadItems()">📥 Load Template</button>
 <button class="btn-tambah" onclick="tambahProdukManual()">➕ Produk</button>
@@ -318,6 +329,8 @@ Versi 2.0 • By Ade Supriatna<br>
 <h2>💾 Backup & Data</h2>
 <button class="btn-aksi" onclick="exportExcel()">📤 Backup CSV</button>
 <button class="btn-aksi" onclick="backupJSON()">💾 Backup Data JSON</button>
+<button class="btn-aksi" onclick="$('fileRestore').click()">📥 Restore dari Backup JSON</button>
+<input type="file" id="fileRestore" accept=".json,application/json" style="display:none" onchange="restoreJSON(event)">
 <button class="btn-danger" onclick="resetAplikasi()">⚠️ Reset Aplikasi</button>
 </div>
 
@@ -427,7 +440,7 @@ By Ade Supriatna<br>
 const {jsPDF}=window.jspdf,$=id=>document.getElementById(id),LS=localStorage,rp=n=>"Rp "+n.toLocaleString("id-ID"),N=v=>Number(v)||0;
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js?v=20").catch(()=>{});
 
-let html5QrCode=null,keyAktif=null,ruangAktif=null,userLogin=null,
+let html5QrCode=null,scanning=false,lastScan="",lastScanT=0,scanCtx=null,keyAktif=null,ruangAktif=null,userLogin=null,
 daftarRuang=JSON.parse(LS.getItem("daftar_ruang_so"))||[],
 users=JSON.parse(LS.getItem("users_so"))||[{nik:"ADMIN",pin:"1234",nama:"ADMIN",role:"admin"}];
 
@@ -447,7 +460,7 @@ $("tutorial").innerHTML=[
 ["🔐 1. Login","Masukkan NIK dan PIN yang sudah terdaftar. Admin awal:<br><b>NIK: ADMIN</b><br><b>PIN: 1234</b>"],
 ["🏠 2. Daftar Ruang SO","Buat ruang SO sesuai kebutuhan. Misalnya: SO RAHIL A, SO RAHIL B, MINYAK, GULA, dan sebagainya."],
 ["📦 3. Input Barang","Buka ruang lalu tekan <b>Load Template</b> untuk memasukkan template barang. Kamu juga bisa menambahkan produk secara manual."],
-["📷 4. Scan Barcode","Tekan tombol kamera lalu arahkan kamera ke barcode. Jika kode ditemukan, nilai Fisik akan otomatis bertambah 1."],
+["📷 4. Scan Barcode","Tekan tombol kamera lalu arahkan kamera ke barcode. Jika kode ditemukan, nilai Fisik otomatis bertambah 1 disertai bunyi &amp; getar. Kamera tetap terbuka untuk scan berikutnya, tekan Tutup Kamera jika sudah selesai."],
 ["📊 5. OH & Fisik","<b>OH</b> = stok menurut sistem.<br><b>Fisik</b> = stok hasil perhitungan langsung.<br>Selisih otomatis dihitung oleh aplikasi."],
 ["❌ 6. Minus","Jika Fisik lebih kecil daripada OH, barang masuk kategori <b>Minus</b> dan nilai kerugian dihitung berdasarkan harga."],
 ["✅ 7. Plus","Jika Fisik lebih besar daripada OH, barang masuk kategori <b>Plus</b>."],
@@ -455,7 +468,7 @@ $("tutorial").innerHTML=[
 ["📲 9. WhatsApp","Tersedia tombol untuk mengirim:<br>❌ Rekap Minus<br>✅ Rekap Plus<br>📋 Rekap Semua"],
 ["📑 10. PDF & CSV","Gunakan PDF untuk laporan dan CSV untuk backup atau dibuka menggunakan Excel."],
 ["☕ 11. Rehat Sejenak","Gunakan fitur ini ketika sudah terlalu lama melakukan SO. Tersedia animasi, latihan napas, timer, partikel dan suara relaksasi yang dibuat langsung menggunakan JavaScript."],
-["💾 12. Penyimpanan","Data disimpan di penyimpanan browser perangkat. Gunakan menu Backup secara berkala agar data lebih aman."]
+["💾 12. Penyimpanan","Data disimpan di penyimpanan browser perangkat. Gunakan menu Backup secara berkala. Backup JSON memuat ruang, user &amp; riwayat, dan bisa dikembalikan lewat tombol Restore."]
 ].map(([h,p])=>`<h4>${h}</h4><p>${p}</p>`).join("");
 
 /* NAVIGASI */
@@ -614,17 +627,17 @@ function tampilkan(){
  [...new Set(ruangAktif.data.map(x=>x.kategori))].forEach(kat=>{
   let vis=ruangAktif.data.filter(x=>x.kategori===kat&&cocok(x,k));
   if(!vis.length)return;
-  html+=`<h3>📦 ${escapeHTML(kat)}</h3><table><tr><th>No</th><th>Kode</th><th>Nama</th><th>OH</th><th>Fisik</th><th>Harga</th><th>Selisih</th><th>Nilai</th><th>Aksi</th></tr>`;
+  html+=`<h3>📦 ${escapeHTML(kat)}</h3><table class="tbl-item"><tr><th>No</th><th>Kode</th><th>Nama</th><th>OH</th><th>Fisik</th><th>Harga</th><th>Selisih</th><th>Nilai</th><th>Aksi</th></tr>`;
   vis.forEach((item,n)=>{
    let i=ruangAktif.data.indexOf(item),oh=N(item.oh),fisik=N(item.fisik),harga=N(item.harga),
    sel=fisik-oh,cls=sel<0?"sel-minus":sel>0?"sel-plus":"",sid=safeId(item.kode);
    totalOH+=oh;totalFisik+=fisik;
-   html+=`<tr id="row-${sid}"><td>${n+1}</td><td>${escapeHTML(item.kode)}</td><td style="text-align:left">${escapeHTML(item.nama)}</td>
-<td><input type="number" value="${item.oh}" onchange="updateField(${i},'oh',this.value)"></td>
-<td><input type="number" id="fisik-${sid}" value="${item.fisik}" onchange="updateField(${i},'fisik',this.value)"></td>
-<td><input type="number" value="${item.harga}" onchange="updateField(${i},'harga',this.value)"></td>
-<td class="${cls}">${sel}</td><td class="${cls}">${rp(sel*harga)}</td>
-<td><button class="btn-danger" onclick="hapusProduk(${i})">🗑️</button></td></tr>`;
+   html+=`<tr id="row-${sid}"><td data-label="No">${n+1}</td><td data-label="Kode">${escapeHTML(item.kode)}</td><td class="nm" data-label="Nama" style="text-align:left">${escapeHTML(item.nama)}</td>
+<td data-label="OH"><input type="number" value="${item.oh}" onchange="updateField(${i},'oh',this.value)"></td>
+<td data-label="Fisik"><input type="number" id="fisik-${sid}" value="${item.fisik}" onchange="updateField(${i},'fisik',this.value)"></td>
+<td data-label="Harga"><input type="number" value="${item.harga}" onchange="updateField(${i},'harga',this.value)"></td>
+<td data-label="Selisih" class="${cls}">${sel}</td><td data-label="Nilai" class="${cls}">${rp(sel*harga)}</td>
+<td data-label="Aksi"><button class="btn-danger" onclick="hapusProduk(${i})">🗑️</button></td></tr>`;
   });
   html+="</table>";
  });
@@ -662,27 +675,51 @@ function tampilkanRekapSelisih(){
 function handleScan(kode){
  if(!ruangAktif)return;
  let item=ruangAktif.data.find(x=>x.kode===kode);
- if(!item){showToast("⚠️ Barcode tidak ditemukan");return}
+ if(!item){beep(false);showToast("⚠️ Barcode tidak ditemukan");return}
+ beep(true);
  item.fisik=N(item.fisik)+1;
  simpanRuang();tampilkan();
  let sid=safeId(kode),row=$("row-"+sid);
  if(row){row.classList.add("highlight-row");setTimeout(()=>row.classList.remove("highlight-row"),1000)}
  showToast("✅ "+item.nama+" +1");
- $("fisik-"+sid)?.focus();
+ if(!scanning)$("fisik-"+sid)?.focus();
 }
 
 function startScan(){
  if(!ruangAktif){alert("Pilih ruang terlebih dahulu!");return}
  const reader=$("reader"),status=$("readerStatus");
  reader.style.display="block";
- status.innerText="📷 Arahkan kamera ke barcode...";
+ status.innerText="📷 Arahkan kamera ke barcode... (scan berulang aktif)";
+ scanning=true;
+ $("btnTutupScan").style.display="block";
  if(html5QrCode){try{html5QrCode.stop()}catch(e){}}
  html5QrCode=new Html5Qrcode("reader");
  html5QrCode.start({facingMode:"environment"},{fps:10,qrbox:{width:250,height:100}},
  code=>{
+  let n=Date.now();
+  if(code===lastScan&&n-lastScanT<1500)return;
+  lastScan=code;lastScanT=n;
   handleScan(code);
-  html5QrCode.stop().then(()=>{reader.style.display="none";status.innerText=""}).catch(()=>{});
- },()=>{}).catch(()=>{status.innerText="❌ Kamera gagal dibuka. Periksa izin kamera."});
+ },()=>{}).catch(()=>{status.innerText="❌ Kamera gagal dibuka. Periksa izin kamera.";scanning=false;$("btnTutupScan").style.display="none"});
+}
+
+function stopScan(){
+ scanning=false;
+ if(html5QrCode)html5QrCode.stop().catch(()=>{});
+ $("reader").style.display="none";
+ $("readerStatus").innerText="";
+ $("btnTutupScan").style.display="none";
+}
+
+function beep(ok){
+ try{
+  scanCtx=scanCtx||new(window.AudioContext||window.webkitAudioContext)();
+  let o=scanCtx.createOscillator(),g=scanCtx.createGain();
+  o.frequency.value=ok?1200:300;g.gain.value=.1;
+  o.connect(g);g.connect(scanCtx.destination);
+  o.start();o.stop(scanCtx.currentTime+.12);
+ }catch(e){}
+ if(navigator.vibrate)navigator.vibrate(ok?40:[80,50,80]);
 }
 
 /* SHIFT */
@@ -767,8 +804,28 @@ function exportExcel(){
 }
 
 function backupJSON(){
- downloadBlob(JSON.stringify({daftarRuang,users,waktu:new Date().toISOString()},null,2),"BACKUP_SO_RAHIL.json","application/json");
+ let riwayat={};
+ Object.keys(LS).filter(k=>k.startsWith("so_")&&k!=="so_theme").forEach(k=>riwayat[k]=JSON.parse(LS.getItem(k)));
+ downloadBlob(JSON.stringify({daftarRuang,users,riwayat,waktu:new Date().toISOString()},null,2),"BACKUP_SO_RAHIL.json","application/json");
  showToast("💾 Backup JSON berhasil");
+}
+
+function restoreJSON(ev){
+ let f=ev.target.files[0];if(!f)return;
+ let r=new FileReader();
+ r.onload=()=>{
+  try{
+   let d=JSON.parse(r.result);
+   if(!Array.isArray(d.daftarRuang))throw 0;
+   if(!confirm("Data ruang & user saat ini akan ditimpa dengan isi backup. Lanjutkan?"))return;
+   LS.setItem("daftar_ruang_so",JSON.stringify(d.daftarRuang));
+   if(Array.isArray(d.users)&&d.users.length)LS.setItem("users_so",JSON.stringify(d.users));
+   Object.keys(d.riwayat||{}).forEach(k=>LS.setItem(k,JSON.stringify(d.riwayat[k])));
+   alert("✅ Restore berhasil. Aplikasi dimuat ulang.");
+   location.reload();
+  }catch(e){alert("❌ File backup tidak valid.")}
+ };
+ r.readAsText(f);ev.target.value="";
 }
 
 /* PDF */
@@ -787,16 +844,32 @@ function exportPDF(){
  doc.text("REKAP BARANG MINUS",14,y);
  y+=8;
  doc.setFontSize(9);
- ruangAktif.data.filter(x=>Number(x.fisik)<Number(x.oh)).forEach((m,i)=>{
-  let k=Math.abs(selisih(m)),r=k*N(m.harga);
-  total+=r;
-  doc.text(`${i+1}. ${m.nama} - Kurang ${k} - ${rp(r)}`.substring(0,100),14,y);
-  y+=6;
-  if(y>275){doc.addPage();y=20}
- });
+ let tulis=(arr,lbl)=>{
+  let t=0;
+  arr.forEach((m,i)=>{
+   let k=Math.abs(selisih(m)),r=k*N(m.harga);
+   t+=r;
+   doc.text(`${i+1}. ${m.nama} - ${lbl} ${k} - ${rp(r)}`.substring(0,100),14,y);
+   y+=6;
+   if(y>275){doc.addPage();y=20}
+  });
+  if(!arr.length){doc.text("Tidak ada.",14,y);y+=6}
+  return t;
+ };
+ total=tulis(ruangAktif.data.filter(x=>Number(x.fisik)<Number(x.oh)),"Kurang");
+ if(y>262){doc.addPage();y=20}
+ y+=6;
+ doc.setFontSize(13);
+ doc.text("REKAP BARANG PLUS",14,y);
+ y+=8;
+ doc.setFontSize(9);
+ let untung=tulis(ruangAktif.data.filter(x=>Number(x.fisik)>Number(x.oh)),"Lebih");
+ if(y>255){doc.addPage();y=20}
  y+=8;
  doc.setFontSize(12);
  doc.text(`TOTAL RUGI: ${rp(total)}`,14,y);
+ doc.text(`TOTAL PLUS: ${rp(untung)}`,14,y+7);
+ doc.text(`SELISIH BERSIH: ${rp(untung-total)}`,14,y+14);
  for(let p=1;p<=doc.internal.getNumberOfPages();p++){
   doc.setPage(p);
   doc.setFontSize(8);
